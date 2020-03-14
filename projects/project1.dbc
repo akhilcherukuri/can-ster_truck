@@ -32,27 +32,28 @@ NS_ :
 
 BS_:
 
-BU_: DBG DRIVER IO MOTOR SENSOR 
+BU_: DBG DRIVER IO STEERING_MOTOR ACCELERATION_MOTOR SENSOR 
 
 
 BO_ 100 DRIVER_HEARTBEAT: 1 DRIVER
  SG_ DRIVER_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" SENSOR,MOTOR
 
 BO_ 200 SENSOR_SONARS: 4 SENSOR
- SG_ SENSOR_SONARS_left : 0|10@1+ (1,0) [0|1000] "inch" DRIVER
- SG_ SENSOR_SONARS_right : 10|10@1+ (1,0) [0|1000] "inch" DRIVER
- SG_ SENSOR_SONARS_middle : 20|10@1+ (1,0) [0|1000] "inch" DRIVER
+ SG_ SENSOR_SONARS_left : 0|10@1+ (1,0) [0|800] "inch" DRIVER
+ SG_ SENSOR_SONARS_right : 10|10@1+ (1,0) [0|0] "inch" DRIVER
+ SG_ SENSOR_SONARS_middle : 20|10@1+ (1,0) [0|0] "inch" DRIVER
 
-BO_ 300 MOTOR_STEERING: 8 DRIVER
- SG_ STEERING_DIRECTION : 0|64@1+ (0.1,0) [-2|2] "" MOTOR
+BO_ 300 DRIVER_STEERING: 8 DRIVER
+ SG_ STEERING_MOTOR_left : 0|32@1+ (1,0) [-2|0] "" MOTOR
+ SG_ STEERING_MOTOR_right : 32|32@1+ (1,0) [0|2] "" MOTOR
 
-BO_ 400 MOTOR_WHEELSPEED: 8 DRIVER
- SG_ MOTOR_SPEED : 0|64@1+ (0.1,0) [0|60] "kph" MOTOR
+ BO_ 300 DRIVER_STEERING: 8 DRIVER
+ SG_ STEERING_MOTOR_left : 0|32@1+ (1,0) [-2|0] "" MOTOR
+ SG_ STEERING_MOTOR_right : 32|32@1+ (1,0) [0|2] "" MOTOR
+
 
 CM_ BU_ DRIVER "The driver controller driving the car";
 CM_ BU_ MOTOR "The motor controller of the car";
-CM_ BU_ MOTOR_STEERING "The steering direction of the car";
-CM_ BU_ MOTOR_WHEELSPEED "The speed of the car";
 CM_ BU_ SENSOR "The sensor controller of the car";
 CM_ BO_ 100 "Sync message used to synchronize the controllers";
 CM_ SG_ 100 DRIVER_HEARTBEAT_cmd "Heartbeat command from the driver";
