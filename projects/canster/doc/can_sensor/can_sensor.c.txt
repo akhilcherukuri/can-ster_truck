@@ -1,0 +1,63 @@
+#include "can_sensor.h"
+
+#include <stdio.h>
+
+/**
+ * STATIC VARIABLES
+ */
+static dbc_SENSOR_SONARS_s sensor_sonar;
+// TODO, Define more states here
+
+void can_sensor__handle_mia() {
+  const uint32_t mia_increment_value = 1000;
+  if (dbc_service_mia_SENSOR_SONARS(&sensor_sonar, mia_increment_value)) {
+    printf("MIA -> DRIVER_HEARTBEAT\r\n");
+    // put a function here
+    // function gets run here to show that mia has occured
+  }
+}
+
+void can_sensor__handle_incoming_message(dbc_message_header_t *header, uint8_t data[8]) {
+  if (dbc_decode_SENSOR_SONARS(&sensor_sonar, *header, data)) {
+    // do something
+    // set a tx flag
+    // set the states here
+  }
+}
+
+#if SENSOR == 1
+
+/**
+ * STATIC FUNCTIONS
+ */
+static void can_sensor__message_lidar();
+static void can_sensor__message_sensor_sonar();
+
+void can_sensor__transmit_message_10hz() {
+  // Add messages here
+  can_sensor__message_lidar();
+  can_sensor__message_sensor_sonar();
+}
+
+/**
+ * STATIC FUNCTION
+ */
+static void can_sensor__message_lidar() {
+  dbc_SENSOR_SONARS_s created_message;
+  created_message.SENSOR_SONARS_left = 10;
+  created_message.SENSOR_SONARS_middle = 10;
+  created_message.SENSOR_SONARS_right = 10;
+
+  dbc_encode_and_send_SENSOR_SONARS(NULL, &created_message);
+}
+
+static void can_sensor__message_sensor_sonar() {
+  dbc_SENSOR_SONARS_s created_message;
+  created_message.SENSOR_SONARS_left = 20;
+  created_message.SENSOR_SONARS_middle = 20;
+  created_message.SENSOR_SONARS_right = 20;
+
+  dbc_encode_and_send_SENSOR_SONARS(NULL, &created_message);
+}
+
+#endif

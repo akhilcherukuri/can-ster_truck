@@ -1,7 +1,5 @@
 #include "can_bus_initializer.h"
-
 #include "can_bus_constants.h"
-#include "can_bus_initializer.h"
 
 /**
  * STATIC FUNCTION DECLARATIONS
