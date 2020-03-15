@@ -9,6 +9,8 @@
 #include "Mockboard_io.h"
 #include "Mockgpio.h"
 
+#include "Mockcan_bus_initializer.h"
+
 // Include the source we wish to test
 #include "periodic_callbacks.h"
 
@@ -16,7 +18,10 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-void test__periodic_callbacks__initialize(void) { periodic_callbacks__initialize(); }
+void test__periodic_callbacks__initialize(void) {
+  can_bus__initialize_Expect();
+  periodic_callbacks__initialize();
+}
 
 void test__periodic_callbacks__1Hz(void) {
   gpio_s gpio = {};
