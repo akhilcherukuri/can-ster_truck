@@ -1,0 +1,10 @@
+#pragma once
+
+#include "project.h"
+#include "who_am_i.h"
+
+void can_sensor__handle_mia();
+void can_sensor__handle_incoming_message(dbc_message_header_t *header, uint8_t data[8]);
+
+// TODO, explain edge case later
+void can_sensor__transmit_message_10hz();
