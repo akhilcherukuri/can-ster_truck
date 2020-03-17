@@ -6,19 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#include "can_driver_node.h"
-/**
- * Static variables declarations
- */
-static dbc_SENSOR_SONARS_s sensor_sonar;
-static dbc_MOTOR_STEERING_s motor_steering_val;
-static dbc_MOTOR_SPEED_s motor_wheel_speed_val;
-static dbc_MOTOR_SPEED_FEEDBACK_s motor_wheel_speed_current_val_from_rpm_sensor;
-
 /**
  * Defined functions
  */
-
 void can_handler__handle_all_incoming_messages(void) {
   can__msg_t recv_message = {};
 
@@ -34,7 +24,8 @@ void can_handler__handle_all_incoming_messages(void) {
             recv_message.data.words[2]);
 #endif
     // SIGNAL 100
-    dbc_DRIVER_HEARTBEAT_s driver_heartbeat; //= get_dbc_DRIVER_HEARTBEAT_val();
+    // dbc_DRIVER_HEARTBEAT_s driver_heartbeat = get_dbc_DRIVER_HEARTBEAT_val();
+    dbc_DRIVER_HEARTBEAT_s driver_heartbeat;
     if (dbc_decode_DRIVER_HEARTBEAT(&driver_heartbeat, header, recv_message.data.bytes)) {
 #if DEBUG == 1
       fprintf(stderr, "\nDriver Heartbeat: %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
@@ -49,7 +40,8 @@ void can_handler__handle_all_incoming_messages(void) {
 #endif
     }
     // SIGNAL 300
-    dbc_MOTOR_HEARTBEAT_s motor_heartbeat; // = get_dbc_MOTOR_HEARTBEAT_val();
+    // dbc_MOTOR_HEARTBEAT_s motor_heartbeat = get_dbc_MOTOR_HEARTBEAT_val();
+    dbc_MOTOR_HEARTBEAT_s motor_heartbeat;
     if (dbc_decode_MOTOR_HEARTBEAT(&motor_heartbeat, header, recv_message.data.bytes)) {
 #if DEBUG == 1
       fprintf(stderr, "\nMotor Heartbeat: %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
@@ -57,6 +49,7 @@ void can_handler__handle_all_incoming_messages(void) {
     }
 
     // SIGNAL 400
+    dbc_SENSOR_SONARS_s sensor_sonar;
     if (dbc_decode_SENSOR_SONARS(&sensor_sonar, header, recv_message.data.bytes)) {
 #if DEBUG == 1
       fprintf(stderr, "\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nMiddle = %d\r\n",
@@ -66,6 +59,7 @@ void can_handler__handle_all_incoming_messages(void) {
     }
 
     // SIGNAL 500
+    dbc_MOTOR_STEERING_s motor_steering_val;
     if (dbc_decode_MOTOR_STEERING(&motor_steering_val, header, recv_message.data.bytes)) {
 #if DEBUG == 1
       fprintf(stderr, "\nMotor Steering Value from MOTOR Node: %d\r\n", motor_steering_val.MOTOR_STEERING_direction);
@@ -73,6 +67,7 @@ void can_handler__handle_all_incoming_messages(void) {
     }
 
     // SIGNAL 600
+    dbc_MOTOR_SPEED_s motor_wheel_speed_val;
     if (dbc_decode_MOTOR_SPEED(&motor_wheel_speed_val, header, recv_message.data.bytes)) {
 #if DEBUG == 1
       fprintf(stderr, "\nCalculated Motor Wheelspeed Value from DRIVER Node: %lf\r\n",
@@ -81,6 +76,7 @@ void can_handler__handle_all_incoming_messages(void) {
     }
 
     // SIGNAL 700
+    dbc_MOTOR_SPEED_FEEDBACK_s motor_wheel_speed_current_val_from_rpm_sensor;
     /* Used only by DRIVER Node for the purpose of feedback monitoring */
     if (dbc_decode_MOTOR_SPEED_FEEDBACK(&motor_wheel_speed_current_val_from_rpm_sensor, header,
                                         recv_message.data.bytes)) {

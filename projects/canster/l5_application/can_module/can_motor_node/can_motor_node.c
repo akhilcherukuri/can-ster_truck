@@ -1,12 +1,11 @@
 #include "can_motor_node.h"
 #include "can_driver_node.h"
 
-static dbc_MOTOR_HEARTBEAT_s motor_heartbeat;
-
 void can_handler__motor_heartbeat_manage_mia(void (*handle_func)(dbc_MOTOR_HEARTBEAT_s)) {
   const uint32_t mia_increment_value = 1000;
-
+  dbc_MOTOR_HEARTBEAT_s motor_heartbeat;
   if (dbc_service_mia_MOTOR_HEARTBEAT(&motor_heartbeat, mia_increment_value)) {
+
     fprintf(stderr, "MIA -> MOTOR_HEARTBEAT\r\n");
     if (handle_func) {
       handle_func(motor_heartbeat);
@@ -34,4 +33,4 @@ void can_handler__motor_transmit(void) {
 #endif
 }
 
-dbc_MOTOR_HEARTBEAT_s get_dbc_MOTOR_HEARTBEAT_val(void) { return motor_heartbeat; }
+// dbc_MOTOR_HEARTBEAT_s get_dbc_MOTOR_HEARTBEAT_val(void) { return motor_heartbeat; }

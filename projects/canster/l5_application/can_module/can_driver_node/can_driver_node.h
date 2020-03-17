@@ -17,4 +17,4 @@ void driver__set_sensor_input(dbc_SENSOR_SONARS_s);
 dbc_MOTOR_SPEED_s driver__process_current_wheel_speed();
 void driver__process_sensor_input(dbc_SENSOR_SONARS_s);
 
-dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val(void);
+// dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val(void);

@@ -1,9 +1,8 @@
 #include "can_sensor_node.h"
 
-static dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
-
 void can_handler__sensor_heartbeat_manage_mia(void (*handle_func)(dbc_SENSOR_HEARTBEAT_s)) {
   const uint32_t mia_increment_value = 1000;
+  dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
 
   if (dbc_service_mia_SENSOR_HEARTBEAT(&sensor_heartbeat, mia_increment_value)) {
     fprintf(stderr, "MIA -> SENSOR_HEARTBEAT\r\n");
@@ -32,4 +31,4 @@ void can_handler__sensor_transmit(void) {
 #endif
 }
 
-dbc_SENSOR_HEARTBEAT_s get_dbc_SENSOR_HEARTBEAT_val(void) { return sensor_heartbeat; }
+// dbc_SENSOR_HEARTBEAT_s get_dbc_SENSOR_HEARTBEAT_val(void) { return sensor_heartbeat; }

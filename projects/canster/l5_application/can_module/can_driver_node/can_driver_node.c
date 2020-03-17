@@ -2,7 +2,6 @@
 
 // Assuming this data structure as output from the DBC
 static dbc_MOTOR_STEERING_s steering_val;
-static dbc_DRIVER_HEARTBEAT_s driver_heartbeat;
 
 /* TODO: Integrate actual RPM Sensor driver API here in order to fetch the *
  * actual wheel speed. For now assuming RPM gives 60.0kph (hardcoded).     */
@@ -16,6 +15,7 @@ static dbc_MOTOR_SPEED_s wheel_speed_threshold_values = {{0}, 50.0};
 
 void can_handler__driver_heartbeat_manage_mia(void (*handle_func)(dbc_DRIVER_HEARTBEAT_s)) {
   const uint32_t mia_increment_value = 1000;
+  dbc_DRIVER_HEARTBEAT_s driver_heartbeat;
 
   if (dbc_service_mia_DRIVER_HEARTBEAT(&driver_heartbeat, mia_increment_value)) {
 #if DEBUG == 1
@@ -135,4 +135,4 @@ dbc_MOTOR_SPEED_FEEDBACK_s driver__get_current_motor_wheel_speed_from_rpm_sensor
   return current_wheel_speed_val;
 }
 
-dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val(void) { return driver_heartbeat; }
+// dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val(void) { return driver_heartbeat; }
