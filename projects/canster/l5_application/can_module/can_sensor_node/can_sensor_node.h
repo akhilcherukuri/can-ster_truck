@@ -1,21 +1,14 @@
 #pragma once
-#include <stdbool.h>
 
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "project.h"
-
-#include "can_bus_constants.h"
 #include "who_am_i.h"
 
+// Used inside sensor
 #include "can_driver_node.h"
 
-// void can_handler__sensor_heartbeat_manage_mia(void (*handle_func)(dbc_SENSOR_HEARTBEAT_s));
-void can_handler__sensor_heartbeat_manage_mia(void);
-void can_handler__sensor_transmit(void);
-
-// dbc_SENSOR_HEARTBEAT_s get_dbc_SENSOR_HEARTBEAT_val(void);
-
-void can_handler__receive_sensor_heartbeat(dbc_message_header_t, can__msg_t);
-
-void can_handler__sensor_sonar_receive(dbc_message_header_t, can__msg_t);
+void can_sensor__handle_all_mia(void);
+void can_sensor__receive_all_messages(dbc_message_header_t header, uint8_t bytes[8]);
+void can_sensor__transmit_all_messages(void);

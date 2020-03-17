@@ -10,8 +10,11 @@
  * Defined functions
  */
 void can_handler__handle_all_mia(void) {
+
+  // Module function
+  can_sensor__handle_all_mia();
+
   can_handler__driver_heartbeat_manage_mia();
-  can_handler__sensor_heartbeat_manage_mia();
   can_handler__motor_heartbeat_manage_mia();
 }
 
@@ -29,14 +32,14 @@ void can_handler__handle_all_incoming_messages(void) {
     fprintf(stderr, "Raw Data Words: %u %u %u\r\n", recv_message.data.words[0], recv_message.data.words[1],
             recv_message.data.words[2]);
 #endif
+
+    // Module function
+    can_sensor__receive_all_messages(header, recv_message.data.bytes);
+
     // SIGNAL 100
     can_handler__receive_driver_heartbeat(header, recv_message);
-    // SIGNAL 200
-    can_handler__receive_sensor_heartbeat(header, recv_message);
     // SIGNAL 300
     can_handler__motor_heartbeat_receive(header, recv_message);
-    // SIGNAL 400
-    can_handler__sensor_sonar_receive(header, recv_message);
     // SIGNAL 500
     can_handler__motor_steering_receive(header, recv_message);
     // SIGNAL 600
@@ -47,7 +50,9 @@ void can_handler__handle_all_incoming_messages(void) {
 }
 
 void can_handler__transmit_message_10hz(void) {
-  can_handler__sensor_transmit();
+
+  // Module function
+  can_sensor__transmit_all_messages();
 
   can_handler__driver_transmit();
 
