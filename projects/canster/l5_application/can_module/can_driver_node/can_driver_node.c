@@ -14,11 +14,13 @@ static dbc_SENSOR_SONARS_s sensor_sonar_local;
 static dbc_SENSOR_SONARS_s sensor_threshold_values = {{0}, 300, 300, 300};
 static dbc_MOTOR_SPEED_s wheel_speed_threshold_values = {{0}, 50.0};
 
-void can_handler__device_heartbeat_manage_mia(void (*handle_func)(dbc_DRIVER_HEARTBEAT_s)) {
+void can_handler__driver_heartbeat_manage_mia(void (*handle_func)(dbc_DRIVER_HEARTBEAT_s)) {
   const uint32_t mia_increment_value = 1000;
 
   if (dbc_service_mia_DRIVER_HEARTBEAT(&driver_heartbeat, mia_increment_value)) {
+#if DEBUG == 1
     fprintf(stderr, "MIA -> DRIVER_HEARTBEAT\r\n");
+#endif
     if (handle_func) {
       handle_func(driver_heartbeat);
     }
@@ -99,11 +101,13 @@ void driver__process_sensor_input(dbc_SENSOR_SONARS_s sensor_val) {
 // For now, we will discard middle sensor values and assume that obstacles only appear left or right
 
 dbc_MOTOR_STEERING_s driver__process_motor_steering(void) {
+#if DEBUG == 1
   fprintf(stderr,
           "\nSensor values from SENSOR Node used for calculating final steering:\r\nLeft = %d\r\nRight = "
           "%d\r\nMiddle = %d\r\n",
           sensor_sonar_local.SENSOR_SONARS_left, sensor_sonar_local.SENSOR_SONARS_right,
           sensor_sonar_local.SENSOR_SONARS_middle);
+#endif
   if ((sensor_sonar_local.SENSOR_SONARS_left < sensor_threshold_values.SENSOR_SONARS_left) &&
       (sensor_sonar_local.SENSOR_SONARS_right < sensor_threshold_values.SENSOR_SONARS_right)) {
     if (sensor_sonar_local.SENSOR_SONARS_right > sensor_sonar_local.SENSOR_SONARS_left) {
@@ -131,4 +135,4 @@ dbc_MOTOR_SPEED_FEEDBACK_s driver__get_current_motor_wheel_speed_from_rpm_sensor
   return current_wheel_speed_val;
 }
 
-dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val_from_driver_node_c_file(void) { return driver_heartbeat; }
+dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val(void) { return driver_heartbeat; }

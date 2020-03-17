@@ -35,7 +35,7 @@ void periodic_callbacks__initialize(void) {
 void periodic_callbacks__1Hz(uint32_t callback_count) {
 
 #if BOARD_SENSOR_NODE == 1 || BOARD_MOTOR_NODE == 1
-  can_handler__device_heartbeat_manage_mia(driver_mia_handle_func);
+  can_handler__driver_heartbeat_manage_mia(driver_mia_handle_func);
 #endif
 
 #if BOARD_DRIVER_NODE == 1 || BOARD_MOTOR_NODE == 1

@@ -12,10 +12,6 @@
 
 typedef void (*can_void_func_t)(uint32_t);
 
-// void can_handler__device_heartbeat_manage_mia(void (*handle_func)(dbc_DRIVER_HEARTBEAT_s));
-// void can_handler__sensor_heartbeat_manage_mia(void (*handle_func)(dbc_SENSOR_HEARTBEAT_s));
-// void can_handler__motor_heartbeat_manage_mia(void (*handle_func)(dbc_MOTOR_HEARTBEAT_s));
-
 void can_handler__handle_all_incoming_messages(void);
 void can_handler__transmit_message_10hz();
 

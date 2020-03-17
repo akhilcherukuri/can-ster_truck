@@ -27,11 +27,11 @@ void can_handler__motor_transmit(void) {
 
   dbc_MOTOR_SPEED_FEEDBACK_s motor_wheel_speed_current_val = driver__get_current_motor_wheel_speed_from_rpm_sensor();
   if (!dbc_encode_and_send_MOTOR_SPEED_FEEDBACK(NULL, &motor_wheel_speed_current_val)) {
-#if DEBUG
+#if DEBUG == 1
     fprintf(stderr, "\nFailed to encode and send current Motor speed data to DRIVER Node\r\n");
 #endif
   }
 #endif
 }
 
-dbc_MOTOR_HEARTBEAT_s get_dbc_MOTOR_HEARTBEAT_val_from_driver_node_c_file(void) { return motor_heartbeat; }
+dbc_MOTOR_HEARTBEAT_s get_dbc_MOTOR_HEARTBEAT_val(void) { return motor_heartbeat; }

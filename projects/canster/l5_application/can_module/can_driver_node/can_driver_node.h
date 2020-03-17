@@ -4,7 +4,7 @@
 #include "can_bus_constants.h"
 #include "who_am_i.h"
 
-void can_handler__device_heartbeat_manage_mia(void (*handle_func)(dbc_DRIVER_HEARTBEAT_s));
+void can_handler__driver_heartbeat_manage_mia(void (*handle_func)(dbc_DRIVER_HEARTBEAT_s));
 void can_handler__driver_transmit(void);
 
 void driver__process_motor_steering_values(void);
@@ -17,4 +17,4 @@ void driver__set_sensor_input(dbc_SENSOR_SONARS_s);
 dbc_MOTOR_SPEED_s driver__process_current_wheel_speed();
 void driver__process_sensor_input(dbc_SENSOR_SONARS_s);
 
-dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val_from_driver_node_c_file(void);
+dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val(void);

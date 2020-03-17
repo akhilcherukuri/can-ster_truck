@@ -16,13 +16,6 @@ static dbc_MOTOR_SPEED_s motor_wheel_speed_val;
 static dbc_MOTOR_SPEED_FEEDBACK_s motor_wheel_speed_current_val_from_rpm_sensor;
 
 /**
- * Static function declarations
- */
-// static void can_handler__sensor_transmit(void);
-// static void can_handler__driver_transmit(void);
-// static void can_handler__motor_transmit(void);
-
-/**
  * Defined functions
  */
 
@@ -41,21 +34,22 @@ void can_handler__handle_all_incoming_messages(void) {
             recv_message.data.words[2]);
 #endif
     // SIGNAL 100
-    dbc_DRIVER_HEARTBEAT_s driver_heartbeat = get_dbc_DRIVER_HEARTBEAT_val_from_driver_node_c_file();
+    dbc_DRIVER_HEARTBEAT_s driver_heartbeat; //= get_dbc_DRIVER_HEARTBEAT_val();
     if (dbc_decode_DRIVER_HEARTBEAT(&driver_heartbeat, header, recv_message.data.bytes)) {
 #if DEBUG == 1
       fprintf(stderr, "\nDriver Heartbeat: %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
 #endif
     }
     // SIGNAL 200
-    dbc_SENSOR_HEARTBEAT_s sensor_heartbeat = get_dbc_SENSOR_HEARTBEAT_val_from_driver_node_c_file();
+    // dbc_SENSOR_HEARTBEAT_s sensor_heartbeat = get_dbc_SENSOR_HEARTBEAT_val();
+    dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
     if (dbc_decode_SENSOR_HEARTBEAT(&sensor_heartbeat, header, recv_message.data.bytes)) {
 #if DEBUG == 1
       fprintf(stderr, "\nSensor Heartbeat: %d\r\n", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
 #endif
     }
     // SIGNAL 300
-    dbc_MOTOR_HEARTBEAT_s motor_heartbeat = get_dbc_MOTOR_HEARTBEAT_val_from_driver_node_c_file();
+    dbc_MOTOR_HEARTBEAT_s motor_heartbeat; // = get_dbc_MOTOR_HEARTBEAT_val();
     if (dbc_decode_MOTOR_HEARTBEAT(&motor_heartbeat, header, recv_message.data.bytes)) {
 #if DEBUG == 1
       fprintf(stderr, "\nMotor Heartbeat: %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
@@ -135,9 +129,3 @@ bool dbc_send_can_message(void *argument_from_dbc_encode_and_send, uint32_t mess
   }
   return sent;
 }
-
-/**
- *
- * Static function definitions
- *
- */

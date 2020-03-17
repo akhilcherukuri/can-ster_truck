@@ -32,4 +32,4 @@ void can_handler__sensor_transmit(void) {
 #endif
 }
 
-dbc_SENSOR_HEARTBEAT_s get_dbc_SENSOR_HEARTBEAT_val_from_driver_node_c_file(void) { return sensor_heartbeat; }
+dbc_SENSOR_HEARTBEAT_s get_dbc_SENSOR_HEARTBEAT_val(void) { return sensor_heartbeat; }
