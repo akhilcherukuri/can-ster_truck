@@ -4,14 +4,12 @@
 #include <stdint.h>
 
 #include "project.h"
+#include "who_am_i.h"
 
-/**
- * TODO, Stub functions
- * Add your own can code to these functions
- */
-void can_dbc__manage_all_mia(void);               // 1Hz
-void can_dbc__handle_all_incoming_messages(void); // 10hz
-void can_dbc__transmit_message_10hz(void);        // 10hz
+void can_handler__handle_all_mia(void);
+
+void can_handler__handle_all_incoming_messages(void);
+void can_handler__transmit_message_10hz();
 
 /**
  * EXTERN inside project.h

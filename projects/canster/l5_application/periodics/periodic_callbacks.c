@@ -4,7 +4,7 @@
 #include "gpio.h"
 
 #include "can_bus_initializer.h"
-#include "can_dbc.h"
+#include "can_handler.h"
 
 /******************************************************************************
  * Your board will reset if the periodic function does not return within its deadline
@@ -20,15 +20,15 @@ void periodic_callbacks__1Hz(uint32_t callback_count) {
   gpio__toggle(board_io__get_led0());
   // Add your code here
 
-  can_dbc__manage_all_mia();
+  can_handler__handle_all_mia();
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
   gpio__toggle(board_io__get_led1());
   // Add your code here
 
-  can_dbc__handle_all_incoming_messages();
-  can_dbc__transmit_message_10hz();
+  can_handler__handle_all_incoming_messages();
+  can_handler__transmit_message_10hz();
 }
 
 void periodic_callbacks__100Hz(uint32_t callback_count) {
