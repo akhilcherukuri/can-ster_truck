@@ -4,10 +4,6 @@
 #include <stdint.h>
 
 #include "project.h"
-
-#include "can_driver_node.h"
-#include "can_motor_node.h"
-#include "can_sensor_node.h"
 #include "who_am_i.h"
 
 typedef void (*can_void_func_t)(uint32_t);

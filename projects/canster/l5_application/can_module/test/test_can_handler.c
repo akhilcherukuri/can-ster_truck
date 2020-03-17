@@ -1,6 +1,9 @@
 #include "unity.h"
 
 #include "Mockcan_bus.h"
+#include "Mockcan_driver_node.h"
+#include "Mockcan_motor_node.h"
+#include "Mockcan_sensor_node.h"
 
 // Not Mocked
 #include "can_bus_constants.h"

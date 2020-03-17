@@ -25,11 +25,7 @@ void test__periodic_callbacks__initialize(void) {
 }
 
 void test__periodic_callbacks__1Hz(void) {
-  can_handler__driver_heartbeat_manage_mia_Expect();
-  can_handler__sensor_heartbeat_manage_mia_Expect();
-  can_handler__motor_heartbeat_manage_mia_Expect();
   can_handler__handle_all_mia_Expect();
-
   periodic_callbacks__1Hz(0);
 }
 

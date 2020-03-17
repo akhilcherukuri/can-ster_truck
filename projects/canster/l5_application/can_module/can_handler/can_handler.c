@@ -1,10 +1,14 @@
 #include "can_handler.h"
 
-#include "can_bus_constants.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "can_bus_constants.h"
+
+#include "can_driver_node.h"
+#include "can_motor_node.h"
+#include "can_sensor_node.h"
 
 /**
  * Defined functions
