@@ -1,4 +1,6 @@
 #include "can_driver_node.h"
+#include "board_io.h"
+#include "gpio.h"
 
 // Assuming this data structure as output from the DBC
 static dbc_MOTOR_STEERING_s steering_val;
@@ -13,18 +15,19 @@ static dbc_SENSOR_SONARS_s sensor_sonar_local;
 static dbc_SENSOR_SONARS_s sensor_threshold_values = {{0}, 300, 300, 300};
 static dbc_MOTOR_SPEED_s wheel_speed_threshold_values = {{0}, 50.0};
 
-void can_handler__driver_heartbeat_manage_mia(void (*handle_func)(dbc_DRIVER_HEARTBEAT_s)) {
+void can_handler__driver_heartbeat_manage_mia() {
+#if BOARD_SENSOR_NODE == 1 || BOARD_MOTOR_NODE == 1
+  static dbc_DRIVER_HEARTBEAT_s driver_heartbeat;
   const uint32_t mia_increment_value = 1000;
-  dbc_DRIVER_HEARTBEAT_s driver_heartbeat;
 
   if (dbc_service_mia_DRIVER_HEARTBEAT(&driver_heartbeat, mia_increment_value)) {
 #if DEBUG == 1
     fprintf(stderr, "MIA -> DRIVER_HEARTBEAT\r\n");
 #endif
-    if (handle_func) {
-      handle_func(driver_heartbeat);
-    }
+    fprintf(stderr, "assigned default driver heartbeat = %d", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
+    gpio__toggle(board_io__get_led3());
   }
+#endif
 }
 
 void can_handler__driver_transmit(void) {
@@ -136,3 +139,26 @@ dbc_MOTOR_SPEED_FEEDBACK_s driver__get_current_motor_wheel_speed_from_rpm_sensor
 }
 
 // dbc_DRIVER_HEARTBEAT_s get_dbc_DRIVER_HEARTBEAT_val(void) { return driver_heartbeat; }
+
+void can_handler__receive_driver_heartbeat(dbc_message_header_t header, can__msg_t recv_message) {
+  // dbc_DRIVER_HEARTBEAT_s driver_heartbeat = get_dbc_DRIVER_HEARTBEAT_val();
+  dbc_DRIVER_HEARTBEAT_s driver_heartbeat_rcv;
+  if (dbc_decode_DRIVER_HEARTBEAT(&driver_heartbeat_rcv, header, recv_message.data.bytes)) {
+#if DEBUG == 1
+    fprintf(stderr, "\nDriver Heartbeat: %d\r\n", driver_heartbeat_rcv.DRIVER_HEARTBEAT_cmd);
+#endif
+  }
+}
+
+void can_handler__motor_feedback_receive(dbc_message_header_t header, can__msg_t recv_message) {
+  dbc_MOTOR_SPEED_FEEDBACK_s motor_wheel_speed_current_val_from_rpm_sensor;
+  /* Used only by DRIVER Node for the purpose of feedback monitoring */
+  if (dbc_decode_MOTOR_SPEED_FEEDBACK(&motor_wheel_speed_current_val_from_rpm_sensor, header,
+                                      recv_message.data.bytes)) {
+#if DEBUG == 1
+    fprintf(stderr, "\nCurrent Motor Wheel Speed Value from RPM Sensor via MOTOR Node: %lf\r\n",
+            (double)motor_wheel_speed_current_val_from_rpm_sensor.MOTOR_SPEED_current);
+#endif
+    driver__set_current_wheel_speed(motor_wheel_speed_current_val_from_rpm_sensor);
+  }
+}
