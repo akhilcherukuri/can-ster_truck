@@ -34,21 +34,48 @@ BS_:
 
 BU_: DBG DRIVER IO MOTOR SENSOR
 
-
 BO_ 100 DRIVER_HEARTBEAT: 1 DRIVER
- SG_ DRIVER_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" SENSOR,MOTOR
+ SG_ DRIVER_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" MOTOR,SENSOR
 
-BO_ 200 SENSOR_SONARS: 4 SENSOR
- SG_ SENSOR_SONARS_left : 0|10@1+ (1,0) [0|800] "inch" DRIVER
- SG_ SENSOR_SONARS_right : 10|10@1+ (1,0) [0|0] "inch" DRIVER
- SG_ SENSOR_SONARS_middle : 20|10@1+ (1,0) [0|0] "inch" DRIVER
+BO_ 101 MOTOR_HEARTBEAT: 1 MOTOR
+ SG_ MOTOR_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" DRIVER,SENSOR
 
+BO_ 102 SENSOR_HEARTBEAT: 1 SENSOR
+ SG_ SENSOR_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" DRIVER,MOTOR
+
+BO_ 200 MOTOR_SPEED_FEEDBACK: 4 MOTOR
+ SG_ MOTOR_SPEED_current : 0|32@1+ (0.1,0) [0|60] "kph" DRIVER
+
+BO_ 300 MOTOR_SPEED: 4 DRIVER
+ SG_ MOTOR_SPEED_processed : 0|32@1+ (0.1,0) [0|60] "kph" MOTOR
+
+BO_ 400 MOTOR_STEERING: 1 DRIVER
+ SG_ MOTOR_STEERING_direction : 0|8@1- (1,0) [-2|2] "" MOTOR
+
+BO_ 500 SENSOR_SONARS: 4 SENSOR
+ SG_ SENSOR_SONARS_left : 0|10@1+ (1,0) [0|500] "inch" DRIVER
+ SG_ SENSOR_SONARS_right : 10|10@1+ (1,0) [0|500] "inch" DRIVER
+ SG_ SENSOR_SONARS_middle : 20|10@1+ (1,0) [0|500] "inch" DRIVER
 
 CM_ BU_ DRIVER "The driver controller driving the car";
 CM_ BU_ MOTOR "The motor controller of the car";
 CM_ BU_ SENSOR "The sensor controller of the car";
-CM_ BO_ 100 "Sync message used to synchronize the controllers";
-CM_ SG_ 100 DRIVER_HEARTBEAT_cmd "Heartbeat command from the driver";
+CM_ BO_ 100 "Driver Heartbeat Sync message used to synchronize the controllers";
+CM_ BO_ 101 "Motor Heartbeat Sync message used to synchronize the controllers";
+CM_ BO_ 102 "Sensor Heartbeat Sync message used to synchronize the controllers";
+CM_ BO_ 200 "Speed feedback value from RPM Sensor";
+CM_ BO_ 300 "New/Processed speed value sent from driver to motor node based on obstacles or slope";
+CM_ BO_ 400 "Steering values sent to motor node based on obstacles";
+CM_ BO_ 500 "Sonar sensor values sent to driver node to compute steering values";
+CM_ SG_ 100 DRIVER_HEARTBEAT_cmd "Heartbeat command from the driver node";
+CM_ SG_ 101 MOTOR_HEARTBEAT_cmd "Motor command from the motor node";
+CM_ SG_ 102 SENSOR_HEARTBEAT_cmd "Sensor command from the sensor node";
+CM_ SG_ 200 MOTOR_SPEED_current "Actual/Current speed read from RPM sensor via motor node";
+CM_ SG_ 300 MOTOR_SPEED_processed "New/Processed speed based on obstacles or slope and sent from driver to motor node";
+CM_ SG_ 400 MOTOR_STEERING_direction "Steering value calculated based on obstacles and sent from driver to motor node";
+CM_ SG_ 500 SENSOR_SONARS_left "Left sonar sensor value based on obstacles";
+CM_ SG_ 500 SENSOR_SONARS_right "Left sonar sensor value based on obstacles";
+CM_ SG_ 500 SENSOR_SONARS_middle "Left sonar sensor value based on obstacles";
 
 BA_DEF_ "BusType" STRING ;
 BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;
@@ -61,5 +88,9 @@ BA_DEF_DEF_ "GenMsgCycleTime" 0;
 BA_ "GenMsgCycleTime" BO_ 100 1000;
 BA_ "GenMsgCycleTime" BO_ 200 50;
 BA_ "FieldType" SG_ 100 DRIVER_HEARTBEAT_cmd "DRIVER_HEARTBEAT_cmd";
+BA_ "FieldType" SG_ 101 MOTOR_HEARTBEAT_cmd "MOTOR_HEARTBEAT_cmd";
+BA_ "FieldType" SG_ 102 SENSOR_HEARTBEAT_cmd "SENSOR_HEARTBEAT_cmd";
 
 VAL_ 100 DRIVER_HEARTBEAT_cmd 2 "DRIVER_HEARTBEAT_cmd_REBOOT" 1 "DRIVER_HEARTBEAT_cmd_SYNC" 0 "DRIVER_HEARTBEAT_cmd_NOOP" ;
+VAL_ 101 MOTOR_HEARTBEAT_cmd 20 "MOTOR_HEARTBEAT_cmd_REBOOT" 10 "MOTOR_HEARTBEAT_cmd_SYNC" 0 "MOTOR_HEARTBEAT_cmd_NOOP" ;
+VAL_ 102 SENSOR_HEARTBEAT_cmd 200 "SENSOR_HEARTBEAT_cmd_REBOOT" 100 "SENSOR_HEARTBEAT_cmd_SYNC" 0 "SENSOR_HEARTBEAT_cmd_NOOP" ;

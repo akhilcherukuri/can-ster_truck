@@ -6,11 +6,14 @@
 
 #include "can_bus_constants.h"
 
+#include "can_sensor_node.h"
+
 /**
  * Defined functions
  */
 void can_handler__handle_all_mia(void) {
   // Module function
+  can_sensor__handle_all_mia();
 }
 
 void can_handler__handle_all_incoming_messages(void) {
@@ -29,12 +32,14 @@ void can_handler__handle_all_incoming_messages(void) {
 #endif
 
     // Module function
-    (void)header;
+    // (void)header;
+    can_sensor__receive_all_messages(header, recv_message.data.bytes);
   }
 }
 
 void can_handler__transmit_message_10hz(void) {
   // Module function
+  can_sensor__transmit_all_messages();
 }
 
 /**
