@@ -8,6 +8,7 @@
 
 // TODO, Add all your node includes here
 #include "can_driver_node.h"
+#include "can_motor_node.h"
 #include "can_sensor_node.h"
 
 /**
@@ -24,6 +25,10 @@ void can_handler__handle_all_mia(void) {
   // can_driver__motor_speed_mia();
   // can_driver__motor_steering_mia();
   // can_driver__driver_heartbeat_mia();
+
+  // Motor Node MIA Functions
+  // can_motor__motor_heartbeat_mia();
+  // can_motor__motor_speed_feedback_mia();
 }
 
 void can_handler__handle_all_incoming_messages(void) {
@@ -52,6 +57,10 @@ void can_handler__handle_all_incoming_messages(void) {
     // can_driver__decode_driver_heartbeat(header, recv_message.data.bytes);
     // can_driver__decode_motor_speed(header, recv_message.data.bytes);
     // can_driver__decode_motor_steering(header, recv_message.data.bytes);
+
+    // Motor Node Decode functions
+    // can_motor__decode_motor_heartbeat(header, recv_message.data.bytes);
+    // can_motor__decode_motor_speed_feedback(header, recv_message.data.bytes);
   }
 }
 
@@ -63,6 +72,9 @@ void can_handler__transmit_message_10hz(void) {
 
   // Driver Node Transmit
   can_driver__transmit_all_messages();
+
+  // Motor Node Transmit
+  can_motor__transmit_all_messages();
 }
 
 /**

@@ -3,6 +3,7 @@
 #include "Mockcan_bus.h"
 
 #include "Mockcan_driver_node.h"
+#include "Mockcan_motor_node.h"
 #include "Mockcan_sensor_node.h"
 
 // Not Mocked
@@ -42,6 +43,7 @@ void test_can_handler__handle_all_incoming_messages(void) {
 void test_can_handler__transmit_message_10hz(void) {
   can_sensor__transmit_all_messages_Expect();
   can_driver__transmit_all_messages_Expect();
+  can_motor__transmit_all_messages_Expect();
   can_handler__transmit_message_10hz();
 }
 
