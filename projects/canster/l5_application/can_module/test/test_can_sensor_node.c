@@ -18,7 +18,7 @@ void setUp() {
 void test_can_sensor__sensor_heartbeat_mia_true(void) {
   gpio_s gpio;
   board_io__get_led2_ExpectAndReturn(gpio);
-  gpio__toggle_Expect(gpio);
+  gpio__set_Expect(gpio);
 
   can_sensor__sensor_heartbeat_mia();
   TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 1000);
@@ -44,6 +44,10 @@ void test_can_sensor__sensor_heartbeat_mia_true_false(void) {
 }
 
 void test_can_sensor__sensor_sonar_mia_true(void) {
+  gpio_s gpio;
+  board_io__get_led2_ExpectAndReturn(gpio);
+  gpio__set_Expect(gpio);
+
   can_sensor__sensor_sonar_mia();
   TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 1000);
 
