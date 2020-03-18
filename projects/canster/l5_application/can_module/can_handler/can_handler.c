@@ -6,6 +6,8 @@
 
 #include "can_bus_constants.h"
 
+// TODO, Add all your node includes here
+#include "can_driver_node.h"
 #include "can_sensor_node.h"
 
 /**
@@ -17,6 +19,11 @@ void can_handler__handle_all_mia(void) {
   // Senor Node MIA Functions
   // can_sensor__sensor_sonar_mia();
   // can_sensor__sensor_heartbeat_mia();
+
+  // Driver Node MIA Functions
+  // can_driver__motor_speed_mia();
+  // can_driver__motor_steering_mia();
+  // can_driver__driver_heartbeat_mia();
 }
 
 void can_handler__handle_all_incoming_messages(void) {
@@ -40,6 +47,11 @@ void can_handler__handle_all_incoming_messages(void) {
     // Sensor Node Decode functions
     // can_sensor__decode_sensor_heartbeat(header, recv_message.data.bytes);
     // can_sensor__decode_sensor_sonar(header, recv_message.data.bytes);
+
+    // Driver Node Decode functions
+    // can_driver__decode_driver_heartbeat(header, recv_message.data.bytes);
+    // can_driver__decode_motor_speed(header, recv_message.data.bytes);
+    // can_driver__decode_motor_steering(header, recv_message.data.bytes);
   }
 }
 
@@ -48,6 +60,9 @@ void can_handler__transmit_message_10hz(void) {
 
   // Sensor Node Transmit
   can_sensor__transmit_all_messages();
+
+  // Driver Node Transmit
+  can_driver__transmit_all_messages();
 }
 
 /**
