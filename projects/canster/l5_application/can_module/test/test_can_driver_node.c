@@ -5,6 +5,7 @@
 
 #include "Mockboard_io.h"
 #include "Mockcan_handler.h"
+#include "Mockdriver_obstacle.h"
 #include "Mockgpio.h"
 
 #include "can_driver_node.c"
@@ -99,4 +100,15 @@ void test_can_driver__motor_steering_mia_false() {
 
   can_driver__motor_steering_mia();
   TEST_ASSERT_EQUAL_UINT32(driver_steering.mia_info.mia_counter, 1000);
+}
+
+/**
+ * Static
+ */
+void test_can_driver__transmit_driver_steering() {
+  dbc_MOTOR_STEERING_s message;
+  driver_obstacle__get_motor_commands_ExpectAndReturn(message);
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+
+  can_driver__transmit_driver_steering();
 }

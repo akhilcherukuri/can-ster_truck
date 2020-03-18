@@ -3,6 +3,8 @@
 #include "board_io.h"
 #include "gpio.h"
 
+#include "driver_obstacle.h"
+
 #define DRIVER_NODE_DEBUG 1
 
 #if DRIVER_NODE_DEBUG == 1
@@ -72,10 +74,7 @@ void can_driver__transmit_all_messages(void) {
 }
 
 static void can_driver__transmit_driver_steering() {
-
-  // TODO, Get the steering values from hardware here
-  dbc_MOTOR_STEERING_s message;
-  message.MOTOR_STEERING_direction = 0; // straight
+  dbc_MOTOR_STEERING_s message = driver_obstacle__get_motor_commands();
 
   if (!dbc_encode_and_send_MOTOR_STEERING(NULL, &message)) {
 #if DRIVER_NODE_DEBUG == 1

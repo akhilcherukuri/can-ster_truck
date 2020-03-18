@@ -5,6 +5,7 @@
 
 #include "Mockboard_io.h"
 #include "Mockcan_handler.h"
+#include "Mockdriver_obstacle.h"
 #include "Mockgpio.h"
 
 #include "can_sensor_node.c"
@@ -47,6 +48,8 @@ void test_can_sensor__sensor_sonar_mia_true(void) {
   gpio_s gpio;
   board_io__get_led2_ExpectAndReturn(gpio);
   gpio__set_Expect(gpio);
+
+  driver_obstacle__process_input_Expect(&sensor_sonar);
 
   can_sensor__sensor_sonar_mia();
   TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 1000);

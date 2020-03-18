@@ -3,6 +3,8 @@
 #include "board_io.h"
 #include "gpio.h"
 
+#include "driver_obstacle.h"
+
 #define SENSOR_NODE_DEBUG 1
 
 #if SENSOR_NODE_DEBUG == 1
@@ -16,6 +18,11 @@
  */
 static dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
 static dbc_SENSOR_SONARS_s sensor_sonar;
+
+/**
+ * STATIC FUNCTIONS
+ */
+static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *sonar);
 
 /**
  * Getters here
@@ -52,6 +59,7 @@ void can_sensor__sensor_sonar_mia() {
 
     // DONE, Add more here
     gpio__set(board_io__get_led2());
+    can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
 
@@ -123,5 +131,11 @@ void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[
 
     // TODO, Do other things here
     // ! Added sensor sonar processing code here
+    can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
+
+/**
+ * STATIC FUNCTIONS
+ */
+static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *sonar) { driver_obstacle__process_input(sonar); }
