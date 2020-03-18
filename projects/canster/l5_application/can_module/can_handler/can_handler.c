@@ -6,7 +6,7 @@
 
 #include "can_bus_constants.h"
 
-#include "can_sensor_node.h"
+#include "can_driver_node.h"
 
 /**
  * Defined functions
@@ -47,7 +47,7 @@ void can_handler__transmit_message_10hz(void) {
   // Module function
 
   // Sensor Node Transmit
-  can_sensor__transmit_all_messages();
+  can_driver__transmit_all_messages();
 }
 
 /**
