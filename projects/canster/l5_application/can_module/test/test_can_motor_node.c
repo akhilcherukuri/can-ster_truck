@@ -18,6 +18,10 @@ void setUp() {
 void tearDown() {}
 
 #if BOARD_MOTOR_NODE == 1
+void test_can_motor__motor_heartbeat_mia_true() {}
+void test_can_motor__motor_heartbeat_mia_false() {}
+void test_can_motor__motor_speed_feedback_mia_true() {}
+void test_can_motor__motor_speed_feedback_mia_false() {}
 #else
 
 void test_can_motor__motor_heartbeat_mia_true() {

@@ -43,7 +43,8 @@ void can_driver__motor_speed_mia() {
   if (dbc_service_mia_MOTOR_SPEED(&driver_required_motor_speed, mia_increment_value)) {
 #if DRIVER_NODE_DEBUG == 1
     printf("MIA -> DRIVER_REQUIRED_MOTOR_SPEED\r\n");
-    printf("assigned default driver required motor speed = %f\r\n", driver_required_motor_speed.MOTOR_SPEED_processed);
+    printf("assigned default driver required motor speed = %f\r\n",
+           (double)driver_required_motor_speed.MOTOR_SPEED_processed);
 #endif
     gpio__set(board_io__get_led2());
   }
@@ -128,7 +129,7 @@ void can_driver__decode_driver_heartbeat(dbc_message_header_t header, uint8_t by
 void can_driver__decode_motor_speed(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_MOTOR_SPEED(&driver_required_motor_speed, header, bytes)) {
 #if DRIVER_NODE_DEBUG == 1
-    printf("Driver Required motor speed: %f\r\n", driver_required_motor_speed.MOTOR_SPEED_processed);
+    printf("Driver Required motor speed: %f\r\n", (double)driver_required_motor_speed.MOTOR_SPEED_processed);
 #endif
 
     // TODO, Do other things here

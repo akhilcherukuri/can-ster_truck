@@ -102,6 +102,7 @@ void test_can_driver__motor_steering_mia_false() {
   TEST_ASSERT_EQUAL_UINT32(driver_steering.mia_info.mia_counter, 1000);
 }
 
+#if BOARD_DRIVER_NODE == 1
 /**
  * Static
  */
@@ -112,3 +113,6 @@ void test_can_driver__transmit_driver_steering() {
 
   can_driver__transmit_driver_steering();
 }
+#else
+void test_can_driver__transmit_driver_steering() {}
+#endif
