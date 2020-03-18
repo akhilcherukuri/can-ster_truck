@@ -77,5 +77,6 @@ void test_can_sensor__transmit_all_messages(void) {
 
   can_sensor__transmit_all_messages();
 }
-
+#else
+void test_can_sensor__transmit_all_messages(void) {}
 #endif

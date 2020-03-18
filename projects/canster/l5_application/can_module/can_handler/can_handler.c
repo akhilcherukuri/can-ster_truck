@@ -13,7 +13,10 @@
  */
 void can_handler__handle_all_mia(void) {
   // Module function
-  can_sensor__handle_all_mia();
+
+  // Senor Node MIA Functions
+  // can_sensor__sensor_sonar_mia();
+  // can_sensor__sensor_heartbeat_mia();
 }
 
 void can_handler__handle_all_incoming_messages(void) {
@@ -32,13 +35,18 @@ void can_handler__handle_all_incoming_messages(void) {
 #endif
 
     // Module function
-    // (void)header;
-    can_sensor__receive_all_messages(header, recv_message.data.bytes);
+    (void)header;
+
+    // Sensor Node Decode functions
+    // can_sensor__decode_sensor_heartbeat(header, recv_message.data.bytes);
+    // can_sensor__decode_sensor_sonar(header, recv_message.data.bytes);
   }
 }
 
 void can_handler__transmit_message_10hz(void) {
   // Module function
+
+  // Sensor Node Transmit
   can_sensor__transmit_all_messages();
 }
 
