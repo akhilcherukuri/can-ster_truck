@@ -16,6 +16,10 @@
  */
 void can_handler__handle_all_mia(void) {
   // Module function
+  /**
+   * NOTE, We will uncomment these functions depending on which node we are
+   * And looking at the dbc file
+   */
 
   // Senor Node MIA Functions
   // can_sensor__sensor_sonar_mia();
@@ -48,6 +52,12 @@ void can_handler__handle_all_incoming_messages(void) {
 
     // Module function
     (void)header;
+
+    /**
+     * NOTE
+     * We will uncomment these functions depending on which node we are
+     * and the dbc file
+     */
 
     // Sensor Node Decode functions
     // can_sensor__decode_sensor_heartbeat(header, recv_message.data.bytes);

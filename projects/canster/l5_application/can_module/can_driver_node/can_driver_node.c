@@ -46,7 +46,7 @@ void can_driver__motor_speed_mia() {
     printf("assigned default driver required motor speed = %f\r\n",
            (double)driver_required_motor_speed.MOTOR_SPEED_processed);
 #endif
-    gpio__set(board_io__get_led2());
+    // gpio__set(board_io__get_led2());
   }
 }
 
@@ -58,7 +58,7 @@ void can_driver__motor_steering_mia() {
     printf("MIA -> DRIVER_STEERING\r\n");
     printf("assigned default driver steering = %d\r\n", driver_steering.MOTOR_STEERING_direction);
 #endif
-    gpio__set(board_io__get_led2());
+    // gpio__set(board_io__get_led2());
   }
 }
 
@@ -134,7 +134,7 @@ void can_driver__decode_motor_speed(dbc_message_header_t header, uint8_t bytes[8
 
     // TODO, Do other things here
     // ! Make a function for process required_motor_speed here
-    gpio__reset(board_io__get_led2());
+    // gpio__reset(board_io__get_led2());
   }
 }
 
@@ -146,6 +146,6 @@ void can_driver__decode_motor_steering(dbc_message_header_t header, uint8_t byte
 
     // TODO, Do other things here
     // ! Make a function for process motor_steering here
-    gpio__reset(board_io__get_led2());
+    // gpio__reset(board_io__get_led2());
   }
 }

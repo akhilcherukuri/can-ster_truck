@@ -43,7 +43,7 @@ void can_sensor__sensor_heartbeat_mia() {
 #endif
 
     // Do other things here
-    gpio__set(board_io__get_led2());
+    gpio__set(board_io__get_led3());
   }
 }
 
@@ -58,7 +58,7 @@ void can_sensor__sensor_sonar_mia() {
 #endif
 
     // DONE, Add more here
-    gpio__set(board_io__get_led2());
+    // gpio__set(board_io__get_led2());
     can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
@@ -119,6 +119,7 @@ void can_sensor__decode_sensor_heartbeat(dbc_message_header_t header, uint8_t by
 
     // TODO, Do other things here
     // ! Add sensor heartbeat processing code here
+    gpio__reset(board_io__get_led3());
   }
 }
 

@@ -16,25 +16,14 @@ void periodic_callbacks__initialize(void) {
   can_bus__initialize();
 }
 
-void periodic_callbacks__1Hz(uint32_t callback_count) {
-  gpio__toggle(board_io__get_led0());
-  // Add your code here
-
-  can_handler__handle_all_mia();
-}
+void periodic_callbacks__1Hz(uint32_t callback_count) { can_handler__handle_all_mia(); }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
-  gpio__toggle(board_io__get_led1());
-  // Add your code here
-
   can_handler__handle_all_incoming_messages();
   can_handler__transmit_message_10hz();
 }
 
-void periodic_callbacks__100Hz(uint32_t callback_count) {
-  gpio__toggle(board_io__get_led2());
-  // Add your code here
-}
+void periodic_callbacks__100Hz(uint32_t callback_count) {}
 
 /**
  * @warning

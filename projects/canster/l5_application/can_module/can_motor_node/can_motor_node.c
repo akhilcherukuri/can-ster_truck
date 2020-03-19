@@ -79,7 +79,7 @@ void can_motor__motor_speed_feedback_mia() {
 #endif
     printf("assigned default motor speed for feedback = %f\r\n",
            (double)motor_wheel_speed_current_val.MOTOR_SPEED_current);
-    gpio__set(board_io__get_led1());
+    // gpio__set(board_io__get_led1());
   }
 }
 
