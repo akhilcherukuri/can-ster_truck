@@ -1,7 +1,6 @@
 #include "ultrasonic_wrapper.h"
 
 #include "gpio.h"
-#include "ultrasonic.h"
 
 /**
  * ULTRASONIC SENSOR PORT-PIN MAPPING SUMMARY:
