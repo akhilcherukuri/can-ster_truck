@@ -2,6 +2,8 @@
 #include "can_led.h"
 #include "lidar.h"
 
+#include "delay.h"
+
 #include "board_io.h"
 #include "gpio.h"
 
@@ -14,12 +16,17 @@ void periodic_callbacks__initialize(void) {
   // This method is invoked once when the periodic tasks are created
   can_led__init();
   lidar__config_init();
+  delay__ms(100);
+  lidar__reset();
+  delay__ms(50);
+  lidar__force_scan();
+  // lidar__get_health();
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
   // Add your code here
-  // lidar__sample_scan();
-  lidar__express_scan();
+  // lidar__express_scan();
+  lidar__receive_data_response();
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
@@ -27,7 +34,6 @@ void periodic_callbacks__10Hz(uint32_t callback_count) {
 }
 void periodic_callbacks__100Hz(uint32_t callback_count) {
   // Add your code here
-  lidar__receive_data_response();
 }
 
 /**
