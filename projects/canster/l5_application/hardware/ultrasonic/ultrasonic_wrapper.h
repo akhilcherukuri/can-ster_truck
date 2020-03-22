@@ -2,11 +2,11 @@
 
 #include "ultrasonic.h"
 
+typedef struct {
+  float right, left, middle;
+} ultrasonic_distance_s;
+
 void ultrasonic__init_all_sensors(void);
-void ultrasonic__init_ports_and_pins(void);
+void ultrasonic__update_all_sensors(void);
 
-ultrasonic_sensor_s *get__sensor_left(void);
-ultrasonic_sensor_s *get__sensor_middle(void);
-ultrasonic_sensor_s *get__sensor_right(void);
-
-const double ultrasonic__get_obstacle_distance(ultrasonic_sensor_s *);
+void ultrasonic__get_distance_from_all_sensors(ultrasonic_distance_s *output);

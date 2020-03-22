@@ -17,5 +17,5 @@ typedef struct {
   double distance_from_obstacle;
 } ultrasonic_sensor_s;
 
-void ultrasonic__init(ultrasonic_sensor_s *);
-void ultrasonic__calculate_distance_from_obstacle(ultrasonic_sensor_s *);
+void ultrasonic__init(ultrasonic_sensor_s *u_sensor);
+void ultrasonic__calculate_distance_from_obstacle(ultrasonic_sensor_s *u_sensor);
