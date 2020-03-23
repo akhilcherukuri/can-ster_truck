@@ -36,14 +36,22 @@ void can_geo__transmit_all_messages(void) {
 static void can_geo__transmit_geo_heartbeat() {
   dbc_GEO_HEARTBEAT_s message = {};
   message.GEO_HEARTBEAT_cmd = GEO_HEARTBEAT_cmd_SYNC;
-  dbc_encode_and_send_GEO_HEARTBEAT(NULL, &message);
+  if (!dbc_encode_and_send_GEO_HEARTBEAT(NULL, &message)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Failed to encode and send Geo Heartbeat\r\n");
+#endif
+  }
 }
 
 static void can_geo__transmit_geo_degree() {
   // TODO, get current and computed degree from here
   dbc_GEO_DEGREE_s message = {};
 
-  dbc_encode_and_send_GEO_DEGREE(NULL, &message);
+  if (!dbc_encode_and_send_GEO_DEGREE(NULL, &message)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Failed to encode and send Geo Degree\r\n");
+#endif
+  }
 }
 
 #else
