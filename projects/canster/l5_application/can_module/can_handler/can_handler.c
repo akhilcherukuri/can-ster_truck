@@ -8,6 +8,7 @@
 
 // TODO, Add all your node includes here
 #include "can_driver_node.h"
+#include "can_geo_node.h"
 #include "can_motor_node.h"
 #include "can_sensor_node.h"
 
@@ -33,6 +34,10 @@ void can_handler__handle_all_mia(void) {
   // Motor Node MIA Functions
   // can_motor__motor_heartbeat_mia();
   // can_motor__motor_speed_feedback_mia();
+
+  // Geo Node MIA Functions
+  // can_geo__geo_heartbeat_mia();
+  // can_geo__geo_degree_mia();
 }
 
 void can_handler__handle_all_incoming_messages(void) {
@@ -71,6 +76,10 @@ void can_handler__handle_all_incoming_messages(void) {
     // Motor Node Decode functions
     // can_motor__decode_motor_heartbeat(header, recv_message.data.bytes);
     // can_motor__decode_motor_speed_feedback(header, recv_message.data.bytes);
+
+    // Geo Node Decode Functions
+    // can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);
+    // can_geo__decode_geo_degree(header, recv_message.data.bytes);
   }
 }
 
@@ -85,6 +94,9 @@ void can_handler__transmit_message_10hz(void) {
 
   // Motor Node Transmit
   can_motor__transmit_all_messages();
+
+  // Geo Node Transmit
+  can_geo__transmit_all_messages();
 }
 
 /**
