@@ -1,5 +1,10 @@
 #include "can_geo_node.h"
 
+#include "compass.h"
+
+#include "driver_obstacle.h"
+#include "geo_logic.h"
+
 /**
  * Constants
  */
@@ -22,6 +27,12 @@ static dbc_GEO_DEGREE_s geo_degree;
 /**
  * Functions
  */
+// Getters for all static variables
+// ! NO SETTERS
+// ! DO NOT DISCARD THE CONST QUALIFIER
+const dbc_GEO_DEGREE_s *can_geo__get_geo_degree() { return &geo_degree; }
+const dbc_GEO_HEARTBEAT_s *can_geo__get_heartbeat() { return &geo_heartbeat; }
+
 #if BOARD_GEO_NODE == 1
 
 static void can_geo__transmit_geo_heartbeat();
@@ -46,6 +57,8 @@ static void can_geo__transmit_geo_heartbeat() {
 static void can_geo__transmit_geo_degree() {
   // TODO, get current and computed degree from here
   dbc_GEO_DEGREE_s message = {};
+  message.GEO_DEGREE_current = compass__read_compass_bearing_16bit();
+  message.GEO_DEGREE_required = geo_logic__compute_required_bearing();
 
   if (!dbc_encode_and_send_GEO_DEGREE(NULL, &message)) {
 #if GEO_NODE_DEBUG == 1
@@ -70,6 +83,7 @@ void can_geo__geo_heartbeat_mia() {
     // Do something here
   }
 }
+
 void can_geo__geo_degree_mia() {
   const uint32_t increment = 1000;
 
@@ -84,7 +98,11 @@ void can_geo__geo_degree_mia() {
   }
 }
 
-// Decode
+/**
+ * DECODE
+ */
+static void can_geo__on_decode_geo_degree(void);
+
 void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_GEO_HEARTBEAT(&geo_heartbeat, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
@@ -103,11 +121,8 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
 #endif
 
     // Do something here
+    can_geo__on_decode_geo_degree();
   }
 }
 
-// Getters for all static variables
-// ! NO SETTERS
-// ! DO NOT DISCARD THE CONST QUALIFIER
-const dbc_GEO_DEGREE_s *can_geo__get_geo_degree() { return &geo_degree; }
-const dbc_GEO_HEARTBEAT_s *can_geo__get_heartbeat() { return &geo_heartbeat; }
+static void can_geo__on_decode_geo_degree(void) { driver_obstacle__geo_controller_directions(&geo_degree); }

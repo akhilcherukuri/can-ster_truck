@@ -11,6 +11,8 @@
 #include "gpio.h"
 
 #include "driver_obstacle.h"
+#include "geo_logic.h"
+
 #include "driver_state.h"
 
 #define DRIVER_NODE_DEBUG 1
@@ -200,4 +202,5 @@ void can_driver__decode_driver_coordinates(dbc_message_header_t header, uint8_t 
 
 static void can_driver__on_decode_driver_coordinates() {
   // DONE, Update the geo logic/state here
+  geo_logic__update_destination_coordinate(&driver_coordinates);
 }

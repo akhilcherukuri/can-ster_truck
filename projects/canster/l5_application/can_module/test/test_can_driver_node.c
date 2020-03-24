@@ -8,6 +8,8 @@
 #include "Mockgpio.h"
 
 #include "Mockdriver_obstacle.h"
+#include "Mockgeo_logic.h"
+
 #include "Mockdriver_state.h"
 
 #include "can_driver_node.c"
@@ -146,4 +148,8 @@ void test_can_driver__transmit_driver_coordinates() {}
 /**
  * DECODE
  */
-void test_can_driver__on_decode_driver_coordinates(void) { can_driver__on_decode_driver_coordinates(); }
+void test_can_driver__on_decode_driver_coordinates(void) {
+  dbc_DRIVER_COORDINATES_s driver_coordinate;
+  geo_logic__update_destination_coordinate_Expect(&driver_coordinates);
+  can_driver__on_decode_driver_coordinates();
+}

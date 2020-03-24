@@ -26,6 +26,8 @@ const dbc_MOTOR_SPEED_FEEDBACK_s dbc_mia_replacement_MOTOR_SPEED_FEEDBACK = {{0}
 // Geo
 const uint32_t dbc_mia_threshold_DRIVER_COORDINATES = 3000;
 const uint32_t dbc_mia_threshold_GEO_DEGREE = 3000;
+const uint32_t dbc_mia_threshold_GEO_HEARTBEAT = 3000;
 
 const dbc_DRIVER_COORDINATES_s dbc_mia_replacement_DRIVER_COORDINATES;
 const dbc_GEO_DEGREE_s dbc_mia_replacement_GEO_DEGREE;
+const dbc_GEO_HEARTBEAT_s dbc_mia_replacement_GEO_HEARTBEAT;
