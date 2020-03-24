@@ -5,8 +5,10 @@
 
 #include "Mockboard_io.h"
 #include "Mockcan_handler.h"
-#include "Mockdriver_obstacle.h"
 #include "Mockgpio.h"
+
+#include "Mockdriver_obstacle.h"
+#include "Mockdriver_state.h"
 
 #include "can_driver_node.c"
 #include "who_am_i.h"
@@ -18,6 +20,9 @@ void setUp() {
 }
 void tearDown() {}
 
+/**
+ * MIA
+ */
 void test_can_driver__driver_heartbeat_mia_true() {
   gpio_s gpio;
   board_io__get_led2_ExpectAndReturn(gpio);
@@ -113,6 +118,32 @@ void test_can_driver__transmit_driver_steering() {
 
   can_driver__transmit_driver_steering();
 }
+
+void test_can_driver__transmit_driver_required_motor_speed() {
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+  can_driver__transmit_driver_required_motor_speed();
+}
+
+void test_can_driver__transmit_driver_heartbeat() {
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+  can_driver__transmit_driver_heartbeat();
+}
+
+void test_can_driver__transmit_driver_coordinates() {
+  const dbc_DRIVER_COORDINATES_s destination_coordinate;
+  driver_state__get_destination_coordinate_ExpectAndReturn(&destination_coordinate);
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+  can_driver__transmit_driver_coordinates();
+}
+
 #else
 void test_can_driver__transmit_driver_steering() {}
+void test_can_driver__transmit_driver_required_motor_speed() {}
+void test_can_driver__transmit_driver_heartbeat() {}
+void test_can_driver__transmit_driver_coordinates() {}
 #endif
+
+/**
+ * DECODE
+ */
+void test_can_driver__on_decode_driver_coordinates(void) { can_driver__on_decode_driver_coordinates(); }

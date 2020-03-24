@@ -1,9 +1,17 @@
+
+/**
+ * TODO, Update
+ * - `driver_state__update_destination_coordinate()` inside `can_sensor__on_decode`
+ * -
+ */
+
 #include "can_driver_node.h"
 
 #include "board_io.h"
 #include "gpio.h"
 
 #include "driver_obstacle.h"
+#include "driver_state.h"
 
 #define DRIVER_NODE_DEBUG 1
 
@@ -89,8 +97,9 @@ void can_driver__transmit_all_messages(void) {
 }
 
 static void can_driver__transmit_driver_coordinates() {
-  // TODO, update the message here
-  dbc_DRIVER_COORDINATES_s message = {};
+
+  const dbc_DRIVER_COORDINATES_s *destination_coordinate = driver_state__get_destination_coordinate();
+  dbc_DRIVER_COORDINATES_s message = *destination_coordinate;
 
   if (!dbc_encode_and_send_DRIVER_COORDINATES(NULL, &message)) {
 #if DRIVER_NODE_DEBUG == 1
@@ -139,6 +148,8 @@ void can_driver__transmit_all_messages(void) {}
 /**
  * DECODE
  */
+static void can_driver__on_decode_driver_coordinates();
+
 void can_driver__decode_driver_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_DRIVER_HEARTBEAT(&driver_heartbeat, header, bytes)) {
 #if DRIVER_NODE_DEBUG == 1
@@ -182,6 +193,11 @@ void can_driver__decode_driver_coordinates(dbc_message_header_t header, uint8_t 
            (double)driver_coordinates.DRIVER_COORDINATES_longitude);
 #endif
 
-    // TODO, Add other things here
+    // DONE, Add other things here
+    can_driver__on_decode_driver_coordinates();
   }
+}
+
+static void can_driver__on_decode_driver_coordinates() {
+  // DONE, Update the geo logic/state here
 }
