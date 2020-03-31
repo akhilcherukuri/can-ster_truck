@@ -6,7 +6,7 @@
 
 #include "board_io.h"
 #include "gpio.h"
-
+static int i = 0;
 /******************************************************************************
  * Your board will reset if the periodic function does not return within its deadline
  * For 1Hz, the function must return within 1000ms
@@ -16,17 +16,24 @@ void periodic_callbacks__initialize(void) {
   // This method is invoked once when the periodic tasks are created
   can_led__init();
   lidar__config_init();
-  delay__ms(100);
-  lidar__reset();
-  delay__ms(50);
-  lidar__force_scan();
-  // lidar__get_health();
+  // lidar__reset();
+  // delay__ms(10);
+  // lidar__express_scan();
+  // delay__ms(1000);
+  // lidar__express_scan();
+
+  // delay__ms(2000);
+  // lidar__sample_scan();
+  // delay__ms(2000);
+  // lidar__sample_scan();
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
   // Add your code here
-  // lidar__express_scan();
-  lidar__receive_data_response();
+  // if (callback_count == 1) {
+  //   lidar__sample_scan();
+  // }
+  lidar__sample_scan_run_once(callback_count);
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
@@ -34,6 +41,7 @@ void periodic_callbacks__10Hz(uint32_t callback_count) {
 }
 void periodic_callbacks__100Hz(uint32_t callback_count) {
   // Add your code here
+  lidar__receive_data_response();
 }
 
 /**
