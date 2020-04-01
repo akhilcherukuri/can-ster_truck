@@ -90,7 +90,29 @@ CM_ BO_ 400 "Steering direction and speed values sent by Driver Node";
 CM_ BO_ 500 "Information values sent by Motor Node";
 
 CM_ SG_ 100 DRIVER_HEARTBEAT_cmd "Heartbeat command from the driver";
+CM_ SG_ 101 SENSOR_HEARTBEAT_cmd "Heartbeat command from the sensor";
+CM_ SG_ 102 GEO_HEARTBEAT_cmd "Heartbeat command from the geological node";
+CM_ SG_ 103 MOTOR_HEARTBEAT_cmd "Heartbeat command from the motor";
 
+CM_ SG_ 200 SENSOR_SONARS_left "Ultrasonic Sensor attached to the left side";
+CM_ SG_ 200 SENSOR_SONARS_right "Ultrasonic Sensor attached to the right side";
+CM_ SG_ 200 SENSOR_SONARS_middle "Ultrasonic Sensor attached to the middle";
+
+CM_ SG_ 210 SENSOR_LIDAR_middle "Lidar sensing the middle sector (-15 to 15)";
+CM_ SG_ 210 SENSOR_LIDAR_slight_left "Lidar sensing the slight left sector (-45 to -15)";
+CM_ SG_ 210 SENSOR_LIDAR_slight_right "Lidar sensing the slight right sector (15 to 45)";
+CM_ SG_ 210 SENSOR_LIDAR_back "Lidar sensing the back of the car (165 to 195)";
+
+CM_ SG_ 220 SENSOR_BT_COORDINATES_latitude "Destination Latitude received over Bluetooth";
+CM_ SG_ 220 SENSOR_BT_COORDINATES_longitude "Destination Longitude received over Bluetooth";
+
+CM_ SG_ 300 GEO_DEGREE_current "Current Geo Degree relative to true north";
+CM_ SG_ 300 GEO_DEGREE_required "Calculated Geo Degree computed by Haversine Formula";
+
+CM_ SG_ 400 DRIVER_STEERING_direction "Calculated Driver Steering values for Motor";
+CM_ SG_ 400 DRIVER_STEERING_speed "Calculated Driver speed values for Motor";
+
+CM_ SG_ 500 MOTOR_INFO_rpm "Feedback RPM (speed) sent by Motor";
 
 BA_DEF_ "BusType" STRING ;
 BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;
