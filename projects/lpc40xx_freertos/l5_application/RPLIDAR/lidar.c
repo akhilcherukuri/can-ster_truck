@@ -32,8 +32,8 @@ void lidar__config_init(void) {
   QueueHandle_t txq_handle = xQueueCreate(50, sizeof(char));
   uart__enable_queues(lidar_uart, rxq_handle, txq_handle);
 
-  gpio_s motoctl_pin = gpio__construct_as_output(GPIO__PORT_2, 0);
-  gpio__set(motoctl_pin);
+  // gpio_s motoctl_pin = gpio__construct_as_output(GPIO__PORT_2, 0);
+  // gpio__set(motoctl_pin);
   // gpio__construct_with_function(GPIO__PORT_2, 0, GPIO__FUNCTION_2); // P0.1 as PWM
   // pwm1__init_single_edge(4000);
   // pwm1__set_duty_cycle(PWM1__2_0, 0.8);
@@ -70,11 +70,12 @@ void lidar__sample_scan_run_once(int send_once) {
   if (1 == send_once) {
     uint8_t request[] = {start_byte, sample_scan};
 
-    // delay__ms(5000);
     received_direct_response = false;
     for (int i = 0; i < 2; i++) {
       uart__put(lidar_uart, request[i], 0);
     }
+    gpio_s motoctl_pin = gpio__construct_as_output(GPIO__PORT_2, 0);
+    gpio__set(motoctl_pin);
   }
 }
 
@@ -119,7 +120,7 @@ void lidar__get_samplerate(void) {
     uart__put(lidar_uart, request[i], 0);
   }
 }
- 
+
 void lidar__get_conf(void) {
   uint8_t request[] = {start_byte, lidar_conf, 0x01, 0x70, 0x50};
 
@@ -168,26 +169,43 @@ void lidar__receive_data_response(void) {
   // }
 }
 
+static bool direct_response_check(char byte) {
+  received_direct_response = false;
+  if (byte == 0xa5 && direct_response_counter == 0) {
+    direct_response_counter++;
+  } else if (byte == 0x5a && direct_response_counter == 1) {
+    direct_response_counter++;
+  } else if (byte == 0x5 && direct_response_counter == 2) {
+    direct_response_counter++;
+  } else if (byte == 0x0 && (direct_response_counter == 3 || direct_response_counter == 4)) {
+    direct_response_counter++;
+  } else if (byte == 0x40 && direct_response_counter == 5) {
+    direct_response_counter++;
+  } else if (byte == 0x81 && direct_response_counter == 6) {
+    received_direct_response = true;
+  } else {
+    direct_response_counter = 0;
+  }
+  return received_direct_response;
+}
+
 void lidar__receive_data_response_check(void) {
   char byte;
-  // int i = 0;
   if (uart__get(lidar_uart, &byte, 0)) {
     if (received_direct_response) {
-      data_response[data_response_index++] = byte;
+      // can_led__led0_ON();
+      // can_led__led1_OFF();
+      data_response[data_response_index] = byte;
     } else if (!received_direct_response) {
-      if (byte == 0xa5 && direct_response_counter == 0) {
-        direct_response_counter++;
-      } else if (byte == 0x5a && direct_response_counter == 1) {
-        direct_response_counter++;
-      } else if (byte == 0x5 && direct_response_counter == 2) {
-        direct_response_counter++;
-      } else if (byte == 0x0 && (direct_response_counter == 3 || direct_response_counter == 4)) {
-        direct_response_counter++;
-      } else if (byte == 0x40 && direct_response_counter == 5) {
-        direct_response_counter++;
-      } else if (byte == 0x81 && direct_response_counter == 6) {
-        received_direct_response = true;
-      }
+      // can_led__led1_ON();
+      // can_led__led0_OFF();
+      received_direct_response = direct_response_check(byte);
     }
+    // printf("%x\r\n", byte);
+
+    if (data_response_index > 4) {
+      lidar_data_response_parse(&data_response);
+    }
+    data_response_index = (data_response_index + 1) % 5;
   }
 }

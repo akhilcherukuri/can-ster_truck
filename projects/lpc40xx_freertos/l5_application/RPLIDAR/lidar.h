@@ -5,7 +5,9 @@
 
 #include "can_led.h"
 #include "delay.h"
+#include "lidar_data_handler.h"
 #include "uart.h"
+
 #include <stdint.h>
 
 void lidar__config_init(void);
@@ -23,3 +25,4 @@ void lidar__get_samplerate(void);
 void lidar__get_conf(void);
 
 void lidar__receive_data_response(void);
+void lidar__receive_data_response_check(void);
