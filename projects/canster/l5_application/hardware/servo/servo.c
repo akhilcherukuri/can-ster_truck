@@ -9,17 +9,17 @@
  * STATIC CONST VARIABLES
  */
 static const pwm1_channel_e PWM_CHANNEL = PWM1__2_0;
-static const uint32_t PWM_FREQUENCY = 50; // (Hz)
+static const uint32_t PWM_FREQUENCY = 100; // (Hz)
 
 static const gpio__port_e PWM_GPIO_PORT = GPIO__PORT_2;
 static const uint8_t PWM_GPIO_PIN = 0;
 static const gpio__function_e PWM_GPIO_FUNCTION = GPIO__FUNCTION_1;
 
-static const float HARD_LEFT = 6.0;
-static const float SOFT_LEFT = 6.75;
-static const float STRAIGHT = 7.5;
-static const float SOFT_RIGHT = 8.75;
-static const float HARD_RIGHT = 9.75;
+static const float HARD_LEFT = 11;
+static const float SOFT_LEFT = 12.5;
+static const float STRAIGHT = 15;
+static const float SOFT_RIGHT = 17.5;
+static const float HARD_RIGHT = 19;
 
 /**
  * STATIC FUNCTIONS
