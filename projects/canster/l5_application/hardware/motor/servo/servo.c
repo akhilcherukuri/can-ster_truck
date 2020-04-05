@@ -8,7 +8,7 @@
 /**
  * STATIC CONST VARIABLES
  */
-static const pwm1_channel_e PWM_CHANNEL = PWM1__2_0;
+static const pwm1_channel_e PWM_CHANNEL = PWM1__2_5;
 static const uint32_t PWM_FREQUENCY = 100; // (Hz)
 
 static const gpio__port_e PWM_GPIO_PORT = GPIO__PORT_2;
