@@ -37,6 +37,8 @@ void lidar__config_init(void) {
   // gpio__construct_with_function(GPIO__PORT_2, 0, GPIO__FUNCTION_2); // P0.1 as PWM
   // pwm1__init_single_edge(4000);
   // pwm1__set_duty_cycle(PWM1__2_0, 0.8);
+
+  lidar_data_handler_init();
 }
 
 void lidar__stop(void) {
@@ -195,7 +197,7 @@ void lidar__receive_data_response_check(void) {
     if (received_direct_response) {
       // can_led__led0_ON();
       // can_led__led1_OFF();
-      data_response[data_response_index] = byte;
+      data_response[data_response_index++] = byte;
     } else if (!received_direct_response) {
       // can_led__led1_ON();
       // can_led__led0_OFF();
@@ -203,9 +205,10 @@ void lidar__receive_data_response_check(void) {
     }
     // printf("%x\r\n", byte);
 
-    if (data_response_index > 4) {
+    if (data_response_index > 3) {
+      data_response_index = 0;
       lidar_data_response_parse(&data_response);
     }
-    data_response_index = (data_response_index + 1) % 5;
+    // data_response_index = (data_response_index + 1) % 5;
   }
 }
