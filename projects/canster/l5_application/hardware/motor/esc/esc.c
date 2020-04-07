@@ -67,6 +67,6 @@ static void esc__set_duty_cycle(float duty_cycle) { pwm1__set_duty_cycle(PWM_CHA
 /**
  * REFERENCE VALUES
  */
-//   Fast (Rev) - 14, Medium (Rev) -14.25, Slow  (Rev) - 14.5, Neutral - 15
-//   Slow (FW) - 15.75, Medium (FW) - 16,  Fast (FW) - 16.5, Fast (FW)- 17, Fast (FW)- 17.5
+//   Fast (Rev) - 14, Medium (Rev) - 14.25, Slow  (Rev) - 14.5, Neutral - 15
+//   Slow (FW) - 15.75, Medium (FW) - 16,  Fast (FW) - 16.5, Fast (FW)- 17, Fast (FW) - 17.5
 //   Final Rev - 14.4, Final FW - 15.875

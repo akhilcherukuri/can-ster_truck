@@ -1,18 +1,19 @@
 #include "rpm.h"
 
-#include "gpio.h"
-
-#include "clock.h"
-#include "lpc40xx.h"
-#include "lpc_peripherals.h"
-#include "sys_time.h"
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "clock.h"
 #include "delay.h"
+#include "gpio.h"
+#include "lpc40xx.h"
+#include "lpc_peripherals.h"
+#include "sys_time.h"
 
 #define RPM_ISR_DEBUG 0
-#define circumference 0.33
+#define RPM_DEBUG 0
+#define CIRCUMFERENCE_METER 0.314
+#define MPS_TO_KPH_CONVERSION_FACTOR 3.6
 
 /**
  * STATIC VARIABLES
@@ -28,8 +29,8 @@ static const uint8_t RPM_GPIO_PIN = 2;
 /**
  * GLOBAL VARIABLES
  */
-uint16_t pulse = 0;
-double speed = 0; // kmph
+uint16_t pulse_count = 0;
+double speed_kph = 0; // kph
 
 /**
  * STATIC FUNCTIONS
@@ -52,40 +53,44 @@ void rpm__init() {
   NVIC_EnableIRQ(GPIO_IRQn);
 }
 
-float rpm__calculate_speed() {
-  uint16_t rotation_per_sec = pulse;
-  printf("Pulses: %d", pulse);
-  pulse = 0;
-  speed = (circumference * rotation_per_sec) / (2.7);
-  printf("\nSpeed = %lf", speed);
-  return speed;
+float rpm__calculate_speed_kph() {
+  uint16_t rotation_per_sec = pulse_count;
+#if RPM_DEBUG == 1
+  printf("\nPulses: %d ", pulse_count);
+#endif
+  pulse_count = 0;
+  speed_kph = (CIRCUMFERENCE_METER * rotation_per_sec) * (MPS_TO_KPH_CONVERSION_FACTOR);
+#if RPM_DEBUG == 1
+  printf("Speed = %lf", speed_kph);
+#endif
+  return speed_kph;
 }
 
 /**
  * STATIC FUNCTION DEFINITIONS
  */
 static void rpm__enable_interrupt() {
-  LPC_GPIOINT->IO2IntEnF |= (1 << 2);
-  LPC_GPIOINT->IO2IntEnR |= (1 << 2);
+  LPC_GPIOINT->IO2IntEnF |= (1 << RPM_GPIO_PIN);
+  LPC_GPIOINT->IO2IntEnR |= (1 << RPM_GPIO_PIN);
 }
 
 static void rpm_sensor_isr_dispatcher(void) {
 
-  if (LPC_GPIOINT->IO2IntStatF & (1 << 2)) {
+  if (LPC_GPIOINT->IO2IntStatF & (1 << RPM_GPIO_PIN)) {
     rpm_sensor_isr_falling();
   }
 
-  if (LPC_GPIOINT->IO2IntStatR & (1 << 2)) {
+  if (LPC_GPIOINT->IO2IntStatR & (1 << RPM_GPIO_PIN)) {
     rpm_sensor_isr_rising();
   }
   rpm__clear_interrupt();
 }
 
-static void rpm__clear_interrupt() { LPC_GPIOINT->IO2IntClr |= (1 << 2); }
+static void rpm__clear_interrupt() { LPC_GPIOINT->IO2IntClr |= (1 << RPM_GPIO_PIN); }
 
 static void rpm_sensor_isr_falling(void) {
   clock_time_at_falling_edge = sys_time__get_uptime_us();
-  pulse++;
+  pulse_count++;
 #if RPM_ISR_DEBUG == 1
   fprintf(stderr, "Falling edge, %lu\n", clock_time_at_falling_edge);
 #endif

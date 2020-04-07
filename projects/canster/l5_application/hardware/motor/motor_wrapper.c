@@ -11,8 +11,15 @@ void motor__init() {
 }
 
 void motor__run_10hz(int callback_count) {
-  servo__steer_processor(0); // Steering Value from Driver
+  // TODO Attach the motor steering decoder function here and check the decoded datatype from DBC
+  int decoded_steering_value_from_driver = 0;
+  servo__steer_processor(decoded_steering_value_from_driver);
   if (callback_count % 10 == 0)
     rpm__calculate_speed();
-  esc__forward_slow();
+
+  // TODO Handle reverse cases and wrap this logic into a separate wrapper
+  if (decoded_steering_value_from_driver == 0)
+    esc__forward_medium();
+  else
+    esc__forward_slow();
 }
