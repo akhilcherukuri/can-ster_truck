@@ -35,12 +35,16 @@ void test__periodic_callbacks__1Hz(void) {
 }
 
 void test__periodic_callbacks__10Hz(void) {
-  ultrasonic_distance_s distance_from_obstacle = {};
-
   can_handler__handle_all_incoming_messages_Expect();
   can_handler__transmit_message_10hz_Expect();
 
+  periodic_callbacks__10Hz(0);
+}
+
+void test__periodic_callbacks__100Hz(void) {
+  ultrasonic_distance_s distance_from_obstacle = {};
+
   ultrasonic__update_all_sensors_Expect();
   ultrasonic__get_distance_from_all_sensors_Expect(&distance_from_obstacle);
-  periodic_callbacks__10Hz(0);
+  periodic_callbacks__100Hz(0);
 }

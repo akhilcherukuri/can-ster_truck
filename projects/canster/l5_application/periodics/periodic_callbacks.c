@@ -33,9 +33,6 @@ void periodic_callbacks__1Hz(uint32_t callback_count) {
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
-  ultrasonic_distance_s distance_from_obstacle = {};
-  ultrasonic__update_all_sensors();
-  ultrasonic__get_distance_from_all_sensors(&distance_from_obstacle);
 
   can_handler__handle_all_incoming_messages();
   can_handler__transmit_message_10hz();
@@ -43,7 +40,13 @@ void periodic_callbacks__10Hz(uint32_t callback_count) {
   // gps__run_once();
 }
 
-void periodic_callbacks__100Hz(uint32_t callback_count) {}
+void periodic_callbacks__100Hz(uint32_t callback_count) {
+  ultrasonic_distance_s distance_from_obstacle = {};
+  if (callback_count % 5 == 0) {
+    ultrasonic__update_all_sensors();
+    ultrasonic__get_distance_from_all_sensors(&distance_from_obstacle);
+  }
+}
 
 /**
  * @warning
