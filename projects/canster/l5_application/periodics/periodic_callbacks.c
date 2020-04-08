@@ -7,6 +7,7 @@
 #include "can_handler.h"
 
 #include "gps.h"
+#include "motor_wrapper.h"
 
 #include <stdio.h>
 
@@ -20,6 +21,7 @@ void periodic_callbacks__initialize(void) {
   can_bus__initialize();
 
   // gps__init();
+ motor__init();
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
@@ -35,6 +37,7 @@ void periodic_callbacks__10Hz(uint32_t callback_count) {
   can_handler__transmit_message_10hz();
 
   // gps__run_once();
+  motor__run_10hz(callback_count);
 }
 
 void periodic_callbacks__100Hz(uint32_t callback_count) {}
