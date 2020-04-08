@@ -26,4 +26,51 @@ void test_geo_logic__update_destination_coordinate(void) {
 }
 
 // TODO,
-void test_geo_logic__compute_required_bearing(void) {}
+
+void test_geo_logic__compute_required_bearing_dont_move(void) {
+  gps_coordinates_s coordinates = {};
+  coordinates.latitude = 10.2;
+  coordinates.longitude = 20.3;
+  gps__get_coordinates_ExpectAndReturn(coordinates);
+
+  destination_coordinate.DRIVER_COORDINATES_latitude = 10.2;
+  destination_coordinate.DRIVER_COORDINATES_longitude = 20.3;
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 0.0);
+}
+
+void test_geo_logic__compute_required_bearing(void) {
+  gps_coordinates_s coordinates = {};
+  coordinates.latitude = 5.2;
+  coordinates.longitude = 10.3;
+  gps__get_coordinates_ExpectAndReturn(coordinates);
+
+  destination_coordinate.DRIVER_COORDINATES_latitude = 10.2;
+  destination_coordinate.DRIVER_COORDINATES_longitude = 20.3;
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 62.58239);
+}
+
+/**
+ * San Jose
+ * 37.338207
+ * -121.886330
+ *
+ * SJSU
+ * 37.441810
+ * -122.165280
+ */
+void test_geo_logic__compute_required_bearing_real(void) {
+  gps_coordinates_s coordinates = {};
+  coordinates.latitude = 37.338207;
+  coordinates.longitude = -121.886330;
+  gps__get_coordinates_ExpectAndReturn(coordinates);
+
+  destination_coordinate.DRIVER_COORDINATES_latitude = 37.441810;
+  destination_coordinate.DRIVER_COORDINATES_longitude = -122.165280;
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, -71.28366);
+}
