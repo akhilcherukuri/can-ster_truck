@@ -15,7 +15,7 @@ void motor__run_10hz(int callback_count) {
   int decoded_steering_value_from_driver = 0;
   servo__steer_processor(decoded_steering_value_from_driver);
   if (callback_count % 10 == 0)
-    rpm__calculate_speed();
+    rpm__calculate_speed_kph();
 
   // TODO Handle reverse cases and wrap this logic into a separate wrapper
   if (decoded_steering_value_from_driver == 0)

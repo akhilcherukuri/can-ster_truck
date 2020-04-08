@@ -21,7 +21,7 @@ void periodic_callbacks__initialize(void) {
   can_bus__initialize();
 
   // gps__init();
- motor__init();
+  motor__init();
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
