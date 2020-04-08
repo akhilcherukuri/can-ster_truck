@@ -6,6 +6,7 @@
 #include "can_bus_initializer.h"
 #include "can_handler.h"
 
+#include "compass.h"
 #include "gps.h"
 
 #include <stdio.h>
@@ -19,22 +20,29 @@ void periodic_callbacks__initialize(void) {
   // This method is invoked once when the periodic tasks are created
   can_bus__initialize();
 
-  // gps__init();
+  gps__init();
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
-  can_handler__handle_all_mia();
+  // can_handler__handle_all_mia();
 
-  // gps_coordinates_s coordinates = gps__get_coordinates();
-  // printf("Coordinates: %f %f\r\n", (double)coordinates.latitude, (double)coordinates.longitude);
+  // GPS Test here
+  gps_coordinates_s coordinates = gps__get_coordinates();
+  printf("Coordinates: %f %f\r\n", (double)coordinates.latitude, (double)coordinates.longitude);
+
+  // Debug
   // gps__debug_print_parsed_rmc_data();
+
+  // Compass Test here
+  float bearing = compass__read_compass_bearing_16bit();
+  printf("Bearing: %f\r\n", (double)bearing);
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
-  can_handler__handle_all_incoming_messages();
-  can_handler__transmit_message_10hz();
+  gps__run_once();
 
-  // gps__run_once();
+  // can_handler__handle_all_incoming_messages();
+  // can_handler__transmit_message_10hz();
 }
 
 void periodic_callbacks__100Hz(uint32_t callback_count) {}
