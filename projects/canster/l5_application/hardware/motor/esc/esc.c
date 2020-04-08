@@ -17,12 +17,12 @@ static const gpio__function_e PWM_GPIO_FUNCTION = GPIO__FUNCTION_1;
  * STATIC CONST FLOAT VARIABLES
  */
 static const float FORWARD_SLOW = 15.875;
-static const float FORWARD_MEDIUM = 16;
+static const float FORWARD_MEDIUM = 16.0;
 static const float FORWARD_FAST = 16.5;
-static const float NEUTRAL = 15;
+static const float NEUTRAL = 15.0;
 static const float REVERSE_SLOW = 14.4;
 static const float REVERSE_MEDIUM = 14.25;
-static const float REVERSE_FAST = 14;
+static const float REVERSE_FAST = 14.0;
 
 /**
  * STATIC FUNCTIONS

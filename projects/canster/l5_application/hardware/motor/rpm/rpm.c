@@ -29,8 +29,8 @@ static const uint8_t RPM_GPIO_PIN = 2;
 /**
  * GLOBAL VARIABLES
  */
-uint16_t pulse_count = 0;
-double speed_kph = 0; // kph
+static uint16_t pulse_count;
+static double speed_kph;
 
 /**
  * STATIC FUNCTIONS
@@ -40,6 +40,8 @@ static void rpm_sensor_isr_dispatcher(void);
 static void rpm__clear_interrupt(void);
 static void rpm_sensor_isr_falling(void);
 static void rpm_sensor_isr_rising(void);
+static void set_pulse_count(uint16_t);
+static uint16_t get_pulse_count(void);
 
 /**
  * NON-STATIC FUNCTION DEFINITIONS
@@ -75,7 +77,6 @@ static void rpm__enable_interrupt() {
 }
 
 static void rpm_sensor_isr_dispatcher(void) {
-
   if (LPC_GPIOINT->IO2IntStatF & (1 << RPM_GPIO_PIN)) {
     rpm_sensor_isr_falling();
   }
@@ -102,3 +103,6 @@ static void rpm_sensor_isr_rising(void) {
   fprintf(stderr, "Rising edge, %lu\n", clock_time_at_rising_edge);
 #endif
 }
+
+static void set_pulse_count(uint16_t pulse) { pulse_count = pulse; }
+static uint16_t get_pulse_count(void) { return pulse_count; }
