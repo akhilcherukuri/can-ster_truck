@@ -7,6 +7,7 @@
 #include "can_handler.h"
 
 #include "gps.h"
+#include "ultrasonic_wrapper.h"
 
 #include <stdio.h>
 
@@ -20,6 +21,7 @@ void periodic_callbacks__initialize(void) {
   can_bus__initialize();
 
   // gps__init();
+  ultrasonic__init_all_sensors();
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
@@ -31,6 +33,10 @@ void periodic_callbacks__1Hz(uint32_t callback_count) {
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
+  ultrasonic_distance_s distance_from_obstacle = {};
+  ultrasonic__update_all_sensors();
+  ultrasonic__get_distance_from_all_sensors(&distance_from_obstacle);
+
   can_handler__handle_all_incoming_messages();
   can_handler__transmit_message_10hz();
 
