@@ -10,11 +10,9 @@
 
 #include "line_buffer.h"
 
-#define BT_DEBUG 1
-
-#if BT_DEBUG == 1
 #include <stdio.h>
-#endif
+
+#define BT_DEBUG 1
 
 static const gpio__port_e UART2_PORT = GPIO__PORT_0;
 static const uint8_t UART2_TX = 10;
@@ -35,7 +33,10 @@ static line_buffer_s line;
  * Static function declaration
  */
 static void bt__absorb_data(void);
-static void bt__handle_line(void);
+static void bt__handle_line(bt__read_func_cb read_func);
+
+// Process lines
+static void bt__process_line(char *buffer, char *identifier);
 
 /**
  * Functions
@@ -53,9 +54,15 @@ void bt__init(void) {
   line_buffer__init(&line, line_buffer, sizeof(line_buffer));
 }
 
-void bt__run_once(void) {
+void bt__read(bt__read_func_cb read_func) {
   bt__absorb_data();
-  bt__handle_line();
+  bt__handle_line(read_func);
+}
+
+void bt__write(char *data) {
+  for (int i = 0; i < strlen(data); i++) {
+    uart__put(BT_UART, data[i], 0);
+  }
 }
 
 /**
@@ -72,14 +79,70 @@ static void bt__absorb_data(void) {
   }
 }
 
-static void bt__handle_line(void) {
-  char buffer[100];
+static void bt__handle_line(bt__read_func_cb read_func) {
+  char buffer[100] = {0};
+  char identifier[10] = {0};
   while (line_buffer__remove_line(&line, buffer, sizeof(buffer))) {
 
 #if BT_DEBUG == 1
     printf("extracted: %s\r\n", buffer);
 #endif
 
-    // TODO, Process something here
+    // DONE, Process something here
+    bt__process_line(buffer, identifier);
+
+#if BT_DEBUG == 1
+    printf("Buffer: %s\r\n", buffer);
+    printf("Identifier: %s\r\n", identifier);
+#endif
+
+    // NOTE, This is to be used by the bt_wrapper function
+    if (read_func != NULL) {
+      read_func(buffer, identifier);
+    }
+
+    // // TODO, Optional, transfer to a different function
+    // // Parse everything here
+    // if (strcmp(identifier, "$loc") == 0) {
+    //   bt__parse_loc(buffer);
+    // }
+
+    // END
+  }
+}
+
+/**
+ * Message receive in the form of $ and ends with \r\n
+ * Get identifier here
+ * Return the identifier and the rest of the message
+ */
+static void bt__process_line(char *buffer, char *identifier) {
+  if (buffer[0] != '$') {
+    return;
+  }
+
+  bool found_id = true;
+  uint32_t id_counter = 0;
+
+  for (int i = 0; i < strlen(buffer); i++) {
+    // ? debugging
+    // printf("%x\r\n", buffer[i]);
+
+    // Store the identifier
+    if (found_id) {
+      if (buffer[i] == ',') {
+        found_id = false;
+      } else {
+        identifier[id_counter] = buffer[i];
+        id_counter++;
+      }
+    }
+
+    // Sanitize for sscanf
+    if (buffer[i] == ',') {
+      buffer[i] = ' ';
+    }
+
+    // END
   }
 }
