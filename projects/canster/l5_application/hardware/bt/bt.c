@@ -88,6 +88,8 @@ static void bt__handle_line(bt__read_func_cb read_func) {
     printf("extracted: %s\r\n", buffer);
 #endif
 
+    // TODO, Decide shift everything from here to the bt_wrapper module
+
     // DONE, Process something here
     bt__process_line(buffer, identifier);
 
@@ -100,12 +102,6 @@ static void bt__handle_line(bt__read_func_cb read_func) {
     if (read_func != NULL) {
       read_func(buffer, identifier);
     }
-
-    // // TODO, Optional, transfer to a different function
-    // // Parse everything here
-    // if (strcmp(identifier, "$loc") == 0) {
-    //   bt__parse_loc(buffer);
-    // }
 
     // END
   }
