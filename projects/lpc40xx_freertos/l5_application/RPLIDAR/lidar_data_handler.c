@@ -1,6 +1,7 @@
 #include "lidar_data_handler.h"
 
-// static char data_response[5] = {0};
+static char data_response[5] = {0};
+static uint8_t data_counter = 0;
 
 static uint8_t measurement_quality = 0;
 static uint16_t measurement_angle = 0;
@@ -22,7 +23,7 @@ static uint16_t distance_left = 500;
 static uint16_t distance_right = 500;
 static uint16_t distance_front = 500;
 static uint16_t distance_rear = 500;
-static uint8_t distance_threshold = 30;
+static uint8_t distance_threshold = 254;
 
 static uint16_t left_data[20];
 static uint16_t front_data[21];
@@ -48,8 +49,8 @@ static uint16_t min_distance(uint16_t *distance_data, uint8_t data_size) {
 }
 
 static void lidar_data_response_handle_distance(uint16_t angle, uint16_t distance, uint8_t quality) {
-  printf("%u   %u\r\n", angle, distance);
-  if (quality > 0xe && distance != 0) {
+  //   printf("%u   %u\r\n", angle, distance);
+  if (/*quality > 0xe &&*/ distance != 0) {
     if (angle >= left_low_angle && angle <= left_high_angle) {
       left_data[(angle - left_low_angle) % 20] = distance;
       distance_left = min_distance(&left_data, sizeof(left_data) / 2);
@@ -107,14 +108,16 @@ static bool check_bits(uint8_t *byte) {
   //   }
 
   //   return check_bit;
-  return ((byte[0] & 0x1) == ((~(byte[0] >> 1) & 0x1)) && (byte[1] & 0x1));
+  return (((byte[0] & 0x1) == ((~(byte[0] >> 1) & 0x1))) && (byte[1] & 0x1));
 }
 
 void lidar_data_response_parse(uint8_t *data) {
   if (check_bits(data)) {
     measurement_quality = (data[0] >> 2);
-    measurement_angle = (((data[2] << 7) | (data[1] >> 1)) >> 6);
-    measurement_distance = (((data[4] << 8) | (data[3])) >> 2);
+    measurement_angle = (((uint16_t)(data[2] << 7) | (uint16_t)(data[1] >> 1)) >> 6);
+    measurement_distance = (((uint16_t)(data[4] << 8) | (uint16_t)(data[3])) >> 2);
+
+    // printf("%u   %u\r\n", measurement_angle, measurement_distance);
 
     // for (int i = 0; i < 5; i++) {
     //   printf("%x\r\n", data[i]);
@@ -155,5 +158,33 @@ void within_range(void) {
     can_led__led3_ON();
   } else {
     can_led__led3_OFF();
+  }
+}
+
+bool receive_five_byte_sample(char data) {
+  bool received_five_bytes = false;
+  data_response[data_counter++] = data;
+
+  if (5 == data_counter) {
+    data_counter = 0;
+    received_five_bytes = true;
+  }
+
+  return received_five_bytes;
+}
+
+void lidar_data_response_parse_v2(void) {
+  if (check_bits(data_response)) {
+    // printf("Computing Data\r\n");
+    measurement_quality = (data_response[0] >> 2);
+    measurement_angle = (((uint16_t)(data_response[2] << 7) | (uint16_t)(data_response[1] >> 1)) >> 6);
+    measurement_distance = (((uint16_t)(data_response[4] << 8) | (uint16_t)(data_response[3])) >> 2);
+
+    // printf("%u   %u\r\n", measurement_angle, measurement_distance);
+
+    // for (int i = 0; i < 5; i++) {
+    //   printf("%x\r\n", data[i]);
+    // }
+    lidar_data_response_handle_distance(measurement_angle, measurement_distance, measurement_quality);
   }
 }

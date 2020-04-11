@@ -41,21 +41,21 @@ void test__lidar_data_handler_objects_in_blind_spots_and_do_nothing(void) {
 
 void test__lidar_data_handler_objects_in_rear(void) {
   can_led__led2_OFF_Expect();
-  lidar_data_response_handle_distance(180, 50, 20);
+  lidar_data_response_handle_distance(180, distance_threshold + 20, 20);
 
   can_led__led2_ON_Expect();
-  lidar_data_response_handle_distance(190, 20, 20);
+  lidar_data_response_handle_distance(190, distance_threshold - 10, 20);
 
   can_led__led2_ON_Expect();
-  lidar_data_response_handle_distance(170, 29, 20);
+  lidar_data_response_handle_distance(170, distance_threshold - 1, 20);
 }
 
 void test__lidar_data_handler_objects_in_front(void) {
   can_led__led3_OFF_Expect();
-  lidar_data_response_handle_distance(359, 50, 20);
+  lidar_data_response_handle_distance(359, distance_threshold + 20, 20);
 
   can_led__led3_OFF_Expect();
-  lidar_data_response_handle_distance(0, 30, 20);
+  lidar_data_response_handle_distance(0, distance_threshold, 20);
 
   can_led__led3_ON_Expect();
   lidar_data_response_handle_distance(359, 2, 20);
@@ -64,50 +64,50 @@ void test__lidar_data_handler_objects_in_front(void) {
   lidar_data_response_handle_distance(10, 20, 20);
 
   can_led__led3_ON_Expect();
-  lidar_data_response_handle_distance(10, 100, 20);
+  lidar_data_response_handle_distance(10, distance_threshold + 100, 20);
 
   can_led__led3_OFF_Expect();
-  lidar_data_response_handle_distance(359, 30, 20);
+  lidar_data_response_handle_distance(359, distance_threshold, 20);
 }
 
 void test__lidar_data_handler_objects_in_left(void) {
   can_led__led0_OFF_Expect();
-  lidar_data_response_handle_distance(330, 50, 20);
+  lidar_data_response_handle_distance(330, distance_threshold + 20, 20);
 
   can_led__led0_OFF_Expect();
-  lidar_data_response_handle_distance(349, 30, 20);
+  lidar_data_response_handle_distance(349, distance_threshold, 20);
 
   can_led__led0_ON_Expect();
   lidar_data_response_handle_distance(330, 2, 20);
 
   can_led__led0_ON_Expect();
-  lidar_data_response_handle_distance(349, 20, 20);
+  lidar_data_response_handle_distance(349, distance_threshold - 10, 20);
 
   can_led__led0_ON_Expect();
-  lidar_data_response_handle_distance(349, 100, 20);
+  lidar_data_response_handle_distance(349, distance_threshold + 100, 20);
 
   can_led__led0_OFF_Expect();
-  lidar_data_response_handle_distance(330, 30, 20);
+  lidar_data_response_handle_distance(330, distance_threshold, 20);
 }
 
 void test__lidar_data_handler_objects_in_right(void) {
   can_led__led1_OFF_Expect();
-  lidar_data_response_handle_distance(11, 50, 20);
+  lidar_data_response_handle_distance(11, distance_threshold + 20, 20);
 
   can_led__led1_OFF_Expect();
-  lidar_data_response_handle_distance(30, 30, 20);
+  lidar_data_response_handle_distance(30, distance_threshold, 20);
 
   can_led__led1_ON_Expect();
   lidar_data_response_handle_distance(11, 2, 20);
 
   can_led__led1_ON_Expect();
-  lidar_data_response_handle_distance(30, 20, 20);
+  lidar_data_response_handle_distance(30, distance_threshold - 10, 20);
 
   can_led__led1_ON_Expect();
-  lidar_data_response_handle_distance(30, 100, 20);
+  lidar_data_response_handle_distance(30, distance_threshold + 100, 20);
 
   can_led__led1_OFF_Expect();
-  lidar_data_response_handle_distance(11, 30, 20);
+  lidar_data_response_handle_distance(11, distance_threshold, 20);
 }
 
 void test__check_bits_start_correct(void) {

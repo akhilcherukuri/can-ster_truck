@@ -41,7 +41,7 @@ static void create_blinky_tasks(void) {
 #else
   const bool run_1000hz = true;
   const size_t stack_size_bytes = 2048 / sizeof(void *); // RTOS stack size is in terms of 32-bits for ARM M4 32-bit CPU
-  periodic_scheduler__initialize(stack_size_bytes, !run_1000hz); // Assuming we do not need the high rate 1000Hz task
+  periodic_scheduler__initialize(stack_size_bytes, run_1000hz); // Assuming we do not need the high rate 1000Hz task
   UNUSED(blink_task);
 #endif
 }

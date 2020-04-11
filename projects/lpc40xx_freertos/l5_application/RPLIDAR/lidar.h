@@ -4,9 +4,9 @@
 #include "pwm1.h"
 
 #include "can_led.h"
-#include "delay.h"
 #include "lidar_data_handler.h"
 #include "uart.h"
+#include <string.h>
 
 #include <stdint.h>
 
@@ -24,5 +24,5 @@ void lidar__get_health(void);
 void lidar__get_samplerate(void);
 void lidar__get_conf(void);
 
-void lidar__receive_data_response(void);
+// void lidar__receive_data_response(void);
 void lidar__receive_data_response_check(void);

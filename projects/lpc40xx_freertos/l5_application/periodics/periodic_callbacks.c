@@ -38,7 +38,6 @@ void periodic_callbacks__10Hz(uint32_t callback_count) {
 }
 void periodic_callbacks__100Hz(uint32_t callback_count) {
   // Add your code here
-  lidar__receive_data_response_check();
 }
 
 /**
@@ -50,4 +49,5 @@ void periodic_callbacks__1000Hz(uint32_t callback_count) {
   // Add your code here
   // check_range();
   // within_range();
+  lidar__receive_data_response_check();
 }
