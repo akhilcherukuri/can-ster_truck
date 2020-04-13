@@ -43,7 +43,7 @@ void servo__steer_init(void) {
   servo__configure_pwm_channel();
 }
 
-void servo__steer_processor(int steering_value) {
+void servo__steer_processor(int16_t steering_value) {
   switch (steering_value) {
   case -2:
     servo__steer_hard_left();
