@@ -30,7 +30,7 @@ void bt_wrapper__write_once(void) {
   // TODO, Send the message here
 }
 
-void bt_wrapper__get_destination_coordinates(gps_coordinates_s * dest_coordinate) {
+void bt_wrapper__get_destination_coordinates(gps_coordinates_s *dest_coordinate) {
   *dest_coordinate = destination_coordinate;
 }
 
