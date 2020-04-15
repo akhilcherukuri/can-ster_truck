@@ -29,7 +29,7 @@ static void can_motor__transmit_motor_speed_feedback();
 
 void can_motor__transmit_all_messages(void) {
   can_motor__transmit_motor_heartbeat();
-  can_motor__transmit_motor_speed_feedback();
+  // can_motor__transmit_motor_speed_feedback();
 }
 
 static void can_motor__transmit_motor_heartbeat() {

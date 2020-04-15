@@ -14,12 +14,16 @@
 #include "geo_logic.h"
 
 #include "driver_state.h"
+#include "motor_wrapper.h"
 
 #define DRIVER_NODE_DEBUG 1
 
 #if DRIVER_NODE_DEBUG == 1
 #include <stdio.h>
 #endif
+#include <stdbool.h>
+
+bool mia_steering;
 
 static dbc_MOTOR_STEERING_s driver_steering;
 static dbc_MOTOR_SPEED_s driver_required_motor_speed;
@@ -33,6 +37,7 @@ const dbc_MOTOR_STEERING_s *can_driver__get_driver_steering() { return &driver_s
 const dbc_MOTOR_SPEED_s *can_driver__get_driver_required_motor_speed() { return &driver_required_motor_speed; }
 const dbc_DRIVER_HEARTBEAT_s *can_driver__get_driver_heartbeat() { return &driver_heartbeat; }
 const dbc_DRIVER_COORDINATES_s *can_driver__get_driver_coordinates() { return &driver_coordinates; }
+
 /**
  * MIA
  */
@@ -69,7 +74,8 @@ void can_driver__motor_steering_mia() {
     printf("MIA -> DRIVER_STEERING\r\n");
     printf("assigned default driver steering = %d\r\n", driver_steering.MOTOR_STEERING_direction);
 #endif
-    // gpio__set(board_io__get_led2());
+    gpio__set(board_io__get_led1());
+    mia_steering = true;
   }
 }
 
@@ -184,7 +190,8 @@ void can_driver__decode_motor_steering(dbc_message_header_t header, uint8_t byte
 
     // TODO, Do other things here
     // ! Make a function for process motor_steering here
-    // gpio__reset(board_io__get_led2());
+    gpio__reset(board_io__get_led1());
+    mia_steering = false;
   }
 }
 

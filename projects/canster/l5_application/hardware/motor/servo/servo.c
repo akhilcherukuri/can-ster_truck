@@ -12,7 +12,7 @@ static const pwm1_channel_e PWM_CHANNEL = PWM1__2_5;
 static const uint32_t PWM_FREQUENCY = 100; // (Hz)
 
 static const gpio__port_e PWM_GPIO_PORT = GPIO__PORT_2;
-static const uint8_t PWM_GPIO_PIN = 0;
+static const uint8_t PWM_GPIO_PIN = 5;
 static const gpio__function_e PWM_GPIO_FUNCTION = GPIO__FUNCTION_1;
 
 static const float HARD_LEFT = 11.0;

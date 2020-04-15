@@ -14,7 +14,7 @@ const uint32_t dbc_mia_threshold_MOTOR_SPEED = 3000;
 const uint32_t dbc_mia_threshold_MOTOR_STEERING = 3000;
 const dbc_DRIVER_HEARTBEAT_s dbc_mia_replacement_DRIVER_HEARTBEAT = {{0}, DRIVER_HEARTBEAT_cmd_REBOOT};
 const dbc_MOTOR_SPEED_s dbc_mia_replacement_MOTOR_SPEED = {{0}, 0.5};
-const dbc_MOTOR_STEERING_s dbc_mia_replacement_MOTOR_STEERING = {{0}, 1};
+const dbc_MOTOR_STEERING_s dbc_mia_replacement_MOTOR_STEERING = {{0}, 0};
 
 // Motor
 const uint32_t dbc_mia_threshold_MOTOR_HEARTBEAT = 3000;
