@@ -1,6 +1,10 @@
 #pragma once
 
+#define DEBUG 1
+
+#if DEBUG
 #include "can_led.h"
+#endif
 #include <stdint.h>
 #include <stdio.h>
 

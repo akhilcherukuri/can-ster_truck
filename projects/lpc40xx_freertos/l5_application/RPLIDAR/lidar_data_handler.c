@@ -130,6 +130,7 @@ void check_range(void) {
 }
 
 void within_range(void) {
+#if DEBUG
   if (distance_left < distance_threshold) {
     can_led__led0_ON();
   } else {
@@ -155,6 +156,7 @@ void within_range(void) {
   } else {
     can_led__led3_OFF();
   }
+#endif
 }
 
 bool receive_five_byte_sample(char data) {

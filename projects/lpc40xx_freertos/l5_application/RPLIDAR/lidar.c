@@ -2,6 +2,10 @@
 #include <stdio.h>
 
 static uart_e lidar_uart = UART__3;
+
+/**
+ * STATIC CONST VARIABLES
+ */
 static const uint8_t start_byte = 0xa5;
 
 static const uint8_t lidar_stop = 0x25;
@@ -15,11 +19,18 @@ static const uint8_t lidar_health = 0x52;
 static const uint8_t lidar_samplerate = 0x59;
 static const uint8_t lidar_conf = 0x84;
 
+/**
+ * STATIC VARIABLES
+ */
 static bool received_direct_response = false;
 static int direct_response_counter = 0;
-
 static int data_response_index = 0;
 static uint8_t data_response[5] = {0};
+
+/**
+ * STATIC FUNCTIONS
+ */
+static bool direct_response_check(char byte);
 
 void lidar__config_init(void) {
   gpio__construct_with_function(GPIO__PORT_4, 28, GPIO__FUNCTION_2); // P4.28 as TXD3
@@ -31,12 +42,6 @@ void lidar__config_init(void) {
   QueueHandle_t txq_handle = xQueueCreate(50, sizeof(char));
 
   uart__enable_queues(lidar_uart, rxq_handle, txq_handle);
-
-  // gpio_s motoctl_pin = gpio__construct_as_output(GPIO__PORT_2, 0);
-  // gpio__set(motoctl_pin);
-  // gpio__construct_with_function(GPIO__PORT_2, 0, GPIO__FUNCTION_2); // P0.1 as PWM
-  // pwm1__init_single_edge(4000);
-  // pwm1__set_duty_cycle(PWM1__2_0, 0.8);
 
   lidar_data_handler_init();
 }
