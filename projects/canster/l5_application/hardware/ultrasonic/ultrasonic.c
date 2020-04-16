@@ -60,7 +60,7 @@ void ultrasonic__calculate_distance_from_obstacle(ultrasonic_sensor_s *u_sensor)
                distance_cm_conversion_factor);
 
 #if ULTRASONIC_DEBUG == 1
-  printf("Distance from obstacle = %lf cm\r\n", u_sensor->distance_from_obstacle);
+  printf("Distance from obstacle = %lf cm\r\n", (double)u_sensor->distance_from_obstacle);
 #endif
 }
 

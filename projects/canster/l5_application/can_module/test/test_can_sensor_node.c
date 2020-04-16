@@ -7,6 +7,7 @@
 #include "Mockcan_handler.h"
 #include "Mockdriver_obstacle.h"
 #include "Mockgpio.h"
+#include "Mockultrasonic_wrapper.h"
 
 #include "can_sensor_node.c"
 #include "who_am_i.h"
@@ -16,74 +17,42 @@ void setUp() {
   sensor_sonar.mia_info.mia_counter = 0;
 }
 
-void test_can_sensor__sensor_heartbeat_mia_true(void) {
-  gpio_s gpio;
-  board_io__get_led3_ExpectAndReturn(gpio);
-  gpio__set_Expect(gpio);
-
-  can_sensor__sensor_heartbeat_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 1000);
-
-  can_sensor__sensor_heartbeat_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 2000);
-
-  can_sensor__sensor_heartbeat_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 3000);
+void test__can_sensor_heartbeat_mia_true(void) {
+  gpio_s gpio_unused = {};
+  gpio__set_Expect(gpio_unused);
+  board_io__get_led3_ExpectAndReturn(gpio_unused);
+  for (int i = 100; i <= 3000; i += 100) {
+    can_sensor__sensor_heartbeat_mia();
+    TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, i);
+  }
   TEST_ASSERT(sensor_heartbeat.SENSOR_HEARTBEAT_cmd == SENSOR_HEARTBEAT_cmd_REBOOT);
 }
 
-void test_can_sensor__sensor_heartbeat_mia_true_false(void) {
-  can_sensor__sensor_heartbeat_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 1000);
+void test__can_sensor_heartbeat_mia_true_false(void) {
 
   can_sensor__sensor_heartbeat_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 2000);
+  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 100);
+
+  can_sensor__sensor_heartbeat_mia();
+  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 200);
 
   sensor_heartbeat.mia_info.mia_counter = 0;
+
   can_sensor__sensor_heartbeat_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 1000);
+  TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, 100);
 }
 
-void test_can_sensor__sensor_sonar_mia_true(void) {
-  // gpio_s gpio;
-  // board_io__get_led2_ExpectAndReturn(gpio);
-  // gpio__set_Expect(gpio);
-
+void test_can_sensor_sonar_mia_true(void) {
   driver_obstacle__process_input_Expect(&sensor_sonar);
+  gpio_s gpio_unused = {};
+  gpio__set_Expect(gpio_unused);
+  board_io__get_led2_ExpectAndReturn(gpio_unused);
 
-  can_sensor__sensor_sonar_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 1000);
-
-  can_sensor__sensor_sonar_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 2000);
-
-  can_sensor__sensor_sonar_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 3000);
-  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_left == 10);
-  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_middle == 10);
-  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_right == 10);
+  for (int i = 100; i <= 3000; i += 100) {
+    can_sensor__sensor_sonar_mia();
+    TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, i);
+  }
+  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.SENSOR_SONARS_left, 0);
+  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.SENSOR_SONARS_middle, 0);
+  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.SENSOR_SONARS_right, 0);
 }
-
-void test_can_sensor__sensor_sonar_mia_false(void) {
-  can_sensor__sensor_sonar_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 1000);
-
-  can_sensor__sensor_sonar_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 2000);
-
-  sensor_sonar.mia_info.mia_counter = 0;
-  can_sensor__sensor_sonar_mia();
-  TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 1000);
-}
-
-#if BOARD_SENSOR_NODE
-
-void test_can_sensor__transmit_all_messages(void) {
-  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
-  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
-
-  can_sensor__transmit_all_messages();
-}
-#else
-void test_can_sensor__transmit_all_messages(void) {}
-#endif

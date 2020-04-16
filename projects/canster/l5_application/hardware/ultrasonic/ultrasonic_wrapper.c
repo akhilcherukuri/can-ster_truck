@@ -2,6 +2,8 @@
 
 #include "gpio.h"
 
+#include <stdio.h>
+
 /**
  * ULTRASONIC SENSOR PORT-PIN MAPPING SUMMARY:
  * SENSOR_LEFT - Echo: 0.6, Trigger: 0.7
@@ -18,11 +20,11 @@
  * STATIC CONST VARIABLES
  */
 // PINS
-static const uint8_t ULTRASONIC_LEFT_ECHO_INPUT_PIN = 6, ULTRASONIC_LEFT_TRIG_OUTPUT_PIN = 7;
+static const uint8_t ULTRASONIC_LEFT_ECHO_INPUT_PIN = 7, ULTRASONIC_LEFT_TRIG_OUTPUT_PIN = 6;
 
-static const uint8_t ULTRASONIC_MIDDLE_ECHO_INPUT_PIN = 8, ULTRASONIC_MIDDLE_TRIG_OUTPUT_PIN = 9;
+static const uint8_t ULTRASONIC_MIDDLE_ECHO_INPUT_PIN = 9, ULTRASONIC_MIDDLE_TRIG_OUTPUT_PIN = 8;
 
-static const uint8_t ULTRASONIC_RIGHT_ECHO_INPUT_PIN = 26, ULTRASONIC_RIGHT_TRIG_OUTPUT_PIN = 25;
+static const uint8_t ULTRASONIC_RIGHT_ECHO_INPUT_PIN = 25, ULTRASONIC_RIGHT_TRIG_OUTPUT_PIN = 26;
 
 // PORTS
 static const gpio__port_e COMMON_PORT = GPIO__PORT_0;
@@ -62,21 +64,20 @@ void ultrasonic__init_all_sensors(void) {
 }
 
 void ultrasonic__update_all_sensors(void) {
-  ultrasonic__calculate_distance_from_obstacle(&sensor_middle);
   ultrasonic__calculate_distance_from_obstacle(&sensor_left);
+  ultrasonic__calculate_distance_from_obstacle(&sensor_middle);
   ultrasonic__calculate_distance_from_obstacle(&sensor_right);
 }
 
-void ultrasonic__get_distance_from_all_sensors(ultrasonic_distance_s *output) {
-  output->left = sensor_left.distance_from_obstacle;
-  output->right = sensor_right.distance_from_obstacle;
-  output->middle = sensor_middle.distance_from_obstacle;
+void ultrasonic__get_distance_from_all_sensors(dbc_SENSOR_SONARS_s *output) {
+  output->SENSOR_SONARS_left = sensor_left.distance_from_obstacle;
+  output->SENSOR_SONARS_right = sensor_right.distance_from_obstacle;
+  output->SENSOR_SONARS_middle = sensor_middle.distance_from_obstacle;
 }
 
 /**
  * STATIC FUNCTION DEFINITIONS
  */
-
 static void ultrasonic__init_ports_and_pins(void) {
   ultrasonic__init_ports_and_pins_left();
   ultrasonic__init_ports_and_pins_middle();
