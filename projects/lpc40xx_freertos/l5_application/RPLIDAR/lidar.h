@@ -24,5 +24,4 @@ void lidar__get_health(void);
 void lidar__get_samplerate(void);
 void lidar__get_conf(void);
 
-// void lidar__receive_data_response(void);
 void lidar__receive_data_response_check(void);

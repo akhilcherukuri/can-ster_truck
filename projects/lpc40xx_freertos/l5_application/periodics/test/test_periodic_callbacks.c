@@ -27,9 +27,17 @@ void test__periodic_callbacks__initialize(void) {
 void test__periodic_callbacks__1Hz(void) {
   lidar__sample_scan_run_once_Expect(0);
   periodic_callbacks__1Hz(0);
+
+  lidar__sample_scan_run_once_Expect(1);
+  periodic_callbacks__1Hz(1);
 }
 
 void test__periodic_callbacks__100Hz(void) {
-  lidar__receive_data_response_check_Expect();
+  // lidar__receive_data_response_check_Expect();
   periodic_callbacks__100Hz(0);
+}
+
+void test__periodic_callbacks__1000Hz(void) {
+  lidar__receive_data_response_check_Expect();
+  periodic_callbacks__1000Hz(0);
 }

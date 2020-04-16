@@ -95,7 +95,7 @@ static void lidar_data_response_handle_distance(uint16_t angle, uint16_t distanc
         can_led__led3_ON();
       } else {
         can_led__led3_OFF();
-      } // remove
+      }
     }
   }
 }
@@ -118,10 +118,6 @@ void lidar_data_response_parse(uint8_t *data) {
     measurement_distance = (((uint16_t)(data[4] << 8) | (uint16_t)(data[3])) >> 2);
 
     // printf("%u   %u\r\n", measurement_angle, measurement_distance);
-
-    // for (int i = 0; i < 5; i++) {
-    //   printf("%x\r\n", data[i]);
-    // }
     lidar_data_response_handle_distance(measurement_angle, measurement_distance, measurement_quality);
   }
 }
@@ -175,16 +171,11 @@ bool receive_five_byte_sample(char data) {
 
 void lidar_data_response_parse_v2(void) {
   if (check_bits(data_response)) {
-    // printf("Computing Data\r\n");
     measurement_quality = (data_response[0] >> 2);
     measurement_angle = (((uint16_t)(data_response[2] << 7) | (uint16_t)(data_response[1] >> 1)) >> 6);
     measurement_distance = (((uint16_t)(data_response[4] << 8) | (uint16_t)(data_response[3])) >> 2);
 
     // printf("%u   %u\r\n", measurement_angle, measurement_distance);
-
-    // for (int i = 0; i < 5; i++) {
-    //   printf("%x\r\n", data[i]);
-    // }
     lidar_data_response_handle_distance(measurement_angle, measurement_distance, measurement_quality);
   }
 }

@@ -20,7 +20,6 @@ static int direct_response_counter = 0;
 
 static int data_response_index = 0;
 static uint8_t data_response[5] = {0};
-// static char line[100] = {0};
 
 void lidar__config_init(void) {
   gpio__construct_with_function(GPIO__PORT_4, 28, GPIO__FUNCTION_2); // P4.28 as TXD3
@@ -127,46 +126,6 @@ void lidar__get_conf(void) {
   }
 }
 
-// static bool found_start = false;
-// static int found_start_counter = 0;
-// static int counter = 0;
-// static int index = -1;
-// void lidar__receive_data_response(void) {
-//   char byte;
-//   // int i = 0;
-//   while (uart__get(lidar_uart, &byte, 0)) {
-//     if (byte == 0xa5) {
-//       found_start = true;
-//       found_start_counter = counter;
-//     } else if (found_start == true && byte == 0x5a) {
-//       index = counter;
-//       found_start = false;
-//     }
-//     if (found_start_counter + 1 == counter && byte != 0x5a) {
-//       found_start = false;
-//       found_start_counter = 0;
-//     }
-//     // line[i++] = byte;
-//     // printf("%d %x\r\n", index, byte);
-//     printf("%x\r\n", byte);
-//     counter++;
-//   }
-
-//   // printf("Line[0] = %x\r\n", line[0]);
-//   // printf("Line[1] = %x\r\n", line[1]);
-//   // printf("Line[2] = %x\r\n", line[2]);
-//   // printf("Line[3] = %x\r\n", line[3]);
-//   // printf("Line[4] = %x\r\n", line[4]);
-//   // printf("Line[5] = %x\r\n", line[5]);
-//   // printf("Line[6] = %x\r\n", line[6]);
-//   // if ((line[0] == 0xa5) && (line[1] == 0x5a) && (line[2] == 0x05) && (line[3] == 0x00) && (line[4] == 0x00) &&
-//   //     (line[5] == 0x40) && (line[6] == 0x81)) {
-//   //   can_led__led3_ON();
-//   // } else {
-//   //   can_led__led3_OFF();
-//   // }
-// }
-
 static bool direct_response_check(char byte) {
   received_direct_response = false;
   if (byte == 0xa5 && direct_response_counter == 0) {
@@ -189,15 +148,13 @@ static bool direct_response_check(char byte) {
 
 void lidar__receive_data_response_check(void) {
   char byte;
-  // uint32_t byte_counter = 0;
   while (uart__get(lidar_uart, &byte, 0)) {
     if (received_direct_response) {
       // can_led__led0_ON();
       // can_led__led1_OFF();
-      // byte_counter++;
       // data_response[data_response_index++] = byte;
 
-      // printf("%d   %x\r\n", byte_counter, byte);
+      // printf("%x\r\n", byte);
       if (receive_five_byte_sample(byte)) {
         lidar_data_response_parse_v2();
       }
@@ -205,10 +162,8 @@ void lidar__receive_data_response_check(void) {
       // can_led__led1_ON();
       // can_led__led0_OFF();
       // printf("%x\r\n", byte);
-      // byte_counter = 0;
       received_direct_response = direct_response_check(byte);
     }
-    // printf("%d   %x\r\n", byte_counter, byte);
 
     // if (data_response_index > 4) {
     //   printf("Computing Data\r\n");
@@ -216,9 +171,5 @@ void lidar__receive_data_response_check(void) {
     //   lidar_data_response_parse(data_response);
     // }
     // data_response_index = (data_response_index + 1) % 5;
-    // if (counter >= 600 && byte_counter % 5 == 0) {
-    //   memset(rxq_handle, NULL, sizeof(rxq_handle));
-    //   break;
-    // }
   }
 }
