@@ -93,9 +93,9 @@ static void can_driver__transmit_driver_coordinates();
 
 void can_driver__transmit_all_messages(void) {
   can_driver__transmit_driver_steering();
-  can_driver__transmit_driver_required_motor_speed();
+  // can_driver__transmit_driver_required_motor_speed();
   can_driver__transmit_driver_heartbeat();
-  can_driver__transmit_driver_coordinates();
+  // can_driver__transmit_driver_coordinates();
 }
 
 static void can_driver__transmit_driver_coordinates() {

@@ -5,7 +5,7 @@
 /**
  * STATIC VARIABLES
  */
-static const uint8_t DISTANCE_THRESHOLD = 20; // cms
+static const uint8_t DISTANCE_THRESHOLD = 30; // cms
 
 static dbc_SENSOR_SONARS_s sensor_sonar;
 static dbc_GEO_DEGREE_s geo_degree;
@@ -36,17 +36,14 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
   dbc_MOTOR_STEERING_s motor_steering = {{0}, 0};
 
   if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD) {
-    if (sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD && sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD) {
-      // Position yourself to the GPS Coordinates and move towards the target
-      motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
-    } else {
-      // Either left or right obstacle is near while going straight
-      // Tilt slight in the opposite direction
-      motor_steering.MOTOR_STEERING_direction = driver_obstacle__tilt_left_or_right();
-    }
+    // Position yourself to the GPS Coordinates and move towards the target
+    motor_steering.MOTOR_STEERING_direction = 0; // driver_obstacle__move_to_destination();
   } else {
     // Obstacle is detected, DODGE
-    motor_steering.MOTOR_STEERING_direction = driver_obstacle__obstacle_detected();
+    if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right)
+      motor_steering.MOTOR_STEERING_direction = -1; // driver_obstacle__obstacle_detected();
+    else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right)
+      motor_steering.MOTOR_STEERING_direction = 1;
   }
 
   return motor_steering;

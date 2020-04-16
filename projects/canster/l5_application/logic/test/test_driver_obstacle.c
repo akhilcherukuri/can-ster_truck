@@ -135,10 +135,10 @@ void test_driver_obstacle__get_motor_commands_left_right() {
   sensor_sonar.SENSOR_SONARS_right = 30;
 
   dbc_MOTOR_STEERING_s steering = driver_obstacle__get_motor_commands();
-  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, -2);
+  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, -1);
 
   sensor_sonar.SENSOR_SONARS_left = 30;
   sensor_sonar.SENSOR_SONARS_right = 50;
   steering = driver_obstacle__get_motor_commands();
-  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, 2);
+  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, 1);
 }

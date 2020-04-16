@@ -19,7 +19,13 @@
 void setUp(void) {}
 void tearDown(void) {}
 
-void test_can_handler__handle_all_mia() { can_handler__handle_all_mia(); }
+void test_can_handler__handle_all_mia() {
+  can_sensor__sensor_sonar_mia_Expect();
+  can_sensor__sensor_heartbeat_mia_Expect();
+  can_motor__motor_heartbeat_mia_Expect();
+
+  can_handler__handle_all_mia();
+}
 
 void test_can_handler__handle_all_incoming_messages(void) {
 
@@ -32,8 +38,10 @@ void test_can_handler__handle_all_incoming_messages(void) {
 
   (void)header; // uncomment if used
 
-  // can_sensor__decode_sensor_heartbeat_Expect(header, recv_message.data.bytes);
   // can_sensor__decode_sensor_heartbeat_IgnoreArg_header();
+  can_sensor__decode_sensor_heartbeat_ExpectAnyArgs();
+  can_sensor__decode_sensor_sonar_ExpectAnyArgs();
+  can_motor__decode_motor_heartbeat_ExpectAnyArgs();
 
   // TODO, Add more decode functions here as you build your node logic
 
