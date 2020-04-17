@@ -34,7 +34,7 @@ void test__periodic_callbacks__1Hz(void) {
 }
 
 void test__periodic_callbacks__100Hz(void) {
-  check_range_Expect();
+  lidar_data_handler__retrieve_distance_Expect();
   within_range_Expect();
   periodic_callbacks__100Hz(0);
 }

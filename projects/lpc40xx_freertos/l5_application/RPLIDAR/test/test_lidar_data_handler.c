@@ -11,10 +11,10 @@
 #include "lidar_data_handler.c"
 
 void setUp(void) {
-  memset(&left_data, 127, sizeof(left_data));
-  memset(&front_data, 127, sizeof(front_data));
-  memset(&right_data, 127, sizeof(right_data));
-  memset(&rear_data, 127, sizeof(rear_data));
+  memset(left_data, 127, sizeof(left_data));
+  memset(front_data, 127, sizeof(front_data));
+  memset(right_data, 127, sizeof(right_data));
+  memset(rear_data, 127, sizeof(rear_data));
 }
 
 void tearDown(void) {}
@@ -22,7 +22,7 @@ void tearDown(void) {}
 void test__min_distance(void) {
   uint16_t data[] = {90, 85, 60, 76, 105, 100, 49, 44, 66};
 
-  TEST_ASSERT_EQUAL(44, min_distance(&data, sizeof(data) / 2));
+  TEST_ASSERT_EQUAL(44, min_distance(data, sizeof(data) / 2));
 }
 
 void test__lidar_data_handler_receive_low_quality_data(void) {
@@ -43,113 +43,113 @@ void test__lidar_data_handler_objects_in_rear(void) {
   TEST_ASSERT_NOT_EQUAL(distance_threshold + 20, rear_data[10]);
   lidar_data_response_handle_distance(180, distance_threshold + 20, 20);
   TEST_ASSERT_EQUAL(distance_threshold + 20, rear_data[10]);
-  TEST_ASSERT_EQUAL(distance_threshold + 20, min_distance(&rear_data, sizeof(rear_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold + 20, min_distance(rear_data, sizeof(rear_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold - 10, rear_data[20]);
   lidar_data_response_handle_distance(190, distance_threshold - 10, 20);
   TEST_ASSERT_EQUAL(distance_threshold - 10, rear_data[20]);
-  TEST_ASSERT_EQUAL(distance_threshold - 10, min_distance(&rear_data, sizeof(rear_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold - 10, min_distance(rear_data, sizeof(rear_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold - 1, rear_data[0]);
   lidar_data_response_handle_distance(170, distance_threshold - 1, 20);
   TEST_ASSERT_EQUAL(distance_threshold - 1, rear_data[0]);
-  TEST_ASSERT_EQUAL(distance_threshold - 10, min_distance(&rear_data, sizeof(rear_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold - 10, min_distance(rear_data, sizeof(rear_data) / 2));
 }
 
 void test__lidar_data_handler_objects_in_front(void) {
   TEST_ASSERT_NOT_EQUAL(distance_threshold + 20, front_data[9]);
   lidar_data_response_handle_distance(359, distance_threshold + 20, 20);
   TEST_ASSERT_EQUAL(distance_threshold + 20, front_data[9]);
-  TEST_ASSERT_EQUAL(distance_threshold + 20, min_distance(&front_data, sizeof(front_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold + 20, min_distance(front_data, sizeof(front_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold, front_data[10]);
   lidar_data_response_handle_distance(0, distance_threshold, 20);
   TEST_ASSERT_EQUAL(distance_threshold, front_data[10]);
-  TEST_ASSERT_EQUAL(distance_threshold, min_distance(&front_data, sizeof(front_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold, min_distance(front_data, sizeof(front_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(2, front_data[9]);
   lidar_data_response_handle_distance(359, 2, 20);
   TEST_ASSERT_EQUAL(2, front_data[9]);
-  TEST_ASSERT_EQUAL(2, min_distance(&front_data, sizeof(front_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(front_data, sizeof(front_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(20, front_data[20]);
   lidar_data_response_handle_distance(10, 20, 20);
   TEST_ASSERT_EQUAL(20, front_data[20]);
-  TEST_ASSERT_EQUAL(2, min_distance(&front_data, sizeof(front_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(front_data, sizeof(front_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold + 100, front_data[20]);
   lidar_data_response_handle_distance(10, distance_threshold + 100, 20);
   TEST_ASSERT_EQUAL(distance_threshold + 100, front_data[20]);
-  TEST_ASSERT_EQUAL(2, min_distance(&front_data, sizeof(front_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(front_data, sizeof(front_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold, front_data[9]);
   lidar_data_response_handle_distance(359, distance_threshold, 20);
   TEST_ASSERT_EQUAL(distance_threshold, front_data[9]);
-  TEST_ASSERT_EQUAL(distance_threshold, min_distance(&front_data, sizeof(front_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold, min_distance(front_data, sizeof(front_data) / 2));
 }
 
 void test__lidar_data_handler_objects_in_left(void) {
   TEST_ASSERT_NOT_EQUAL(distance_threshold + 20, left_data[0]);
   lidar_data_response_handle_distance(330, distance_threshold + 20, 20);
   TEST_ASSERT_EQUAL(distance_threshold + 20, left_data[0]);
-  TEST_ASSERT_EQUAL(distance_threshold + 20, min_distance(&left_data, sizeof(left_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold + 20, min_distance(left_data, sizeof(left_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold, left_data[19]);
   lidar_data_response_handle_distance(349, distance_threshold, 20);
   TEST_ASSERT_EQUAL(distance_threshold, left_data[19]);
-  TEST_ASSERT_EQUAL(distance_threshold, min_distance(&left_data, sizeof(left_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold, min_distance(left_data, sizeof(left_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(2, left_data[0]);
   lidar_data_response_handle_distance(330, 2, 20);
   TEST_ASSERT_EQUAL(2, left_data[0]);
-  TEST_ASSERT_EQUAL(2, min_distance(&left_data, sizeof(left_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(left_data, sizeof(left_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold - 10, left_data[19]);
   lidar_data_response_handle_distance(349, distance_threshold - 10, 20);
   TEST_ASSERT_EQUAL(distance_threshold - 10, left_data[19]);
-  TEST_ASSERT_EQUAL(2, min_distance(&left_data, sizeof(left_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(left_data, sizeof(left_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold + 100, left_data[19]);
   lidar_data_response_handle_distance(349, distance_threshold + 100, 20);
   TEST_ASSERT_EQUAL(distance_threshold + 100, left_data[19]);
-  TEST_ASSERT_EQUAL(2, min_distance(&left_data, sizeof(left_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(left_data, sizeof(left_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold, left_data[0]);
   lidar_data_response_handle_distance(330, distance_threshold, 20);
   TEST_ASSERT_EQUAL(distance_threshold, left_data[0]);
-  TEST_ASSERT_EQUAL(distance_threshold, min_distance(&left_data, sizeof(left_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold, min_distance(left_data, sizeof(left_data) / 2));
 }
 
 void test__lidar_data_handler_objects_in_right(void) {
   TEST_ASSERT_NOT_EQUAL(distance_threshold + 20, right_data[0]);
   lidar_data_response_handle_distance(11, distance_threshold + 20, 20);
   TEST_ASSERT_EQUAL(distance_threshold + 20, right_data[0]);
-  TEST_ASSERT_EQUAL(distance_threshold + 20, min_distance(&right_data, sizeof(right_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold + 20, min_distance(right_data, sizeof(right_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold, right_data[19]);
   lidar_data_response_handle_distance(30, distance_threshold, 20);
   TEST_ASSERT_EQUAL(distance_threshold, right_data[19]);
-  TEST_ASSERT_EQUAL(distance_threshold, min_distance(&right_data, sizeof(right_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold, min_distance(right_data, sizeof(right_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(2, right_data[0]);
   lidar_data_response_handle_distance(11, 2, 20);
   TEST_ASSERT_EQUAL(2, right_data[0]);
-  TEST_ASSERT_EQUAL(2, min_distance(&right_data, sizeof(right_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(right_data, sizeof(right_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold - 10, right_data[19]);
   lidar_data_response_handle_distance(30, distance_threshold - 10, 20);
   TEST_ASSERT_EQUAL(distance_threshold - 10, right_data[19]);
-  TEST_ASSERT_EQUAL(2, min_distance(&right_data, sizeof(right_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(right_data, sizeof(right_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold + 100, right_data[19]);
   lidar_data_response_handle_distance(30, distance_threshold + 100, 20);
   TEST_ASSERT_EQUAL(distance_threshold + 100, right_data[19]);
-  TEST_ASSERT_EQUAL(2, min_distance(&right_data, sizeof(right_data) / 2));
+  TEST_ASSERT_EQUAL(2, min_distance(right_data, sizeof(right_data) / 2));
 
   TEST_ASSERT_NOT_EQUAL(distance_threshold, right_data[0]);
   lidar_data_response_handle_distance(11, distance_threshold, 20);
   TEST_ASSERT_EQUAL(distance_threshold, right_data[0]);
-  TEST_ASSERT_EQUAL(distance_threshold, min_distance(&right_data, sizeof(right_data) / 2));
+  TEST_ASSERT_EQUAL(distance_threshold, min_distance(right_data, sizeof(right_data) / 2));
 }
 
 void test__check_bits_start_correct(void) {
@@ -195,17 +195,17 @@ void test__data_response_parse_left(void) {
       data[3] = (dist << 2) & 0xff;
       data[4] = (dist >> 6) & 0xff;
       TEST_ASSERT_NOT_EQUAL(dist, left_data[(angle - left_low_angle) % 20]);
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
       TEST_ASSERT_EQUAL(dist, left_data[(angle - left_low_angle) % 20]);
 
       dist = distance_threshold;
       data[3] = (dist << 2) & 0xff;
       data[4] = (dist >> 6) & 0xff;
       TEST_ASSERT_NOT_EQUAL(dist, left_data[(angle - left_low_angle) % 20]);
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
       TEST_ASSERT_EQUAL(dist, left_data[(angle - left_low_angle) % 20]);
     } else {
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
     }
   }
 }
@@ -225,17 +225,17 @@ void test__data_response_parse_right(void) {
       data[3] = (dist << 2) & 0xff;
       data[4] = (dist >> 6) & 0xff;
       TEST_ASSERT_NOT_EQUAL(dist, right_data[(angle - right_low_angle) % 20]);
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
       TEST_ASSERT_EQUAL(dist, right_data[(angle - right_low_angle) % 20]);
 
       dist = distance_threshold;
       data[3] = (dist << 2) & 0xff;
       data[4] = (dist >> 6) & 0xff;
       TEST_ASSERT_NOT_EQUAL(dist, right_data[(angle - right_low_angle) % 20]);
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
       TEST_ASSERT_EQUAL(dist, right_data[(angle - right_low_angle) % 20]);
     } else {
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
     }
   }
 }
@@ -255,17 +255,17 @@ void test__data_response_parse_rear(void) {
       data[3] = (dist << 2) & 0xff;
       data[4] = (dist >> 6) & 0xff;
       TEST_ASSERT_NOT_EQUAL(dist, rear_data[(angle - rear_low_angle) % 21]);
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
       TEST_ASSERT_EQUAL(dist, rear_data[(angle - rear_low_angle) % 21]);
 
       dist = distance_threshold;
       data[3] = (dist << 2) & 0xff;
       data[4] = (dist >> 6) & 0xff;
       TEST_ASSERT_NOT_EQUAL(dist, rear_data[(angle - rear_low_angle) % 21]);
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
       TEST_ASSERT_EQUAL(dist, rear_data[(angle - rear_low_angle) % 21]);
     } else {
-      lidar_data_response_parse(&data);
+      lidar_data_handler__response_parse(data);
     }
   }
 }
@@ -285,14 +285,14 @@ void test__data_response_parse_front(void) {
     data[3] = (dist << 2) & 0xff;
     data[4] = (dist >> 6) & 0xff;
     TEST_ASSERT_NOT_EQUAL(dist, front_data[(mod_angle - front_low_angle) % 21]);
-    lidar_data_response_parse(&data);
+    lidar_data_handler__response_parse(data);
     TEST_ASSERT_EQUAL(dist, front_data[(mod_angle - front_low_angle) % 21]);
 
     dist = distance_threshold;
     data[3] = (dist << 2) & 0xff;
     data[4] = (dist >> 6) & 0xff;
     TEST_ASSERT_NOT_EQUAL(dist, front_data[(mod_angle - front_low_angle) % 21]);
-    lidar_data_response_parse(&data);
+    lidar_data_handler__response_parse(data);
     TEST_ASSERT_EQUAL(dist, front_data[(mod_angle - front_low_angle) % 21]);
   }
 }

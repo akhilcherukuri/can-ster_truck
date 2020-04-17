@@ -43,7 +43,7 @@ void lidar__config_init(void) {
 
   uart__enable_queues(lidar_uart, rxq_handle, txq_handle);
 
-  lidar_data_handler_init();
+  lidar_data_handler__init();
 }
 
 void lidar__stop(void) {
@@ -153,31 +153,16 @@ static bool direct_response_check(char byte) {
 
 void lidar__receive_data_response_check(void) {
   char byte;
+
   while (uart__get(lidar_uart, &byte, 0)) {
     if (received_direct_response) {
-      // can_led__led0_ON();
-      // can_led__led1_OFF();
-      // data_response[data_response_index++] = byte;
-
-      // printf("%x\r\n", byte);
       data_response[data_response_index++] = byte;
-      if (receive_five_byte_sample(byte)) {
-        // lidar_data_response_parse_v2();
+      if (lidar_data_handler__receive_five_byte_sample(byte)) {
         data_response_index = 0;
-        lidar_data_response_parse(&data_response);
+        lidar_data_handler__response_parse(&data_response);
       }
     } else if (!received_direct_response) {
-      // can_led__led1_ON();
-      // can_led__led0_OFF();
-      // printf("%x\r\n", byte);
       received_direct_response = direct_response_check(byte);
     }
-
-    // if (data_response_index > 4) {
-    //   printf("Computing Data\r\n");
-    //   data_response_index = 0;
-    //   lidar_data_response_parse(data_response);
-    // }
-    // data_response_index = (data_response_index + 1) % 5;
   }
 }

@@ -38,7 +38,7 @@ void periodic_callbacks__10Hz(uint32_t callback_count) {
 }
 void periodic_callbacks__100Hz(uint32_t callback_count) {
   // Add your code here
-  check_range();
+  lidar_data_handler__retrieve_distance();
   within_range();
 }
 
