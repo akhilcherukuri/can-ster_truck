@@ -10,6 +10,7 @@
 #include "Mockcan_led.h"
 #include "Mockgpio.h"
 #include "Mocklidar.h"
+#include "Mocklidar_data_handler.h"
 
 // Include the source we wish to test
 #include "periodic_callbacks.h"
@@ -25,15 +26,16 @@ void test__periodic_callbacks__initialize(void) {
 }
 
 void test__periodic_callbacks__1Hz(void) {
-  lidar__sample_scan_run_once_Expect(0);
+  lidar__scan_run_once_Expect(0);
   periodic_callbacks__1Hz(0);
 
-  lidar__sample_scan_run_once_Expect(1);
+  lidar__scan_run_once_Expect(1);
   periodic_callbacks__1Hz(1);
 }
 
 void test__periodic_callbacks__100Hz(void) {
-  // lidar__receive_data_response_check_Expect();
+  check_range_Expect();
+  within_range_Expect();
   periodic_callbacks__100Hz(0);
 }
 

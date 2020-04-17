@@ -30,7 +30,7 @@ void periodic_callbacks__initialize(void) {
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
   // Add your code here
-  lidar__sample_scan_run_once(callback_count);
+  lidar__scan_run_once(callback_count);
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
@@ -38,8 +38,8 @@ void periodic_callbacks__10Hz(uint32_t callback_count) {
 }
 void periodic_callbacks__100Hz(uint32_t callback_count) {
   // Add your code here
-  // check_range();
-  // within_range();
+  check_range();
+  within_range();
 }
 
 /**

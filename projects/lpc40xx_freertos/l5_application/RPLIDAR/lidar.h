@@ -15,7 +15,7 @@ void lidar__config_init(void);
 void lidar__stop(void);
 void lidar__reset(void);
 void lidar__sample_scan(void);
-void lidar__sample_scan_run_once(int send_once);
+void lidar__scan_run_once(int send_once);
 void lidar__express_scan(void);
 void lidar__force_scan(void);
 

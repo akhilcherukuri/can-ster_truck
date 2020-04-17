@@ -53,49 +53,14 @@ static void lidar_data_response_handle_distance(uint16_t angle, uint16_t distanc
   if (/*quality > 0xe &&*/ distance != 0) {
     if (angle >= left_low_angle && angle <= left_high_angle) {
       left_data[(angle - left_low_angle) % 20] = distance;
-      distance_left = min_distance(&left_data, sizeof(left_data) / 2);
-      //   printf("%u   %u\r\n", angle, distance_left);
-      if (distance_left < distance_threshold) {
-        can_led__led0_ON();
-      } else {
-        can_led__led0_OFF();
-      }
     } else if (angle >= right_low_angle && angle <= right_high_angle) {
       right_data[(angle - right_low_angle) % 20] = distance;
-      distance_right = min_distance(&right_data, sizeof(right_data) / 2);
-      //   printf("%u   %u\r\n", angle, distance_right);
-      if (distance_right < distance_threshold) {
-        can_led__led1_ON();
-      } else {
-        can_led__led1_OFF();
-      }
     } else if (angle >= rear_low_angle && angle <= rear_high_angle) {
       rear_data[(angle - rear_low_angle) % 21] = distance;
-      distance_rear = min_distance(&rear_data, sizeof(rear_data) / 2);
-      //   printf("%u   %u\r\n", angle, distance_rear);
-      if (distance_rear < distance_threshold) {
-        can_led__led2_ON();
-      } else {
-        can_led__led2_OFF();
-      }
     } else if (angle >= front_low_angle && angle <= circle_end_angle) {
       front_data[(angle - front_low_angle) % 10] = distance;
-      distance_front = min_distance(&front_data, sizeof(front_data) / 2);
-      //   printf("%u   %u\r\n", angle, distance_front);
-      if (distance_front < distance_threshold) {
-        can_led__led3_ON();
-      } else {
-        can_led__led3_OFF();
-      }
     } else if (angle >= circle_start_angle && angle <= front_high_angle) {
       front_data[((angle - circle_start_angle) % 11) + 10] = distance;
-      distance_front = min_distance(&front_data, sizeof(front_data) / 2);
-      //   printf("%u   %u\r\n", angle, distance_front);
-      if (distance_front < distance_threshold) {
-        can_led__led3_ON();
-      } else {
-        can_led__led3_OFF();
-      }
     }
   }
 }
@@ -171,13 +136,13 @@ bool receive_five_byte_sample(char data) {
   return received_five_bytes;
 }
 
-void lidar_data_response_parse_v2(void) {
-  if (check_bits(data_response)) {
-    measurement_quality = (data_response[0] >> 2);
-    measurement_angle = (((uint16_t)(data_response[2] << 7) | (uint16_t)(data_response[1] >> 1)) >> 6);
-    measurement_distance = (((uint16_t)(data_response[4] << 8) | (uint16_t)(data_response[3])) >> 2);
+// void lidar_data_response_parse_v2(void) {
+//   if (check_bits(data_response)) {
+//     measurement_quality = (data_response[0] >> 2);
+//     measurement_angle = (((uint16_t)(data_response[2] << 7) | (uint16_t)(data_response[1] >> 1)) >> 6);
+//     measurement_distance = (((uint16_t)(data_response[4] << 8) | (uint16_t)(data_response[3])) >> 2);
 
-    // printf("%u   %u\r\n", measurement_angle, measurement_distance);
-    lidar_data_response_handle_distance(measurement_angle, measurement_distance, measurement_quality);
-  }
-}
+//     // printf("%u   %u\r\n", measurement_angle, measurement_distance);
+//     lidar_data_response_handle_distance(measurement_angle, measurement_distance, measurement_quality);
+//   }
+// }

@@ -70,7 +70,7 @@ void lidar__sample_scan(void) {
   }
 }
 
-void lidar__sample_scan_run_once(int send_once) {
+void lidar__scan_run_once(int send_once) {
   if (1 == send_once) {
     uint8_t request[] = {start_byte, sample_scan};
 
@@ -160,8 +160,11 @@ void lidar__receive_data_response_check(void) {
       // data_response[data_response_index++] = byte;
 
       // printf("%x\r\n", byte);
+      data_response[data_response_index++] = byte;
       if (receive_five_byte_sample(byte)) {
-        lidar_data_response_parse_v2();
+        // lidar_data_response_parse_v2();
+        data_response_index = 0;
+        lidar_data_response_parse(&data_response);
       }
     } else if (!received_direct_response) {
       // can_led__led1_ON();
