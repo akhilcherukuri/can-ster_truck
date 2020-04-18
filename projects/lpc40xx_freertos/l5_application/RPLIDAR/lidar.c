@@ -30,7 +30,7 @@ static uint8_t data_response[5] = {0};
 /**
  * STATIC FUNCTIONS
  */
-static bool direct_response_check(char byte);
+static bool direct_response_check(uint8_t byte);
 
 void lidar__config_init(void) {
   gpio__construct_with_function(GPIO__PORT_4, 28, GPIO__FUNCTION_2); // P4.28 as TXD3
@@ -131,7 +131,7 @@ void lidar__get_conf(void) {
   }
 }
 
-static bool direct_response_check(char byte) {
+static bool direct_response_check(uint8_t byte) {
   received_direct_response = false;
   if (byte == 0xa5 && direct_response_counter == 0) {
     direct_response_counter++;
@@ -159,7 +159,7 @@ void lidar__receive_data_response_check(void) {
       data_response[data_response_index++] = byte;
       if (lidar_data_handler__receive_five_byte_sample(byte)) {
         data_response_index = 0;
-        lidar_data_handler__response_parse(&data_response);
+        lidar_data_handler__response_parse(data_response);
       }
     } else if (!received_direct_response) {
       received_direct_response = direct_response_check(byte);

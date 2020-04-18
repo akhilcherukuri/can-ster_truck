@@ -6,9 +6,9 @@
 #include "can_led.h"
 #include "lidar_data_handler.h"
 #include "uart.h"
-#include <string.h>
 
 #include <stdint.h>
+#include <string.h>
 
 void lidar__config_init(void);
 
