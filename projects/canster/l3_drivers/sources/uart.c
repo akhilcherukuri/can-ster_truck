@@ -193,6 +193,32 @@ void uart__init(uart_e uart, uint32_t peripheral_clock, uint32_t baud_rate) {
   uart_regs->LCR = eight_bit_datalen | stop_bits_is_2; // DLAB is reset back to zero also
 }
 
+void uart__init_stop_bit(uart_e uart, uint32_t peripheral_clock, uint32_t baud_rate, uint8_t stop_bit) {
+  lpc_peripheral__turn_on_power_to(uart_peripheral_ids[uart]);
+
+  const float roundup_offset = 0.5;
+  const uint16_t divider = (uint16_t)((peripheral_clock / (16 * baud_rate)) + roundup_offset);
+  const uint8_t dlab_bit = (1 << 7);
+  const uint8_t eight_bit_datalen = 3;
+
+  // 2-stop bits helps improve baud rate error; you can remove this if bandwidth is critical to you
+  // const uint8_t stop_bits_is_2 = (1 << 2);
+  const uint8_t stop_bits_is_2 = stop_bit;
+
+  lpc_uart *uart_regs = uarts[uart].registers;
+
+  uart_regs->LCR = dlab_bit; // Set DLAB bit to access DLM & DLL
+  uart_regs->DLM = (divider >> 8) & 0xFF;
+  uart_regs->DLL = (divider >> 0) & 0xFF;
+
+  /* Bootloader uses Uart0 fractional dividers and can wreck havoc in our baud rate code, so re-initialize it
+   * Lesson learned: DO NOT RELY ON RESET VALUES
+   */
+  const uint32_t default_reset_fdr_value = (1 << 4);
+  uart_regs->FDR = default_reset_fdr_value;
+  uart_regs->LCR = eight_bit_datalen | stop_bits_is_2; // DLAB is reset back to zero also
+}
+
 bool uart__is_initialized(uart_e uart) {
   return lpc_peripheral__is_powered_on(uart_peripheral_ids[uart]) && (0 != uarts[uart].registers->LCR);
 }

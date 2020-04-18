@@ -21,6 +21,7 @@ typedef enum {
  * @note Once UART is initialied to a baud rate, this API will not allow further changes to it
  */
 void uart__init(uart_e uart, uint32_t peripheral_clock, uint32_t baud_rate);
+void uart__init_stop_bit(uart_e uart, uint32_t peripheral_clock, uint32_t baud_rate, uint8_t stop_bit);
 
 bool uart__is_initialized(uart_e uart);
 bool uart__is_transmit_queue_initialized(uart_e uart);

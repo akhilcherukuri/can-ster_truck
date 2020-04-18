@@ -6,11 +6,39 @@
 
 #include "can_bus_constants.h"
 
+// TODO, Add all your node includes here
+#include "can_driver_node.h"
+#include "can_geo_node.h"
+#include "can_motor_node.h"
+#include "can_sensor_node.h"
+
 /**
  * Defined functions
  */
 void can_handler__handle_all_mia(void) {
   // Module function
+  /**
+   * NOTE, We will uncomment these functions depending on which node we are
+   * And looking at the dbc file
+   */
+
+  // Senor Node MIA Functions
+  // can_sensor__sensor_sonar_mia();
+  // can_sensor__sensor_heartbeat_mia();
+
+  // Driver Node MIA Functions
+  // can_driver__motor_speed_mia();
+  // can_driver__motor_steering_mia();
+  // can_driver__driver_heartbeat_mia();
+  // can_driver__driver_coordinates_mia();
+
+  // Motor Node MIA Functions
+  // can_motor__motor_heartbeat_mia();
+  // can_motor__motor_speed_feedback_mia();
+
+  // Geo Node MIA Functions
+  // can_geo__geo_heartbeat_mia();
+  // can_geo__geo_degree_mia();
 }
 
 void can_handler__handle_all_incoming_messages(void) {
@@ -30,11 +58,47 @@ void can_handler__handle_all_incoming_messages(void) {
 
     // Module function
     (void)header;
+
+    /**
+     * NOTE
+     * We will uncomment these functions depending on which node we are
+     * and the dbc file
+     */
+
+    // Sensor Node Decode functions
+    // can_sensor__decode_sensor_heartbeat(header, recv_message.data.bytes);
+    // can_sensor__decode_sensor_sonar(header, recv_message.data.bytes);
+
+    // Driver Node Decode functions
+    // can_driver__decode_driver_heartbeat(header, recv_message.data.bytes);
+    // can_driver__decode_motor_speed(header, recv_message.data.bytes);
+    // can_driver__decode_motor_steering(header, recv_message.data.bytes);
+    // can_driver__decode_driver_coordinates(header, recv_message.data.bytes);
+
+    // Motor Node Decode functions
+    // can_motor__decode_motor_heartbeat(header, recv_message.data.bytes);
+    // can_motor__decode_motor_speed_feedback(header, recv_message.data.bytes);
+
+    // Geo Node Decode Functions
+    // can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);
+    // can_geo__decode_geo_degree(header, recv_message.data.bytes);
   }
 }
 
 void can_handler__transmit_message_10hz(void) {
   // Module function
+
+  // Sensor Node Transmit
+  can_sensor__transmit_all_messages();
+
+  // Driver Node Transmit
+  can_driver__transmit_all_messages();
+
+  // Motor Node Transmit
+  can_motor__transmit_all_messages();
+
+  // Geo Node Transmit
+  can_geo__transmit_all_messages();
 }
 
 /**
