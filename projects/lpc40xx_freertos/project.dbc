@@ -59,7 +59,8 @@ BO_ 300 GEO_DEGREE: 8 GEO
  SG_ GEO_DEGREE_required: 32|32@1+ (0.1,0) [0|0] "" DRIVER
 
 BO_ 400 MOTOR_INFO: 4 MOTOR
- SG_ MOTOR_INFO_rpm: 0|32@1+ (0.1,0) [0|0] "" DRIVER
+ SG_ MOTOR_INFO_rps: 0|16@1+ (0.1,0) [0|0] "" DRIVER
+ SG_ MOTOR_INFO_kph: 16|16@1+ (0.1,0) [0|0] "" DRIVER
 
 BO_ 500 SENSOR_BT_COORDINATES: 8 SENSOR
  SG_ SENSOR_BT_COORDINATES_latitude: 0|32@1+ (0.0001,0) [0|0] "" GEO
@@ -90,7 +91,7 @@ CM_ BO_ 103 "Sensor Sync message used to synchronize the controllers";
 CM_ BO_ 200 "Steering direction and speed values sent by Driver Node";
 CM_ BO_ 210 "Driver coordinates sent by Driver Node";
 CM_ BO_ 300 "Current and computer/required degree values sent by Geo Node";
-CM_ BO_ 400 "Current motor RPM sent as feedback to the Driver Node";
+CM_ BO_ 400 "Current motor info (rps and kph) sent as feedback to the Driver Node";
 CM_ BO_ 500 "Coordinate BT values sent by Sensor Node";
 CM_ BO_ 510 "Lidar Sector values sent by Sensor Node";
 CM_ BO_ 520 "Ultrasonic Sensor values sent by Sensor Node";
@@ -109,7 +110,8 @@ CM_ SG_ 210 DRIVER_COORDINATES_longitude "Longitude coordinate";
 CM_ SG_ 300 GEO_DEGREE_current "Current Geo Degree relative to true north";
 CM_ SG_ 300 GEO_DEGREE_required "Calculated Geo Degree computed by Haversine Formula";
 
-CM_ SG_ 400 MOTOR_INFO_rpm "Feedback RPM (speed) sent by Motor";
+CM_ SG_ 400 MOTOR_INFO_rps "Feedback speed (rps) sent by Motor";
+CM_ SG_ 400 MOTOR_INFO_kph "Feedback speed (kph) sent by Motor";
 
 CM_ SG_ 500 SENSOR_BT_COORDINATES_latitude "Destination Latitude received over Bluetooth";
 CM_ SG_ 500 SENSOR_BT_COORDINATES_longitude "Destination Longitude received over Bluetooth";
