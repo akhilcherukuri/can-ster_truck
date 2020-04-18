@@ -111,14 +111,14 @@ static void lcd__read_response_id(uint8_t *response_id) {
     return;
   }
 
+  // Set an initial value incase timeout occurs
+  *response_id = 0;
   const uint8_t maxwait = 30; // ms
 
   char byte;
   if (uart__get(LCD_UART, &byte, maxwait)) {
     // Add to the response (identifier) data byte
-    if (response_id != NULL) {
-      *response_id = byte;
-    }
+    *response_id = byte;
   }
 
 #if LCD_DEBUG == 1
