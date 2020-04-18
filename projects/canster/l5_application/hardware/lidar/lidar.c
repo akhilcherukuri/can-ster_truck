@@ -30,7 +30,7 @@ static uint8_t data_response[5] = {0};
 /**
  * STATIC FUNCTIONS
  */
-static bool direct_response_check(char byte);
+static bool direct_response_check(uint8_t byte);
 
 void lidar__config_init(void) {
   gpio__construct_with_function(GPIO__PORT_4, 28, GPIO__FUNCTION_2); // P4.28 as TXD3
@@ -43,7 +43,7 @@ void lidar__config_init(void) {
 
   uart__enable_queues(lidar_uart, rxq_handle, txq_handle);
 
-  lidar_data_handler_init();
+  lidar_data_handler__init();
 }
 
 void lidar__stop(void) {
@@ -70,7 +70,7 @@ void lidar__sample_scan(void) {
   }
 }
 
-void lidar__sample_scan_run_once(int send_once) {
+void lidar__scan_run_once(int send_once) {
   if (1 == send_once) {
     uint8_t request[] = {start_byte, sample_scan};
 
@@ -131,7 +131,7 @@ void lidar__get_conf(void) {
   }
 }
 
-static bool direct_response_check(char byte) {
+static bool direct_response_check(uint8_t byte) {
   received_direct_response = false;
   if (byte == 0xa5 && direct_response_counter == 0) {
     direct_response_counter++;
@@ -153,28 +153,16 @@ static bool direct_response_check(char byte) {
 
 void lidar__receive_data_response_check(void) {
   char byte;
+
   while (uart__get(lidar_uart, &byte, 0)) {
     if (received_direct_response) {
-      // can_led__led0_ON();
-      // can_led__led1_OFF();
-      // data_response[data_response_index++] = byte;
-
-      // printf("%x\r\n", byte);
-      if (receive_five_byte_sample(byte)) {
-        lidar_data_response_parse_v2();
+      data_response[data_response_index++] = byte;
+      if (lidar_data_handler__receive_five_byte_sample(byte)) {
+        data_response_index = 0;
+        lidar_data_handler__response_parse(data_response);
       }
     } else if (!received_direct_response) {
-      // can_led__led1_ON();
-      // can_led__led0_OFF();
-      // printf("%x\r\n", byte);
       received_direct_response = direct_response_check(byte);
     }
-
-    // if (data_response_index > 4) {
-    //   printf("Computing Data\r\n");
-    //   data_response_index = 0;
-    //   lidar_data_response_parse(data_response);
-    // }
-    // data_response_index = (data_response_index + 1) % 5;
   }
 }
