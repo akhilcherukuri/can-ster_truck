@@ -25,6 +25,7 @@ void test__periodic_callbacks__initialize(void) {
 }
 
 void test__periodic_callbacks__1Hz(void) {
+  // gps__run_once_Expect();
   can_handler__handle_all_mia_Expect();
 
   periodic_callbacks__1Hz(0);

@@ -197,11 +197,11 @@ void can_driver__decode_driver_coordinates(dbc_message_header_t header, uint8_t 
 #endif
 
     // DONE, Add other things here
-    can_driver__on_decode_driver_coordinates();
+    // can_driver__on_decode_driver_coordinates();
   }
 }
 
 static void can_driver__on_decode_driver_coordinates() {
   // DONE, Update the geo logic/state here
-  // geo_logic__update_destination_coordinate(&driver_coordinates);
+  geo_logic__update_destination_coordinate(&driver_coordinates);
 }

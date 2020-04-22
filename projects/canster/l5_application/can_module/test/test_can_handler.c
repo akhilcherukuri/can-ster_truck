@@ -19,10 +19,14 @@
 void setUp(void) {}
 void tearDown(void) {}
 
-void test_can_handler__handle_all_mia() { can_handler__handle_all_mia(); }
+void test_can_handler__handle_all_mia() {
+  can_sensor__sensor_heartbeat_mia_Expect();
+  can_driver__driver_heartbeat_mia_Expect();
+  can_motor__motor_heartbeat_mia_Expect();
+  can_handler__handle_all_mia();
+}
 
 void test_can_handler__handle_all_incoming_messages(void) {
-
   can__msg_t recv_message = {};
   can__rx_ExpectAndReturn(CAN_PORT, &recv_message, 0, true);
   const dbc_message_header_t header = {
@@ -32,8 +36,12 @@ void test_can_handler__handle_all_incoming_messages(void) {
 
   (void)header; // uncomment if used
 
-  // can_sensor__decode_sensor_heartbeat_Expect(header, recv_message.data.bytes);
-  // can_sensor__decode_sensor_heartbeat_IgnoreArg_header();
+  can_sensor__decode_sensor_heartbeat_Expect(header, recv_message.data.bytes);
+  can_sensor__decode_sensor_heartbeat_IgnoreArg_header();
+  can_driver__decode_driver_heartbeat_Expect(header, recv_message.data.bytes);
+  can_driver__decode_driver_heartbeat_IgnoreArg_header();
+  can_motor__decode_motor_heartbeat_Expect(header, recv_message.data.bytes);
+  can_motor__decode_motor_heartbeat_IgnoreArg_header();
 
   // TODO, Add more decode functions here as you build your node logic
 

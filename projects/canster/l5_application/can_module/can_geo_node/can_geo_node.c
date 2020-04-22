@@ -126,12 +126,12 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
 #endif
 
     // Do something here
-    can_geo__on_decode_geo_degree();
+    // can_geo__on_decode_geo_degree();
   }
 }
 
 static void can_geo__on_decode_geo_degree(void) {
-  // driver_obstacle__geo_controller_directions(&geo_degree);
-  // printf("on_decode_geo_degree: %f %f\r\n", (double)geo_degree.GEO_DEGREE_current,
-  //        (double)geo_degree.GEO_DEGREE_required);
+  driver_obstacle__geo_controller_directions(&geo_degree);
+  printf("on_decode_geo_degree: %f %f\r\n", (double)geo_degree.GEO_DEGREE_current,
+         (double)geo_degree.GEO_DEGREE_required);
 }
