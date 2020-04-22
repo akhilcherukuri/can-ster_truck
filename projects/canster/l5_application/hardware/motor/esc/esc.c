@@ -54,6 +54,35 @@ void esc__calibrate_blink_red_once() { esc__set_duty_cycle(20); }
 void esc__calibrate_blink_red_twice() { esc__set_duty_cycle(15); }
 void esc__calibrate_red_to_green() { esc__set_duty_cycle(10); }
 
+void esc__direction_processor(int16_t direction_value) {
+  switch (direction_value) {
+  case 0:
+    esc__reverse_fast();
+    break;
+  case 1:
+    esc__reverse_medium();
+    break;
+  case 2:
+    esc__reverse_slow();
+    break;
+  case 3:
+    esc__neutral();
+    break;
+  case 4:
+    esc__forward_slow();
+    break;
+  case 5:
+    esc__forward_medium();
+    break;
+  case 6:
+    esc__forward_fast();
+    break;
+
+  default:
+    printf("\nDid not receive steering value");
+  }
+}
+
 /**
  * STATIC FUNCTION DEFINITIONS
  */

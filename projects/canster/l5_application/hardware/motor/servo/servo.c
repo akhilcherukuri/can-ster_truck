@@ -61,7 +61,7 @@ void servo__steer_processor(int16_t steering_value) {
     servo__steer_hard_right();
     break;
   default:
-    printf("Did not receive steering value");
+    printf("\nDid not receive steering value");
   }
 }
 
