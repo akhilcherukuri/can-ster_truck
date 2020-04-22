@@ -25,7 +25,7 @@
 #endif
 #include <stdbool.h>
 
-bool mia_steering;
+static bool mia_steering;
 
 static dbc_MOTOR_STEERING_s driver_steering;
 static dbc_MOTOR_SPEED_s driver_required_motor_speed;
@@ -39,6 +39,7 @@ const dbc_MOTOR_STEERING_s *can_driver__get_driver_steering() { return &driver_s
 const dbc_MOTOR_SPEED_s *can_driver__get_driver_required_motor_speed() { return &driver_required_motor_speed; }
 const dbc_DRIVER_HEARTBEAT_s *can_driver__get_driver_heartbeat() { return &driver_heartbeat; }
 const dbc_DRIVER_COORDINATES_s *can_driver__get_driver_coordinates() { return &driver_coordinates; }
+bool get_mia_steering() { return mia_steering; }
 
 /**
  * MIA
