@@ -91,7 +91,7 @@ void can_motor__motor_speed_feedback_mia() {
 void can_motor__decode_motor_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_MOTOR_HEARTBEAT(&motor_heartbeat, header, bytes)) {
 #if DEBUG_MOTOR_NODE == 1
-    printf("Motor Heartbeat: %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
+    printf("\nMotor Heartbeat: %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
 #endif
     gpio__reset(board_io__get_led1());
   }

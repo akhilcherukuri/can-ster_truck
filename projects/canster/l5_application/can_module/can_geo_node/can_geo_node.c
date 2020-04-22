@@ -56,14 +56,19 @@ static void can_geo__transmit_geo_heartbeat() {
 
 static void can_geo__transmit_geo_degree() {
   // TODO, get current and computed degree from here
+  //   message.GEO_DEGREE_current = compass__read_compass_bearing_16bit();
+  // message.GEO_DEGREE_required = geo_logic__compute_required_bearing();
   dbc_GEO_DEGREE_s message = {};
-  message.GEO_DEGREE_current = compass__read_compass_bearing_16bit();
-  message.GEO_DEGREE_required = geo_logic__compute_required_bearing();
+  message.GEO_DEGREE_current = ((rand() % 200) / 13.1);
+  message.GEO_DEGREE_required = ((rand() % 200) / 13.1);
 
   if (!dbc_encode_and_send_GEO_DEGREE(NULL, &message)) {
 #if GEO_NODE_DEBUG == 1
     printf("Failed to encode and send Geo Degree\r\n");
 #endif
+  } else {
+    printf("\nCurrent compass degree = %lf Required compass degree = %lf\r\n", (double)message.GEO_DEGREE_current,
+           (double)message.GEO_DEGREE_required);
   }
 }
 
@@ -116,7 +121,7 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
 
   if (dbc_decode_GEO_DEGREE(&geo_degree, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
-    printf("Geo Degree: current: %f, required: %f\r\n", (double)geo_degree.GEO_DEGREE_current,
+    printf("Compass Degree from GEO Node: Current: %f, Required: %f\r\n", (double)geo_degree.GEO_DEGREE_current,
            (double)geo_degree.GEO_DEGREE_required);
 #endif
 
@@ -125,4 +130,8 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
   }
 }
 
-static void can_geo__on_decode_geo_degree(void) { driver_obstacle__geo_controller_directions(&geo_degree); }
+static void can_geo__on_decode_geo_degree(void) {
+  // driver_obstacle__geo_controller_directions(&geo_degree);
+  // printf("on_decode_geo_degree: %f %f\r\n", (double)geo_degree.GEO_DEGREE_current,
+  //        (double)geo_degree.GEO_DEGREE_required);
+}

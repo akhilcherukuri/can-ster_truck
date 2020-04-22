@@ -155,7 +155,7 @@ static void can_driver__on_decode_driver_coordinates();
 void can_driver__decode_driver_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_DRIVER_HEARTBEAT(&driver_heartbeat, header, bytes)) {
 #if DRIVER_NODE_DEBUG == 1
-    printf("Driver Heartbeat: %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
+    printf("\nDriver Heartbeat: %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
 #endif
 
     // TODO, Do other things here
@@ -191,7 +191,8 @@ void can_driver__decode_motor_steering(dbc_message_header_t header, uint8_t byte
 void can_driver__decode_driver_coordinates(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_DRIVER_COORDINATES(&driver_coordinates, header, bytes)) {
 #if DRIVER_NODE_DEBUG == 1
-    printf("Driver required driver coordinates: %f %f\r\n", (double)driver_coordinates.DRIVER_COORDINATES_latitude,
+    printf("Final Destination Coordinate sent to GEO Node: %f %f\r\n",
+           (double)driver_coordinates.DRIVER_COORDINATES_latitude,
            (double)driver_coordinates.DRIVER_COORDINATES_longitude);
 #endif
 
@@ -202,5 +203,5 @@ void can_driver__decode_driver_coordinates(dbc_message_header_t header, uint8_t 
 
 static void can_driver__on_decode_driver_coordinates() {
   // DONE, Update the geo logic/state here
-  geo_logic__update_destination_coordinate(&driver_coordinates);
+  // geo_logic__update_destination_coordinate(&driver_coordinates);
 }

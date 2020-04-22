@@ -19,20 +19,24 @@ void periodic_callbacks__initialize(void) {
   // This method is invoked once when the periodic tasks are created
   can_bus__initialize();
 
-  // gps__init();
+  gps__init();
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
+  can_handler__handle_all_incoming_messages();
+  can_handler__transmit_message_10hz();
+
+  gps__run_once();
   can_handler__handle_all_mia();
 
   // gps_coordinates_s coordinates = gps__get_coordinates();
-  // printf("Coordinates: %f %f\r\n", (double)coordinates.latitude, (double)coordinates.longitude);
+  // printf("Coordinates: %lf %lf\r\n", (double)coordinates.latitude, (double)coordinates.longitude);
   // gps__debug_print_parsed_rmc_data();
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
-  can_handler__handle_all_incoming_messages();
-  can_handler__transmit_message_10hz();
+  // can_handler__handle_all_incoming_messages();
+  // can_handler__transmit_message_10hz();
 
   // gps__run_once();
 }
