@@ -16,6 +16,7 @@ void can_geo__geo_degree_mia();
 // Decode
 void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]);
 void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]);
+// void driver_obstacle__get_geo_controller_direction(dbc_GEO_DEGREE_s *);
 
 // Getters for all static variables
 // ! NO SETTERS

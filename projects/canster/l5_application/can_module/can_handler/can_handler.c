@@ -37,8 +37,8 @@ void can_handler__handle_all_mia(void) {
   // can_motor__motor_speed_feedback_mia();
 
   // Geo Node MIA Functions
-  // can_geo__geo_heartbeat_mia();
-  // can_geo__geo_degree_mia();
+  can_geo__geo_heartbeat_mia();
+  can_geo__geo_degree_mia();
 }
 
 void can_handler__handle_all_incoming_messages(void) {
@@ -80,8 +80,8 @@ void can_handler__handle_all_incoming_messages(void) {
     // can_motor__decode_motor_speed_feedback(header, recv_message.data.bytes);
 
     // Geo Node Decode Functions
-    // can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);
-    // can_geo__decode_geo_degree(header, recv_message.data.bytes);
+    can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);
+    can_geo__decode_geo_degree(header, recv_message.data.bytes);
   }
 }
 

@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+int16_t speed_value;
+
 /**
  * STATIC VARIABLES
  */
@@ -16,7 +18,6 @@ static dbc_GEO_DEGREE_s geo_degree;
 static int16_t driver_obstacle__tilt_left_or_right();
 static int16_t driver_obstacle__obstacle_detected();
 
-static int16_t driver_obstacle__move_to_destination();
 static int16_t driver_obstacle__turn_according_to_degree(float diff);
 /**
  * FUNCTIONS
@@ -25,7 +26,7 @@ void driver_obstacle__process_input(dbc_SENSOR_SONARS_s *sonar) {
   sensor_sonar = *sonar; // copy
 }
 
-void driver_obstacle__geo_controller_direction(dbc_GEO_DEGREE_s *degree) {
+void driver_obstacle__set_geo_controller_direction(dbc_GEO_DEGREE_s *degree) {
   geo_degree = *degree; // copy
 }
 
@@ -34,16 +35,24 @@ void driver_obstacle__geo_controller_direction(dbc_GEO_DEGREE_s *degree) {
 dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
   // 0 -> straight
   dbc_MOTOR_STEERING_s motor_steering = {{0}, 0};
-
+  speed_value = 5; // fwd med
   if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD) {
     // Position yourself to the GPS Coordinates and move towards the target
-    motor_steering.MOTOR_STEERING_direction = 0; // driver_obstacle__move_to_destination();
+    // motor_steering.MOTOR_STEERING_direction = 0;
+
+    motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
+    printf("\n Steering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
   } else {
     // Obstacle is detected, DODGE
-    if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right)
+    if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
       motor_steering.MOTOR_STEERING_direction = -1; // driver_obstacle__obstacle_detected();
-    else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right)
+    } else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right) {
       motor_steering.MOTOR_STEERING_direction = 1;
+    } else {
+      speed_value = 3; // neutral = stops
+    }
+    printf("\n Steering value computed due to Ultrasonic sensor obstacles: %d",
+           motor_steering.MOTOR_STEERING_direction);
   }
 
   return motor_steering;
@@ -84,7 +93,7 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
  * 270 - 40 = 230, -130
  *
  */
-static int16_t driver_obstacle__move_to_destination() {
+int16_t driver_obstacle__move_to_destination() {
   // DONE, Write this logic
   float diff = geo_degree.GEO_DEGREE_current - geo_degree.GEO_DEGREE_required;
   if (abs(diff) > 180) {
@@ -106,7 +115,7 @@ static int16_t driver_obstacle__turn_according_to_degree(float diff) {
 
   if (diff > 0) {
     // Go little right
-    rval = +1;
+    rval = 1;
   } else if (diff < 0) {
     // little left
     rval = -1;
