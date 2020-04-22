@@ -48,6 +48,6 @@ void periodic_callbacks__100Hz(uint32_t callback_count) {}
  * This may be disabled based on intialization of periodic_scheduler__initialize()
  */
 void periodic_callbacks__1000Hz(uint32_t callback_count) {
-  gpio__toggle(board_io__get_led3());
+  // gpio__toggle(board_io__get_led3());
   // Add your code here
 }
