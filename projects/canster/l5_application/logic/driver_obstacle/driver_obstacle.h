@@ -9,4 +9,4 @@ int16_t driver_obstacle__move_to_destination();
 
 void driver_obstacle__set_geo_controller_direction(dbc_GEO_DEGREE_s *);
 
-extern int16_t speed_value;
+float driver_obstacle__get_motor_speed_value();

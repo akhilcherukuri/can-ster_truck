@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-int16_t speed_value;
+#include <stdio.h>
 
 /**
  * STATIC VARIABLES
@@ -11,6 +11,8 @@ static const uint8_t DISTANCE_THRESHOLD = 30; // cms
 
 static dbc_SENSOR_SONARS_s sensor_sonar;
 static dbc_GEO_DEGREE_s geo_degree;
+
+static float motor_speed_value;
 
 /**
  * STATIC FUNCTION DECLARATIONS
@@ -30,12 +32,14 @@ void driver_obstacle__set_geo_controller_direction(dbc_GEO_DEGREE_s *degree) {
   geo_degree = *degree; // copy
 }
 
+float driver_obstacle__get_motor_speed_value() { return motor_speed_value; }
+
 // Generate the motor commands here
 // TODO, Return a value out
 dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
   // 0 -> straight
   dbc_MOTOR_STEERING_s motor_steering = {{0}, 0};
-  speed_value = 5; // fwd med
+  motor_speed_value = 5; // fwd med
   if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD) {
     // Position yourself to the GPS Coordinates and move towards the target
     // motor_steering.MOTOR_STEERING_direction = 0;
@@ -44,7 +48,7 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
     printf("\n Steering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
   } else {
     if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD && sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD) {
-      speed_value = 3; // neutral = stops
+      motor_speed_value = 3; // neutral = stops
     } else {
       // Obstacle is detected, DODGE
       if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {

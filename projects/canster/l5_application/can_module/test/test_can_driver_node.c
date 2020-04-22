@@ -122,7 +122,11 @@ void test_can_driver__transmit_driver_steering() {
 }
 
 void test_can_driver__transmit_driver_required_motor_speed() {
+  // dbc_GEO_DEGREE_s geo_degree;
+  dbc_MOTOR_SPEED_s unused_speed_val;
   dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+  // driver_obstacle__set_geo_controller_direction_Expect(&geo_degree);
+  driver_obstacle__get_motor_speed_value_ExpectAndReturn(0);
   can_driver__transmit_driver_required_motor_speed();
 }
 

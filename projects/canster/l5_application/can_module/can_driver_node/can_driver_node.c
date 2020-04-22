@@ -125,7 +125,7 @@ static void can_driver__transmit_driver_required_motor_speed() {
   // TODO, Get the required motor speed from hardware here
   // This will send the final reduced speed to the MOTOR Node
   dbc_MOTOR_SPEED_s message;
-  message.MOTOR_SPEED_processed = speed_value;
+  message.MOTOR_SPEED_processed = driver_obstacle__get_motor_speed_value();
 
   if (!dbc_encode_and_send_MOTOR_SPEED(NULL, &message)) {
 #if DRIVER_NODE_DEBUG == 1

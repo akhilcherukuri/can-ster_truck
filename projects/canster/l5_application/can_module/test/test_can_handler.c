@@ -23,6 +23,8 @@ void test_can_handler__handle_all_mia() {
   can_sensor__sensor_sonar_mia_Expect();
   can_sensor__sensor_heartbeat_mia_Expect();
   can_motor__motor_heartbeat_mia_Expect();
+  can_geo__geo_heartbeat_mia_Expect();
+  can_geo__geo_degree_mia_Expect();
 
   can_handler__handle_all_mia();
 }
@@ -42,6 +44,8 @@ void test_can_handler__handle_all_incoming_messages(void) {
   can_sensor__decode_sensor_heartbeat_ExpectAnyArgs();
   can_sensor__decode_sensor_sonar_ExpectAnyArgs();
   can_motor__decode_motor_heartbeat_ExpectAnyArgs();
+  can_geo__decode_geo_heartbeat_ExpectAnyArgs();
+  can_geo__decode_geo_degree_ExpectAnyArgs();
 
   // TODO, Add more decode functions here as you build your node logic
 
