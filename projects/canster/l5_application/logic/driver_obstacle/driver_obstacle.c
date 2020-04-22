@@ -43,13 +43,15 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
     motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
     printf("\n Steering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
   } else {
-    // Obstacle is detected, DODGE
-    if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
-      motor_steering.MOTOR_STEERING_direction = -1; // driver_obstacle__obstacle_detected();
-    } else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right) {
-      motor_steering.MOTOR_STEERING_direction = 1;
-    } else {
+    if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD && sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD) {
       speed_value = 3; // neutral = stops
+    } else {
+      // Obstacle is detected, DODGE
+      if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
+        motor_steering.MOTOR_STEERING_direction = -1; // driver_obstacle__obstacle_detected();
+      } else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right) {
+        motor_steering.MOTOR_STEERING_direction = 1;
+      }
     }
     printf("\n Steering value computed due to Ultrasonic sensor obstacles: %d",
            motor_steering.MOTOR_STEERING_direction);
