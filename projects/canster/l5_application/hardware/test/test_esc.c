@@ -58,3 +58,20 @@ void test_esc__set_duty_cycle() {
   pwm1__set_duty_cycle_Expect(PWM_CHANNEL, REVERSE_FAST);
   esc__set_duty_cycle(REVERSE_FAST);
 }
+
+void test_esc__direction_processor() {
+  pwm1__set_duty_cycle_Expect(PWM_CHANNEL, REVERSE_FAST);
+  esc__direction_processor(0);
+  pwm1__set_duty_cycle_Expect(PWM_CHANNEL, REVERSE_MEDIUM);
+  esc__direction_processor(1);
+  pwm1__set_duty_cycle_Expect(PWM_CHANNEL, REVERSE_SLOW);
+  esc__direction_processor(2);
+  pwm1__set_duty_cycle_Expect(PWM_CHANNEL, NEUTRAL);
+  esc__direction_processor(3);
+  pwm1__set_duty_cycle_Expect(PWM_CHANNEL, FORWARD_SLOW);
+  esc__direction_processor(4);
+  pwm1__set_duty_cycle_Expect(PWM_CHANNEL, FORWARD_MEDIUM);
+  esc__direction_processor(5);
+  pwm1__set_duty_cycle_Expect(PWM_CHANNEL, FORWARD_FAST);
+  esc__direction_processor(6);
+}

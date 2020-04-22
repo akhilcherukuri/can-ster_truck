@@ -23,6 +23,7 @@ void test_can_handler__handle_all_mia() {
   can_sensor__sensor_heartbeat_mia_Expect();
   can_driver__motor_steering_mia_Expect();
   can_driver__driver_heartbeat_mia_Expect();
+  can_driver__motor_speed_mia_Expect();
   can_handler__handle_all_mia();
 }
 
@@ -42,6 +43,8 @@ void test_can_handler__handle_all_incoming_messages(void) {
   can_sensor__decode_sensor_heartbeat_ExpectAnyArgs();
   can_driver__decode_driver_heartbeat_ExpectAnyArgs();
   can_driver__decode_motor_steering_ExpectAnyArgs();
+  can_driver__decode_motor_speed_ExpectAnyArgs();
+  can_geo__decode_geo_heartbeat_ExpectAnyArgs();
   can_handler__handle_all_incoming_messages();
 }
 
