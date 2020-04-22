@@ -53,12 +53,12 @@ void test_can_handler__handle_all_incoming_messages(void) {
   can_handler__handle_all_incoming_messages();
 }
 
-void test_can_handler__transmit_message_10hz(void) {
+void test_can_handler__transmit_message_20hz(void) {
   can_sensor__transmit_all_messages_Expect();
   can_driver__transmit_all_messages_Expect();
   can_motor__transmit_all_messages_Expect();
   can_geo__transmit_all_messages_Expect();
-  can_handler__transmit_message_10hz();
+  can_handler__transmit_message_20hz();
 }
 
 /**
