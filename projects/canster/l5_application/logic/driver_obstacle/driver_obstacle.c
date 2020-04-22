@@ -45,7 +45,7 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
     // motor_steering.MOTOR_STEERING_direction = 0;
 
     motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
-    printf("\n Steering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
+    printf("\nSteering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
   } else {
     if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD && sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD) {
       motor_speed_value = 3; // neutral = stops

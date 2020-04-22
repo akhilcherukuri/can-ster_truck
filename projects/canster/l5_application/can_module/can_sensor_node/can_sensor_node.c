@@ -122,7 +122,7 @@ void can_sensor__decode_sensor_heartbeat(dbc_message_header_t header, uint8_t by
 void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_SENSOR_SONARS(&sensor_sonar, header, bytes)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("Sensor values from SENSOR Node:\r\nLeft = %lf\r\nMiddle = %lf\r\nRight = %lf\r\n",
+    printf("\nSensor values from SENSOR Node:\r\nLeft = %lf\r\nMiddle = %lf\r\nRight = %lf\r\n",
            (double)sensor_sonar.SENSOR_SONARS_left, (double)sensor_sonar.SENSOR_SONARS_middle,
            (double)sensor_sonar.SENSOR_SONARS_right);
 #endif
