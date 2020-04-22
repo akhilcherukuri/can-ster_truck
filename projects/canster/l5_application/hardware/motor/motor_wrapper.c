@@ -27,7 +27,7 @@ void motor__run_10hz(int callback_count) {
 
     // TODO Handle reverse cases and wrap this logic into a separate wrapper
     // if (decoded_steering_value_from_driver == 0)
-    esc__forward_medium();
+    // esc__forward_medium(); // Uncomment this
     // else
     //   esc__forward_slow();
   }

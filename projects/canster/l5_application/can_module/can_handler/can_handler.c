@@ -27,7 +27,7 @@ void can_handler__handle_all_mia(void) {
   can_sensor__sensor_heartbeat_mia();
 
   // Driver Node MIA Functions
-  // can_driver__motor_speed_mia();
+  can_driver__motor_speed_mia();
   can_driver__motor_steering_mia();
   can_driver__driver_heartbeat_mia();
   // can_driver__driver_coordinates_mia();
@@ -71,7 +71,7 @@ void can_handler__handle_all_incoming_messages(void) {
 
     // Driver Node Decode functions
     can_driver__decode_driver_heartbeat(header, recv_message.data.bytes);
-    // can_driver__decode_motor_speed(header, recv_message.data.bytes);
+    can_driver__decode_motor_speed(header, recv_message.data.bytes);
     can_driver__decode_motor_steering(header, recv_message.data.bytes);
     // can_driver__decode_driver_coordinates(header, recv_message.data.bytes);
 

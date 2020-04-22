@@ -16,6 +16,8 @@
 #include "driver_state.h"
 #include "motor_wrapper.h"
 
+#include "esc.h"
+
 #define DRIVER_NODE_DEBUG 1
 
 #if DRIVER_NODE_DEBUG == 1
@@ -179,6 +181,34 @@ void can_driver__decode_motor_speed(dbc_message_header_t header, uint8_t bytes[8
     // TODO, Do other things here
     // ! Make a function for process required_motor_speed here
     // gpio__reset(board_io__get_led2());
+  
+
+    switch ((int16_t)driver_required_motor_speed.MOTOR_SPEED_processed) {
+    case 0:
+      esc__reverse_fast();
+      break;
+    case 1:
+      esc__reverse_medium();
+      break;
+    case 2:
+      esc__reverse_slow();
+      break;
+    case 3:
+      esc__neutral();
+      break;
+    case 4:
+      esc__forward_slow();
+      break;
+    case 5:
+      esc__forward_medium();
+      break;
+    case 6:
+      esc__forward_fast();
+      break;
+
+    default:
+      printf("Did not receive steering value");
+    }
   }
 }
 
