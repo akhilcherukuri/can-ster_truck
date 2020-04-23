@@ -22,6 +22,7 @@ void tearDown(void) {}
 void test_can_handler__handle_all_mia() {
   can_driver__driver_heartbeat_mia_Expect();
   can_motor__motor_heartbeat_mia_Expect();
+  can_geo__geo_heartbeat_mia_Expect();
   can_handler__handle_all_mia();
 }
 
@@ -39,6 +40,7 @@ void test_can_handler__handle_all_incoming_messages(void) {
   // TODO, Add more decode functions here as you build your node logic
   can_driver__decode_driver_heartbeat_ExpectAnyArgs();
   can_motor__decode_motor_heartbeat_ExpectAnyArgs();
+  can_geo__decode_geo_heartbeat_ExpectAnyArgs();
   can__rx_ExpectAndReturn(CAN_PORT, &recv_message, 0, false);
   can_handler__handle_all_incoming_messages();
 }
@@ -48,7 +50,7 @@ void test_can_handler__transmit_message_10hz(void) {
   can_driver__transmit_all_messages_Expect();
   can_motor__transmit_all_messages_Expect();
   can_geo__transmit_all_messages_Expect();
-  can_handler__transmit_message_20hz();
+  can_handler__transmit_message_10hz();
 }
 
 /**

@@ -1,5 +1,8 @@
 #include "can_geo_node.h"
 
+#include "board_io.h"
+#include "gpio.h"
+
 #include "compass.h"
 
 #include "driver_obstacle.h"
@@ -81,6 +84,7 @@ void can_geo__geo_heartbeat_mia() {
 #endif
 
     // Do something here
+    gpio__set(board_io__get_led3());
   }
 }
 
@@ -110,6 +114,7 @@ void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]
 #endif
 
     // Do something here
+    gpio__reset(board_io__get_led3());
   }
 }
 void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
