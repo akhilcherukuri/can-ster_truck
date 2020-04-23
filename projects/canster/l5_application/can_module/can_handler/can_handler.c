@@ -85,7 +85,7 @@ void can_handler__handle_all_incoming_messages(void) {
   }
 }
 
-void can_handler__transmit_message_20hz(void) {
+void can_handler__transmit_message_10hz(void) {
   // Module function
 
   // Sensor Node Transmit

@@ -21,14 +21,12 @@ void periodic_callbacks__initialize(void) { can_bus__initialize(); }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) { can_handler__handle_all_mia(); }
 
-void periodic_callbacks__10Hz(uint32_t callback_count) {}
-
-void periodic_callbacks__100Hz(uint32_t callback_count) {
-  if (callback_count % 5 == 0) {
-    can_handler__handle_all_incoming_messages();
-    can_handler__transmit_message_20hz();
-  }
+void periodic_callbacks__10Hz(uint32_t callback_count) {
+  can_handler__handle_all_incoming_messages();
+  can_handler__transmit_message_10hz();
 }
+
+void periodic_callbacks__100Hz(uint32_t callback_count) {}
 
 /**
  * @warning
