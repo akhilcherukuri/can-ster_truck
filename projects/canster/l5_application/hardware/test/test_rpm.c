@@ -19,7 +19,7 @@ void test_rpm__init() {
 
 void speed_calculate_helper(uint16_t test_pulse_count) {
   set_pulse_count(test_pulse_count);
-  float expected_speed = (CIRCUMFERENCE_METER * test_pulse_count) * (MPS_TO_KPH_CONVERSION_FACTOR);
+  float expected_speed = ((CIRCUMFERENCE_METER * test_pulse_count) * (MPS_TO_KPH_CONVERSION_FACTOR)) / GEAR_RATIO;
   TEST_ASSERT_EQUAL_FLOAT(rpm__calculate_speed_kph(), expected_speed);
 }
 

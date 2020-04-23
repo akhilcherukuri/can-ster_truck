@@ -15,7 +15,7 @@ void motor__init() {
   rpm__init();
 }
 
-void motor__run_10hz(int callback_count) {
+void motor__run_10hz(uint32_t callback_count) {
   // TODO Attach the motor steering decoder function here and check the decoded datatype from DBC
   bool mia_steering = get_mia_steering();
   if (mia_steering == true) {

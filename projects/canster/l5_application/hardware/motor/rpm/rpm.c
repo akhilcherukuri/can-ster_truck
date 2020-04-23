@@ -14,6 +14,7 @@
 #define RPM_DEBUG 0
 #define CIRCUMFERENCE_METER 0.314
 #define MPS_TO_KPH_CONVERSION_FACTOR 3.6
+#define GEAR_RATIO 2.72
 
 /**
  * STATIC VARIABLES
@@ -61,7 +62,7 @@ float rpm__calculate_speed_kph() {
   printf("\nPulses: %d ", pulse_count);
 #endif
   pulse_count = 0;
-  speed_kph = (CIRCUMFERENCE_METER * rotation_per_sec) * (MPS_TO_KPH_CONVERSION_FACTOR);
+  speed_kph = ((CIRCUMFERENCE_METER * rotation_per_sec) * (MPS_TO_KPH_CONVERSION_FACTOR)) / GEAR_RATIO;
 #if RPM_DEBUG == 1
   printf("Speed = %lf", speed_kph);
 #endif
