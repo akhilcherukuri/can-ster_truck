@@ -57,8 +57,7 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
         motor_steering.MOTOR_STEERING_direction = 1;
       }
     }
-    printf("\n Steering value computed due to Ultrasonic sensor obstacles: %d",
-           motor_steering.MOTOR_STEERING_direction);
+    printf("\nSteering value computed due to Ultrasonic sensor obstacles: %d", motor_steering.MOTOR_STEERING_direction);
   }
 
   return motor_steering;
