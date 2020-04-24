@@ -107,3 +107,22 @@ void test_can_geo__transmit_geo_degree(void) {
 void test_can_geo__transmit_geo_heartbeat(void) {}
 void test_can_geo__transmit_geo_degree(void) {}
 #endif
+
+// Getter Tests
+void test_can_geo__get_geo_degree(void) {
+  geo_degree.GEO_DEGREE_current = 123.12;
+  geo_degree.GEO_DEGREE_required = 234.56;
+
+  dbc_GEO_DEGREE_s get_degree = {0};
+  can_geo__get_geo_degree(&get_degree);
+  TEST_ASSERT_EQUAL_FLOAT(get_degree.GEO_DEGREE_current, 123.12);
+  TEST_ASSERT_EQUAL_FLOAT(get_degree.GEO_DEGREE_required, 234.56);
+}
+
+void test_can_geo__get_geo_heartbeat(void) {
+  geo_heartbeat.GEO_HEARTBEAT_cmd = GEO_HEARTBEAT_cmd_REBOOT;
+
+  dbc_GEO_HEARTBEAT_s get_heartbeat = {0};
+  can_geo__get_heartbeat(&get_heartbeat);
+  TEST_ASSERT_EQUAL_UINT8(get_heartbeat.GEO_HEARTBEAT_cmd, GEO_HEARTBEAT_cmd_REBOOT);
+}

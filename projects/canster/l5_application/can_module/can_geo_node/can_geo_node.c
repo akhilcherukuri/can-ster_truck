@@ -27,11 +27,10 @@ static dbc_GEO_DEGREE_s geo_degree;
 /**
  * Functions
  */
-// Getters for all static variables
-// ! NO SETTERS
-// ! DO NOT DISCARD THE CONST QUALIFIER
-const dbc_GEO_DEGREE_s *can_geo__get_geo_degree() { return &geo_degree; }
-const dbc_GEO_HEARTBEAT_s *can_geo__get_heartbeat() { return &geo_heartbeat; }
+// Return by copy (getters)
+void can_geo__get_geo_degree(dbc_GEO_DEGREE_s *return_degree) { *return_degree = geo_degree; }
+
+void can_geo__get_heartbeat(dbc_GEO_HEARTBEAT_s *return_heartbeat) { *return_heartbeat = geo_heartbeat; }
 
 #if BOARD_GEO_NODE == 1
 
