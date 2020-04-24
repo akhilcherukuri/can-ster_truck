@@ -152,3 +152,13 @@ void test_gps_parse_rmc(void) {
   TEST_ASSERT_EQUAL_FLOAT(gps_p.latitude, 4807.038);
   TEST_ASSERT_EQUAL_FLOAT(gps_p.longitude, 1131.00);
 }
+
+void test_gps__is_valid(void) {
+  parsed_rmc.status = 'V'; // Not valid / Warning
+  bool isvalid = gps__is_valid();
+  TEST_ASSERT_FALSE(isvalid);
+
+  parsed_rmc.status = 'A'; // OK
+  isvalid = gps__is_valid();
+  TEST_ASSERT_TRUE(isvalid);
+}
