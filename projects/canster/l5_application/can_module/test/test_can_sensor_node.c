@@ -9,6 +9,8 @@
 #include "Mockgpio.h"
 #include "Mockultrasonic_wrapper.h"
 
+#include "Mocklidar_data_handler.h"
+
 #include "can_sensor_node.c"
 #include "who_am_i.h"
 

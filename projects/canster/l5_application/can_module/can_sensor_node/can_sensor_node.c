@@ -5,6 +5,7 @@
 #include "gpio.h"
 
 #include "driver_obstacle.h"
+#include "lidar_data_handler.h"
 #include "ultrasonic_wrapper.h"
 
 #define SENSOR_NODE_DEBUG 1
@@ -20,6 +21,7 @@
  */
 static dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
 static dbc_SENSOR_SONARS_s sensor_sonar;
+static dbc_SENSOR_LIDAR_s sensor_lidar;
 
 /**
  * STATIC FUNCTIONS
@@ -31,6 +33,7 @@ static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *);
  */
 const dbc_SENSOR_SONARS_s *can_sensor__get_sensor_sonar() { return &sensor_sonar; }
 const dbc_SENSOR_HEARTBEAT_s *can_sensor__get_heartbeat() { return &sensor_heartbeat; }
+const dbc_SENSOR_LIDAR_s *can_sensor__get_sensor_lidar() { return &sensor_lidar; }
 
 /**
  * MIA
@@ -65,6 +68,23 @@ void can_sensor__sensor_sonar_mia() {
   }
 }
 
+void can_sensor__sensor_lidar_mia() {
+  const uint32_t mia_increment_value = 100;
+
+  if (dbc_service_mia_SENSOR_LIDAR(&sensor_lidar, mia_increment_value)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("MIA -> SENSOR_LIDAR\r\n");
+    printf("\nAssigned default sensor sonar values = \r\nLeft: %d\r\nRight: %d\r\nFront: %d\r\nRear: %d\r\n",
+           sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
+           sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
+#endif
+
+    // TODO: Set external MIA LED
+    // gpio__set(board_io__get_led2());
+    // can_sensor__update_driver_obstacle(&sensor_sonar);
+  }
+}
+
 /**
  * TRANSMIT FUNCTIONS
  * #if BOARD_XYZ_NODE == 1
@@ -76,10 +96,12 @@ void can_sensor__sensor_sonar_mia() {
 #if BOARD_SENSOR_NODE == 1
 static void can_sensor__transmit_sensor_heartbeat();
 static void can_sensor__transmit_sensor_sonar();
+static void can_sensor__transmit_sensor_lidar();
 
 void can_sensor__transmit_all_messages(void) {
   can_sensor__transmit_sensor_heartbeat();
   can_sensor__transmit_sensor_sonar();
+  can_sensor__transmit_sensor_lidar();
 }
 
 static void can_sensor__transmit_sensor_heartbeat() {
@@ -99,6 +121,18 @@ static void can_sensor__transmit_sensor_sonar() {
   if (!dbc_encode_and_send_SENSOR_SONARS(NULL, &sensor_sonar_data)) {
 #if SENSOR_NODE_DEBUG == 1
     printf("Failed to encode and send Sensor Sonar\r\n");
+#endif
+  }
+}
+
+static void can_sensor__transmit_sensor_lidar() {
+  dbc_SENSOR_LIDAR_s sensor_lidar_data = {};
+  lidar_data_handler__retrieve_distance();
+  lidar_data_handler__get_distances(&sensor_lidar_data);
+
+  if (!dbc_encode_and_send_SENSOR_LIDAR(NULL, &sensor_lidar_data)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("Failed to encode and send Sensor Lidar\r\n");
 #endif
   }
 }
@@ -132,8 +166,23 @@ void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[
 
     // TODO, Do other things here
     // ! Added sensor sonar processing code here
-    gpio__reset(board_io__get_led2());
+    // gpio__reset(board_io__get_led2());
     can_sensor__update_driver_obstacle(&sensor_sonar);
+  }
+}
+
+void can_sensor__decode_sensor_lidar(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_SENSOR_LIDAR(&sensor_lidar, header, bytes)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nFront = %d\r\nRear = %d\r\n",
+           sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
+           sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
+#endif
+
+    // TODO, Do other things here
+    // ! Added sensor sonar processing code here
+    // gpio__reset(board_io__get_led2());
+    // can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
 

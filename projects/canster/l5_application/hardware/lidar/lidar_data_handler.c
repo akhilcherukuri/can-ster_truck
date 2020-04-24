@@ -64,9 +64,7 @@ static void lidar_data_response_handle_distance(uint16_t angle, uint16_t distanc
   }
 }
 
-static bool check_bits(uint8_t *byte) {
-  return (((byte[0] & 0x1) == ((~(byte[0] >> 1) & 0x1))) && (byte[1] & 0x1));
-}
+static bool check_bits(uint8_t *byte) { return (((byte[0] & 0x1) == ((~(byte[0] >> 1) & 0x1))) && (byte[1] & 0x1)); }
 
 void lidar_data_handler__response_parse(uint8_t *data) {
   if (check_bits(data)) {
@@ -85,35 +83,35 @@ void lidar_data_handler__retrieve_distance(void) {
   distance_front = min_distance(front_data, sizeof(front_data) / 2);
 }
 
-void within_range(void) {
-#if DEBUG
-  if (distance_left < distance_threshold) {
-    can_led__led0_ON();
-  } else {
-    can_led__led0_OFF();
-  }
-  if (distance_right < distance_threshold) {
-    can_led__led1_ON();
-  } else {
-    can_led__led1_OFF();
-  }
-  if (distance_rear < distance_threshold) {
-    can_led__led2_ON();
-  } else {
-    can_led__led2_OFF();
-  }
-  if (distance_front < distance_threshold) {
-    can_led__led3_ON();
-  } else {
-    can_led__led3_OFF();
-  }
-  if (distance_front < distance_threshold) {
-    can_led__led3_ON();
-  } else {
-    can_led__led3_OFF();
-  }
-#endif
-}
+// void within_range(void) {
+// #if DEBUG
+//   if (distance_left < distance_threshold) {
+//     can_led__led0_ON();
+//   } else {
+//     can_led__led0_OFF();
+//   }
+//   if (distance_right < distance_threshold) {
+//     can_led__led1_ON();
+//   } else {
+//     can_led__led1_OFF();
+//   }
+//   if (distance_rear < distance_threshold) {
+//     can_led__led2_ON();
+//   } else {
+//     can_led__led2_OFF();
+//   }
+//   if (distance_front < distance_threshold) {
+//     can_led__led3_ON();
+//   } else {
+//     can_led__led3_OFF();
+//   }
+//   if (distance_front < distance_threshold) {
+//     can_led__led3_ON();
+//   } else {
+//     can_led__led3_OFF();
+//   }
+// #endif
+// }
 
 bool lidar_data_handler__receive_five_byte_sample(char data) {
   bool received_five_bytes = false;
@@ -125,4 +123,11 @@ bool lidar_data_handler__receive_five_byte_sample(char data) {
   }
 
   return received_five_bytes;
+}
+
+void lidar_data_handler__get_distances(dbc_SENSOR_LIDAR_s *distances) {
+  distances->SENSOR_LIDAR_middle = distance_front / 10;
+  distances->SENSOR_LIDAR_slight_left = distance_left / 10;
+  distances->SENSOR_LIDAR_slight_right = distance_right / 10;
+  distances->SENSOR_LIDAR_back = distance_rear / 10;
 }
