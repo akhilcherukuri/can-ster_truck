@@ -96,8 +96,8 @@ void test_can_geo__transmit_geo_heartbeat(void) {
 
 void test_can_geo__transmit_geo_degree(void) {
   dbc_GEO_DEGREE_s message;
-  // compass__read_compass_bearing_16bit_ExpectAndReturn(message.GEO_DEGREE_current);
-  // geo_logic__compute_required_bearing_ExpectAndReturn(message.GEO_DEGREE_required);
+  compass__read_compass_bearing_16bit_ExpectAndReturn(message.GEO_DEGREE_current);
+  geo_logic__compute_required_bearing_ExpectAndReturn(message.GEO_DEGREE_required);
 
   dbc_send_can_message_ExpectAnyArgsAndReturn(true);
   can_geo__transmit_geo_degree();

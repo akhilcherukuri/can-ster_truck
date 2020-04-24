@@ -55,12 +55,11 @@ static void can_geo__transmit_geo_heartbeat() {
 }
 
 static void can_geo__transmit_geo_degree() {
-  // TODO, get current and computed degree from here
-  //   message.GEO_DEGREE_current = compass__read_compass_bearing_16bit();
-  // message.GEO_DEGREE_required = geo_logic__compute_required_bearing();
   dbc_GEO_DEGREE_s message = {};
-  message.GEO_DEGREE_current = ((rand() % 200) / 13.1);
-  message.GEO_DEGREE_required = ((rand() % 200) / 13.1);
+
+  // Actual values
+  message.GEO_DEGREE_current = compass__read_compass_bearing_16bit();
+  message.GEO_DEGREE_required = geo_logic__compute_required_bearing();
 
   if (!dbc_encode_and_send_GEO_DEGREE(NULL, &message)) {
 #if GEO_NODE_DEBUG == 1
@@ -91,7 +90,6 @@ void can_geo__geo_heartbeat_mia() {
 
 void can_geo__geo_degree_mia() {
   const uint32_t increment = 1000;
-
   if (dbc_service_mia_GEO_DEGREE(&geo_degree, increment)) {
 #if GEO_NODE_DEBUG == 1
     printf("MIA -> GEO DEGREE\r\n");
@@ -99,7 +97,7 @@ void can_geo__geo_degree_mia() {
            (double)geo_degree.GEO_DEGREE_required);
 #endif
 
-    // Do something here
+    // ! Do something here
   }
 }
 
