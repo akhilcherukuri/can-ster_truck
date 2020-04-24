@@ -55,9 +55,9 @@ void test_can_sensor__sensor_sonar_mia_true(void) {
 
   can_sensor__sensor_sonar_mia();
   TEST_ASSERT_EQUAL_UINT32(sensor_sonar.mia_info.mia_counter, 3000);
-  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_left == 10);
-  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_middle == 10);
-  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_right == 10);
+  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_left == 0);
+  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_middle == 0);
+  TEST_ASSERT(sensor_sonar.SENSOR_SONARS_right == 0);
 }
 
 void test_can_sensor__sensor_sonar_mia_false(void) {
