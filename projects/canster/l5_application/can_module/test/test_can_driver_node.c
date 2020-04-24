@@ -27,7 +27,7 @@ void tearDown() {}
  */
 void test_can_driver__driver_heartbeat_mia_true() {
   gpio_s gpio;
-  board_io__get_led2_ExpectAndReturn(gpio);
+  board_io__get_led1_ExpectAndReturn(gpio);
   gpio__set_Expect(gpio);
 
   can_driver__driver_heartbeat_mia();
@@ -54,10 +54,6 @@ void test_can_driver__driver_heartbeat_mia_false() {
 }
 
 void test_can_driver__motor_speed_mia_true() {
-  // gpio_s gpio;
-  // board_io__get_led2_ExpectAndReturn(gpio);
-  // gpio__set_Expect(gpio);
-
   can_driver__motor_speed_mia();
   TEST_ASSERT_EQUAL_UINT32(driver_required_motor_speed.mia_info.mia_counter, 1000);
 
@@ -82,10 +78,6 @@ void test_can_driver__motor_speed_mia_false() {
 }
 
 void test_can_driver__motor_steering_mia_true() {
-  gpio_s gpio;
-  board_io__get_led1_ExpectAndReturn(gpio);
-  gpio__set_Expect(gpio);
-
   can_driver__motor_steering_mia();
   TEST_ASSERT_EQUAL_UINT32(driver_steering.mia_info.mia_counter, 1000);
 

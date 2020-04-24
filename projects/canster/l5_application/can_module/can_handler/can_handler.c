@@ -37,7 +37,7 @@ void can_handler__handle_all_mia(void) {
   // can_motor__motor_speed_feedback_mia();
 
   // Geo Node MIA Functions
-  // can_geo__geo_heartbeat_mia();
+  can_geo__geo_heartbeat_mia();
   // can_geo__geo_degree_mia();
 }
 

@@ -39,7 +39,7 @@ void can_sensor__sensor_heartbeat_mia() {
   if (dbc_service_mia_SENSOR_HEARTBEAT(&sensor_heartbeat, mia_increment_value)) {
 #if SENSOR_NODE_DEBUG == 1
     printf("MIA -> SENSOR_HEARTBEAT\r\n");
-    printf("assigned default sensor heartbeat = %d\r\n", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
+    printf("Assigned default sensor heartbeat = %d\r\n", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
 #endif
 
     // Do other things here
@@ -53,24 +53,13 @@ void can_sensor__sensor_sonar_mia() {
   if (dbc_service_mia_SENSOR_SONARS(&sensor_sonar, mia_increment_value)) {
 #if SENSOR_NODE_DEBUG == 1
     printf("MIA -> SENSOR_SONAR\r\n");
-    printf("assigned default sensor sonar values = %d:%d:%d\r\n", sensor_sonar.SENSOR_SONARS_left,
+    printf("Assigned default sensor sonar values = %d:%d:%d\r\n", sensor_sonar.SENSOR_SONARS_left,
            sensor_sonar.SENSOR_SONARS_middle, sensor_sonar.SENSOR_SONARS_right);
 #endif
-
-    // DONE, Add more here
-    // gpio__set(board_io__get_led2());
     can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
 
-/**
- * TRANSMIT FUNCTIONS
- * #if BOARD_XYZ_NODE == 1
- *  -> logic
- * #else
- *  -> empty function
- * #endif
- */
 #if BOARD_SENSOR_NODE == 1
 static void can_sensor__transmit_sensor_heartbeat();
 static void can_sensor__transmit_sensor_sonar();

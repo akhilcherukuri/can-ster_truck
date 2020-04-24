@@ -6,9 +6,11 @@
 
 #include "Mockcan_handler.h"
 
+#include "Mockboard_io.h"
 #include "Mockcompass.h"
 #include "Mockdriver_obstacle.h"
 #include "Mockgeo_logic.h"
+#include "Mockgpio.h"
 
 #include "can_geo_node.c"
 
@@ -36,8 +38,9 @@ void test_can_geo__geo_heartbeat_mia_false() {
 }
 
 void test_can_geo__geo_heartbeat_mia_true() {
-
-  // Run an LED on MIA
+  gpio_s gpio_unused;
+  board_io__get_led2_ExpectAndReturn(gpio_unused);
+  gpio__set_Expect(gpio_unused);
 
   can_geo__geo_heartbeat_mia();
   TEST_ASSERT_EQUAL_INT(geo_heartbeat.mia_info.mia_counter, 1000);
@@ -63,8 +66,6 @@ void test_can_geo__geo_degree_mia_false() {
 }
 
 void test_can_geo__geo_degree_mia_true() {
-  // Run an LED on MIA
-
   can_geo__geo_degree_mia();
   TEST_ASSERT_EQUAL_INT(geo_degree.mia_info.mia_counter, 1000);
 
@@ -88,7 +89,6 @@ void test_can_geo__on_decode_geo_degree(void) {
  * TRANSMIT
  */
 #if BOARD_GEO_NODE == 1
-
 void test_can_geo__transmit_geo_heartbeat(void) {
   dbc_send_can_message_ExpectAnyArgsAndReturn(true);
   can_geo__transmit_geo_heartbeat();
