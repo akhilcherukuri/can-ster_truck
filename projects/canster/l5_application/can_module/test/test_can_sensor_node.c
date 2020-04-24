@@ -45,10 +45,6 @@ void test_can_sensor__sensor_heartbeat_mia_true_false(void) {
 }
 
 void test_can_sensor__sensor_sonar_mia_true(void) {
-  // gpio_s gpio;
-  // board_io__get_led2_ExpectAndReturn(gpio);
-  // gpio__set_Expect(gpio);
-
   driver_obstacle__process_input_Expect(&sensor_sonar);
 
   can_sensor__sensor_sonar_mia();
