@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 #define GPS_DEBUG 1
 
 typedef struct {
@@ -11,6 +13,8 @@ void gps__init(void);
 void gps__run_once(void);
 
 gps_coordinates_s gps__get_coordinates(void);
+
+bool gps__is_valid(void);
 
 #if GPS_DEBUG == 1
 void gps__debug_print_raw_data();
