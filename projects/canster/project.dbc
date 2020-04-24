@@ -32,68 +32,96 @@ NS_ :
 
 BS_:
 
-BU_: DBG DRIVER IO MOTOR SENSOR GEO
+BU_: DBG DRIVER GEO IO MOTOR SENSOR
 
 BO_ 100 DRIVER_HEARTBEAT: 1 DRIVER
- SG_ DRIVER_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" MOTOR,SENSOR,GEO
+ SG_ DRIVER_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" GEO,MOTOR,SENSOR
 
-BO_ 101 MOTOR_HEARTBEAT: 1 MOTOR
- SG_ MOTOR_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" DRIVER,SENSOR
+BO_ 101 GEO_HEARTBEAT: 1 GEO
+ SG_ GEO_HEARTBEAT_cmd: 0|8@1+ (1,0) [0|0] "" DRIVER,MOTOR,SENSOR
 
-BO_ 102 SENSOR_HEARTBEAT: 1 SENSOR
- SG_ SENSOR_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" DRIVER,MOTOR
+BO_ 102 MOTOR_HEARTBEAT: 1 MOTOR
+ SG_ MOTOR_HEARTBEAT_cmd: 0|8@1+ (1,0) [0|0] "" DRIVER,GEO,SENSOR
 
-BO_ 103 GEO_HEARTBEAT: 1 GEO
- SG_ GEO_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" DRIVER
+BO_ 103 SENSOR_HEARTBEAT: 1 SENSOR
+ SG_ SENSOR_HEARTBEAT_cmd: 0|8@1+ (1,0) [0|0] "" DRIVER,GEO,MOTOR
 
-BO_ 200 MOTOR_SPEED_FEEDBACK: 4 MOTOR
- SG_ MOTOR_SPEED_current : 0|32@1+ (0.1,0) [0|60] "kph" DRIVER
+BO_ 200 DRIVER_STEERING: 2 DRIVER
+ SG_ DRIVER_STEERING_direction: 0|8@1- (1,0) [-2|2] "" MOTOR
+ SG_ DRIVER_STEERING_speed: 8|8@1- (1,0) [-3|3] "" MOTOR
 
-BO_ 300 MOTOR_SPEED: 4 DRIVER
- SG_ MOTOR_SPEED_processed : 0|32@1+ (0.1,0) [0|60] "kph" MOTOR
-
-BO_ 400 MOTOR_STEERING: 1 DRIVER
- SG_ MOTOR_STEERING_direction : 0|8@1- (1,0) [-2|2] "" MOTOR
-
-BO_ 500 SENSOR_SONARS: 4 SENSOR
- SG_ SENSOR_SONARS_left : 0|10@1+ (1,0) [0|500] "inch" DRIVER
- SG_ SENSOR_SONARS_right : 10|10@1+ (1,0) [0|500] "inch" DRIVER
- SG_ SENSOR_SONARS_middle : 20|10@1+ (1,0) [0|500] "inch" DRIVER
-
-BO_ 600 DRIVER_COORDINATES: 8 DRIVER
- SG_ DRIVER_COORDINATES_latitude: 0|32@1+ (0.0001,0) [0|0] "" GEO
- SG_ DRIVER_COORDINATES_longitude: 32|32@1+ (0.0001,0) [0|0] "" GEO
-
-BO_ 700 GEO_DEGREE: 8 GEO
+BO_ 300 GEO_DEGREE: 8 GEO
  SG_ GEO_DEGREE_current: 0|32@1+ (0.1,0) [0|0] "" DRIVER
  SG_ GEO_DEGREE_required: 32|32@1+ (0.1,0) [0|0] "" DRIVER
 
-CM_ BU_ DRIVER "The driver controller driving the car";
+BO_ 400 MOTOR_INFO: 4 MOTOR
+ SG_ MOTOR_INFO_rps: 0|16@1+ (0.1,0) [0|0] "" DRIVER
+ SG_ MOTOR_INFO_kph: 16|16@1+ (0.1,0) [0|0] "" DRIVER
+
+BO_ 500 SENSOR_BT_COORDINATES: 8 SENSOR
+ SG_ SENSOR_BT_COORDINATES_latitude: 0|32@1+ (0.0001,0) [0|0] "" GEO
+ SG_ SENSOR_BT_COORDINATES_longitude: 32|32@1+ (0.0001,0) [0|0] "" GEO
+
+BO_ 510 SENSOR_LIDAR: 8 SENSOR
+ SG_ SENSOR_LIDAR_middle: 0|16@1+ (1,0) [0|0] "" DRIVER
+ SG_ SENSOR_LIDAR_slight_left: 16|16@1+ (1,0) [0|0] "" DRIVER
+ SG_ SENSOR_LIDAR_slight_right: 32|16@1+ (1,0) [0|0] "" DRIVER
+ SG_ SENSOR_LIDAR_back: 48|16@1+ (1,0) [0|0] "" DRIVER
+
+BO_ 520 SENSOR_SONARS: 8 SENSOR
+ SG_ SENSOR_SONARS_left : 0|12@1+ (0.001,0) [0|0] "cm" DRIVER
+ SG_ SENSOR_SONARS_right : 12|12@1+ (0.001,0) [0|0] "cm" DRIVER
+ SG_ SENSOR_SONARS_middle : 24|12@1+ (0.001,0) [0|0] "cm" DRIVER
+ SG_ SENSOR_SONARS_back_left : 36|12@1+ (0.001,0) [0|0] "cm" DRIVER
+ SG_ SENSOR_SONARS_back_right : 48|12@1+ (0.001,0) [0|0] "cm" DRIVER
+
+CM_ BU_ DRIVER "The driver controller of the car";
+CM_ BU_ GEO "The geo controller of the car";
 CM_ BU_ MOTOR "The motor controller of the car";
 CM_ BU_ SENSOR "The sensor controller of the car";
-CM_ BO_ 100 "Driver Heartbeat Sync message used to synchronize the controllers";
-CM_ BO_ 101 "Motor Heartbeat Sync message used to synchronize the controllers";
-CM_ BO_ 102 "Sensor Heartbeat Sync message used to synchronize the controllers";
-CM_ BO_ 200 "Speed feedback value from RPM Sensor";
-CM_ BO_ 300 "New/Processed speed value sent from driver to motor node based on obstacles or slope";
-CM_ BO_ 400 "Steering values sent to motor node based on obstacles";
-CM_ BO_ 500 "Sonar sensor values sent to driver node to compute steering values";
-CM_ BO_ 600 "Driver destination coordinates sent to the GEO node";
-CM_ BO_ 700 "Degree values sent to the Driver Node for further computation";
+
+CM_ BO_ 100 "Driver Sync message used to synchronize the controllers";
+CM_ BO_ 101 "Geo Sync message used to synchronize the controllers";
+CM_ BO_ 102 "Motor Sync message used to synchronize the controllers";
+CM_ BO_ 103 "Sensor Sync message used to synchronize the controllers";
+CM_ BO_ 200 "Steering direction and speed values sent by Driver Node";
+CM_ BO_ 210 "Driver coordinates sent by Driver Node";
+CM_ BO_ 300 "Current and computer/required degree values sent by Geo Node";
+CM_ BO_ 400 "Current motor info (rps and kph) sent as feedback to the Driver Node";
+CM_ BO_ 500 "Coordinate BT values sent by Sensor Node";
+CM_ BO_ 510 "Lidar Sector values sent by Sensor Node";
+CM_ BO_ 520 "Ultrasonic Sensor values sent by Sensor Node";
 
 CM_ SG_ 100 DRIVER_HEARTBEAT_cmd "Heartbeat command from the driver node";
-CM_ SG_ 101 MOTOR_HEARTBEAT_cmd "Motor command from the motor node";
-CM_ SG_ 102 SENSOR_HEARTBEAT_cmd "Sensor command from the sensor node";
-CM_ SG_ 200 MOTOR_SPEED_current "Actual/Current speed read from RPM sensor via motor node";
-CM_ SG_ 300 MOTOR_SPEED_processed "New/Processed speed based on obstacles or slope and sent from driver to motor node";
-CM_ SG_ 400 MOTOR_STEERING_direction "Steering value calculated based on obstacles and sent from driver to motor node";
-CM_ SG_ 500 SENSOR_SONARS_left "Left sonar sensor value based on obstacles";
-CM_ SG_ 500 SENSOR_SONARS_right "Left sonar sensor value based on obstacles";
-CM_ SG_ 500 SENSOR_SONARS_middle "Left sonar sensor value based on obstacles";
-CM_ SG_ 600 DRIVER_COORDINATES_latitude "Driver required coordinate latitude";
-CM_ SG_ 600 DRIVER_COORDINATES_longitude "Driver required coordinate longitude";
-CM_ SG_ 700 GEO_DEGREE_current "Current Degrees received from Compass";
-CM_ SG_ 700 GEO_DEGREE_required "Required Degrees required to reach destination";
+CM_ SG_ 101 GEO_HEARTBEAT_cmd "Heartbeat command from the geological node";
+CM_ SG_ 102 MOTOR_HEARTBEAT_cmd "Heartbeat command from the motor node";
+CM_ SG_ 103 SENSOR_HEARTBEAT_cmd "Heartbeat command from the sensor node";
+
+CM_ SG_ 200 DRIVER_STEERING_direction "Calculated Driver Steering values (-2,2) for Motor";
+CM_ SG_ 200 DRIVER_STEERING_speed "Calculated Driver speed values (-3,3) for Motor";
+
+CM_ SG_ 210 DRIVER_COORDINATES_latitude "Latitude coordinate";
+CM_ SG_ 210 DRIVER_COORDINATES_longitude "Longitude coordinate";
+
+CM_ SG_ 300 GEO_DEGREE_current "Current Geo Degree relative to true north";
+CM_ SG_ 300 GEO_DEGREE_required "Calculated Geo Degree computed by Haversine Formula";
+
+CM_ SG_ 400 MOTOR_INFO_rps "Feedback speed (rps) sent by Motor";
+CM_ SG_ 400 MOTOR_INFO_kph "Feedback speed (kph) sent by Motor";
+
+CM_ SG_ 500 SENSOR_BT_COORDINATES_latitude "Destination Latitude received over Bluetooth";
+CM_ SG_ 500 SENSOR_BT_COORDINATES_longitude "Destination Longitude received over Bluetooth";
+
+CM_ SG_ 510 SENSOR_LIDAR_middle "Lidar sensing the middle sector (-15 to 15)";
+CM_ SG_ 510 SENSOR_LIDAR_slight_left "Lidar sensing the slight left sector (-45 to -15)";
+CM_ SG_ 510 SENSOR_LIDAR_slight_right "Lidar sensing the slight right sector (15 to 45)";
+CM_ SG_ 510 SENSOR_LIDAR_back "Lidar sensing the back of the car (165 to 195)";
+
+CM_ SG_ 520 SENSOR_SONARS_left "Ultrasonic Sensor attached to the left side";
+CM_ SG_ 520 SENSOR_SONARS_right "Ultrasonic Sensor attached to the right side";
+CM_ SG_ 520 SENSOR_SONARS_middle "Ultrasonic Sensor attached to the middle";
+CM_ SG_ 520 SENSOR_SONARS_back_left "Ultrasonic Sensor attached to the back left side";
+CM_ SG_ 520 SENSOR_SONARS_back_right "Ultrasonic Sensor attached to the back right side";
 
 BA_DEF_ "BusType" STRING ;
 BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;
@@ -105,12 +133,13 @@ BA_DEF_DEF_ "GenMsgCycleTime" 0;
 
 BA_ "GenMsgCycleTime" BO_ 100 1000;
 BA_ "GenMsgCycleTime" BO_ 200 50;
+
 BA_ "FieldType" SG_ 100 DRIVER_HEARTBEAT_cmd "DRIVER_HEARTBEAT_cmd";
-BA_ "FieldType" SG_ 101 MOTOR_HEARTBEAT_cmd "MOTOR_HEARTBEAT_cmd";
-BA_ "FieldType" SG_ 102 SENSOR_HEARTBEAT_cmd "SENSOR_HEARTBEAT_cmd";
-BA_ "FieldType" SG_ 103 GEO_HEARTBEAT_cmd "GEO_HEARTBEAT_cmd";
+BA_ "FieldType" SG_ 101 GEO_HEARTBEAT_cmd "GEO_HEARTBEAT_cmd";
+BA_ "FieldType" SG_ 102 MOTOR_HEARTBEAT_cmd "MOTOR_HEARTBEAT_cmd";
+BA_ "FieldType" SG_ 103 SENSOR_HEARTBEAT_cmd "SENSOR_HEARTBEAT_cmd";
 
 VAL_ 100 DRIVER_HEARTBEAT_cmd 2 "DRIVER_HEARTBEAT_cmd_REBOOT" 1 "DRIVER_HEARTBEAT_cmd_SYNC" 0 "DRIVER_HEARTBEAT_cmd_NOOP" ;
-VAL_ 101 MOTOR_HEARTBEAT_cmd 20 "MOTOR_HEARTBEAT_cmd_REBOOT" 10 "MOTOR_HEARTBEAT_cmd_SYNC" 0 "MOTOR_HEARTBEAT_cmd_NOOP" ;
-VAL_ 102 SENSOR_HEARTBEAT_cmd 200 "SENSOR_HEARTBEAT_cmd_REBOOT" 100 "SENSOR_HEARTBEAT_cmd_SYNC" 0 "SENSOR_HEARTBEAT_cmd_NOOP" ;
-VAL_ 103 GEO_HEARTBEAT_cmd 2 "GEO_HEARTBEAT_cmd_REBOOT" 1 "GEO_HEARTBEAT_cmd_SYNC" 0 "GEO_HEARTBEAT_cmd_NOOP";
+VAL_ 101 GEO_HEARTBEAT_cmd 2 "GEO_HEARTBEAT_cmd_REBOOT" 1 "GEO_HEARTBEAT_cmd_SYNC" 0 "GEO_HEARTBEAT_cmd_NOOP" ;
+VAL_ 102 MOTOR_HEARTBEAT_cmd 2 "MOTOR_HEARTBEAT_cmd_REBOOT" 1 "MOTOR_HEARTBEAT_cmd_SYNC" 0 "MOTOR_HEARTBEAT_cmd_NOOP" ;
+VAL_ 103 SENSOR_HEARTBEAT_cmd 2 "SENSOR_HEARTBEAT_cmd_REBOOT" 1 "SENSOR_HEARTBEAT_cmd_SYNC" 0 "SENSOR_HEARTBEAT_cmd_NOOP" ;
