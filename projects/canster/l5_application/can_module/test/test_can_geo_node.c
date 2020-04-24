@@ -39,7 +39,7 @@ void test_can_geo__geo_heartbeat_mia_false() {
 
 void test_can_geo__geo_heartbeat_mia_true() {
   gpio_s gpio_unused;
-  board_io__get_led2_ExpectAndReturn(gpio_unused);
+  board_io__get_led1_ExpectAndReturn(gpio_unused);
   gpio__set_Expect(gpio_unused);
 
   can_geo__geo_heartbeat_mia();

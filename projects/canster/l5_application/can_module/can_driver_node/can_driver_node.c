@@ -52,7 +52,7 @@ void can_driver__driver_heartbeat_mia() {
     printf("MIA -> DRIVER_HEARTBEAT\r\n");
     printf("assigned default driver heartbeat = %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
 #endif
-    gpio__set(board_io__get_led1());
+    gpio__set(board_io__get_led0());
   }
 }
 
@@ -167,7 +167,7 @@ void can_driver__decode_driver_heartbeat(dbc_message_header_t header, uint8_t by
 
     // TODO, Do other things here
     // ! Make a function for process driver_heartbeat here
-    gpio__reset(board_io__get_led1());
+    gpio__reset(board_io__get_led0());
   }
 }
 
@@ -191,7 +191,7 @@ void can_driver__decode_motor_steering(dbc_message_header_t header, uint8_t byte
 
     // TODO, Do other things here
     // ! Make a function for process motor_steering here
-    gpio__reset(board_io__get_led1());
+    gpio__reset(board_io__get_led0());
     mia_steering = false;
   }
 }

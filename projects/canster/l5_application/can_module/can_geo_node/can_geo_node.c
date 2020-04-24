@@ -83,7 +83,7 @@ void can_geo__geo_heartbeat_mia() {
     printf("Assigned default geo heartbeat: %d\r\n", geo_heartbeat.GEO_HEARTBEAT_cmd);
 #endif
 
-    gpio__set(board_io__get_led2());
+    gpio__set(board_io__get_led1());
   }
 }
 
@@ -109,7 +109,7 @@ void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]
 #if GEO_NODE_DEBUG == 1
     printf("\nGeo Heartbeat: %d\r\n", geo_heartbeat.GEO_HEARTBEAT_cmd);
 #endif
-    gpio__reset(board_io__get_led2());
+    gpio__reset(board_io__get_led1());
   }
 }
 void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
