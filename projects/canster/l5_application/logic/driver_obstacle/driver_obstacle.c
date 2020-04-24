@@ -47,12 +47,12 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
   if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD) {
     // Position yourself to the GPS Coordinates and move towards the target
     motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
-    #if DRIVER_OBSTACLE_DEBUG == 1
+#if DRIVER_OBSTACLE_DEBUG == 1
     printf("\nSteering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
-    #endif
+#endif
   } else {
     /* To check if turning radius is healthy and large enough */
-    if (sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD / 2.0)) {
+    if ((double)sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD / 2.0)) {
       motor_speed_value = 3; // neutral = stop
     } else {
       if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD &&
@@ -66,9 +66,9 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
         }
       }
     }
-    #if DRIVER_OBSTACLE_DEBUG == 1
+#if DRIVER_OBSTACLE_DEBUG == 1
     printf("\nSteering value computed due to Ultrasonic sensor obstacles: %d", motor_steering.MOTOR_STEERING_direction);
-    #endif
+#endif
   }
 
   return motor_steering;
