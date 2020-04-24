@@ -61,12 +61,17 @@ void ultrasonic__init_all_sensors(void) {
   ultrasonic__init(&sensor_left);
   ultrasonic__init(&sensor_middle);
   ultrasonic__init(&sensor_right);
+  ultrasonic__init_enable_interrupt_dispatcher();
 }
 
 void ultrasonic__update_all_sensors(void) {
   ultrasonic__calculate_distance_from_obstacle(&sensor_left);
   ultrasonic__calculate_distance_from_obstacle(&sensor_middle);
   ultrasonic__calculate_distance_from_obstacle(&sensor_right);
+#if ULTRASONIC_DEBUG == 1
+  printf("\nLeft = %lf cm .. Mid = %lf cm .. Right = %lf cm", (double)sensor_left.distance_from_obstacle,
+         (double)sensor_middle.distance_from_obstacle, (double)sensor_right.distance_from_obstacle);
+#endif
 }
 
 void ultrasonic__get_distance_from_all_sensors(dbc_SENSOR_SONARS_s *output) {

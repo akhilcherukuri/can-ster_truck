@@ -34,6 +34,10 @@ static uint8_t u_counter;
 /**
  * NON-STATIC FUNCTION DEFINITIONS
  */
+void ultrasonic__init_enable_interrupt_dispatcher(void) {
+  lpc_peripheral__enable_interrupt(LPC_PERIPHERAL__GPIO, ultrasonic__interrupt_dispatcher, NULL);
+}
+
 void ultrasonic__init(ultrasonic_sensor_s *u_sensor) {
   if (u_counter >= MAX_ULTRASONIC_LENGTH) {
 #if ULTRASONIC_DEBUG == 1
@@ -47,7 +51,6 @@ void ultrasonic__init(ultrasonic_sensor_s *u_sensor) {
 
   ultrasonic__enable_interrupt(u_sensor->echo_input.pin_number);
 
-  lpc_peripheral__enable_interrupt(LPC_PERIPHERAL__GPIO, ultrasonic__interrupt_dispatcher, NULL);
   u_array[u_counter] = u_sensor;
   u_counter++;
 }
@@ -58,10 +61,6 @@ void ultrasonic__calculate_distance_from_obstacle(ultrasonic_sensor_s *u_sensor)
   u_sensor->distance_from_obstacle =
       (double)((u_sensor->clock_time_at_falling_edge - u_sensor->clock_time_at_rising_edge) /
                distance_cm_conversion_factor);
-
-#if ULTRASONIC_DEBUG == 1
-  // printf("Distance from obstacle = %lf cm\r\n", (double)u_sensor->distance_from_obstacle);
-#endif
 }
 
 /**

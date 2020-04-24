@@ -26,7 +26,7 @@ void test_can_motor__motor_speed_feedback_mia_false() {}
 
 void test_can_motor__motor_heartbeat_mia_true() {
   gpio_s gpio;
-  board_io__get_led1_ExpectAndReturn(gpio);
+  board_io__get_led2_ExpectAndReturn(gpio);
   gpio__set_Expect(gpio);
 
   can_motor__motor_heartbeat_mia();
@@ -50,10 +50,6 @@ void test_can_motor__motor_heartbeat_mia_false() {
 }
 
 void test_can_motor__motor_speed_feedback_mia_true() {
-  // gpio_s gpio;
-  // board_io__get_led1_ExpectAndReturn(gpio);
-  // gpio__set_Expect(gpio);
-
   can_motor__motor_speed_feedback_mia();
   TEST_ASSERT_EQUAL_UINT32(motor_wheel_speed_current_val.mia_info.mia_counter, 1000);
 

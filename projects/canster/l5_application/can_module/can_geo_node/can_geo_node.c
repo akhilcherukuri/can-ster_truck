@@ -84,7 +84,7 @@ void can_geo__geo_heartbeat_mia() {
 #endif
 
     // Do something here
-    gpio__set(board_io__get_led3());
+    gpio__set(board_io__get_led1());
   }
 }
 
@@ -114,7 +114,7 @@ void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]
 #endif
 
     // Do something here
-    gpio__reset(board_io__get_led3());
+    gpio__reset(board_io__get_led1());
   }
 }
 void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {

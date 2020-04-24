@@ -19,3 +19,4 @@ typedef struct {
 
 void ultrasonic__init(ultrasonic_sensor_s *u_sensor);
 void ultrasonic__calculate_distance_from_obstacle(ultrasonic_sensor_s *u_sensor);
+void ultrasonic__init_enable_interrupt_dispatcher(void);

@@ -13,7 +13,7 @@ void test_ultrasonic__init_all_sensors(void) {
   ultrasonic__init_Expect(&sensor_left);
   ultrasonic__init_Expect(&sensor_middle);
   ultrasonic__init_Expect(&sensor_right);
-
+  ultrasonic__init_enable_interrupt_dispatcher_Expect();
   ultrasonic__init_all_sensors();
 }
 

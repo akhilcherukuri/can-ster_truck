@@ -25,10 +25,6 @@ void tearDown() {}
  * MIA
  */
 void test_can_geo__geo_heartbeat_mia_false() {
-  gpio_s gpio_unused;
-  // board_io__get_led3_ExpectAndReturn(gpio_unused);
-  // gpio__set_Expect(gpio_unused);
-
   can_geo__geo_heartbeat_mia();
   TEST_ASSERT_EQUAL_INT(geo_heartbeat.mia_info.mia_counter, 1000);
 
@@ -42,10 +38,8 @@ void test_can_geo__geo_heartbeat_mia_false() {
 }
 
 void test_can_geo__geo_heartbeat_mia_true() {
-
-  // Run an LED on MIA
   gpio_s gpio_unused;
-  board_io__get_led3_ExpectAndReturn(gpio_unused);
+  board_io__get_led1_ExpectAndReturn(gpio_unused);
   gpio__set_Expect(gpio_unused);
 
   can_geo__geo_heartbeat_mia();
@@ -72,8 +66,6 @@ void test_can_geo__geo_degree_mia_false() {
 }
 
 void test_can_geo__geo_degree_mia_true() {
-  // Run an LED on MIA
-
   can_geo__geo_degree_mia();
   TEST_ASSERT_EQUAL_INT(geo_degree.mia_info.mia_counter, 1000);
 
