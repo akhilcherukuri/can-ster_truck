@@ -7,15 +7,10 @@
 #include "Mockcan_motor_node.h"
 #include "Mockcan_sensor_node.h"
 
-// Not Mocked
 #include "can_bus_constants.h"
 #include "can_handler.h"
 #include "can_mia_configurations.c"
 
-/**
- * Write your tests here
- * TODO, Add tests for each module added
- */
 void setUp(void) {}
 void tearDown(void) {}
 
@@ -37,7 +32,6 @@ void test_can_handler__handle_all_incoming_messages(void) {
 
   (void)header; // uncomment if used
 
-  // TODO, Add more decode functions here as you build your node logic
   can_driver__decode_driver_heartbeat_ExpectAnyArgs();
   can_motor__decode_motor_heartbeat_ExpectAnyArgs();
   can_geo__decode_geo_heartbeat_ExpectAnyArgs();

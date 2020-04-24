@@ -69,7 +69,7 @@ void ultrasonic__update_all_sensors(void) {
   ultrasonic__calculate_distance_from_obstacle(&sensor_middle);
   ultrasonic__calculate_distance_from_obstacle(&sensor_right);
 #if ULTRASONIC_DEBUG == 1
-  printf("\nLeft = %lf cm .. Mid = %lf cm .. Right = %lf cm", (double)sensor_left.distance_from_obstacle,
+  printf("\nLeft = %lf cm .. Mid = %lf cm .. Right = %lf cm\r\n", (double)sensor_left.distance_from_obstacle,
          (double)sensor_middle.distance_from_obstacle, (double)sensor_right.distance_from_obstacle);
 #endif
 }

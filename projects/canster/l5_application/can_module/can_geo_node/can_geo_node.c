@@ -110,7 +110,7 @@ static void can_geo__on_decode_geo_degree(void);
 void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_GEO_HEARTBEAT(&geo_heartbeat, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
-    printf("Geo Heartbeat: %d\r\n", geo_heartbeat.GEO_HEARTBEAT_cmd);
+    printf("\nGeo Heartbeat: %d\r\n", geo_heartbeat.GEO_HEARTBEAT_cmd);
 #endif
 
     // Do something here

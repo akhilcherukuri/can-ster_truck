@@ -65,7 +65,7 @@ void can_motor__motor_heartbeat_mia() {
   if (dbc_service_mia_MOTOR_HEARTBEAT(&motor_heartbeat, mia_increment_value)) {
 #if DEBUG_MOTOR_NODE == 1
     printf("MIA -> MOTOR_HEARTBEAT\r\n");
-    printf("assigned default motor heartbeat = %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
+    printf("Assigned default motor heartbeat = %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
 #endif
     gpio__set(board_io__get_led2());
   }
@@ -77,7 +77,7 @@ void can_motor__motor_speed_feedback_mia() {
 #if DEBUG_MOTOR_NODE == 1
     printf("MIA -> MOTOR_SPEED_FEEDBACK\r\n");
 #endif
-    printf("assigned default motor speed for feedback = %f\r\n",
+    printf("Assigned default motor speed for feedback = %f\r\n",
            (double)motor_wheel_speed_current_val.MOTOR_SPEED_current);
     // gpio__set(board_io__get_led1());
   }
@@ -91,7 +91,7 @@ void can_motor__motor_speed_feedback_mia() {
 void can_motor__decode_motor_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_MOTOR_HEARTBEAT(&motor_heartbeat, header, bytes)) {
 #if DEBUG_MOTOR_NODE == 1
-    printf("Motor Heartbeat: %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
+    printf("\nMotor Heartbeat: %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
 #endif
     gpio__reset(board_io__get_led2());
   }

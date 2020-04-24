@@ -42,7 +42,7 @@ void can_driver__driver_heartbeat_mia() {
   if (dbc_service_mia_DRIVER_HEARTBEAT(&driver_heartbeat, mia_increment_value)) {
 #if DRIVER_NODE_DEBUG == 1
     printf("MIA -> DRIVER_HEARTBEAT\r\n");
-    printf("assigned default driver heartbeat = %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
+    printf("Assigned default driver heartbeat = %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
 #endif
     gpio__set(board_io__get_led0());
   }
@@ -54,7 +54,7 @@ void can_driver__motor_speed_mia() {
   if (dbc_service_mia_MOTOR_SPEED(&driver_required_motor_speed, mia_increment_value)) {
 #if DRIVER_NODE_DEBUG == 1
     printf("MIA -> DRIVER_REQUIRED_MOTOR_SPEED\r\n");
-    printf("assigned default driver required motor speed = %f\r\n",
+    printf("Assigned default driver required motor speed = %f\r\n",
            (double)driver_required_motor_speed.MOTOR_SPEED_processed);
 #endif
     // gpio__set(board_io__get_led2());
@@ -67,7 +67,7 @@ void can_driver__motor_steering_mia() {
   if (dbc_service_mia_MOTOR_STEERING(&driver_steering, mia_increment_value)) {
 #if DRIVER_NODE_DEBUG == 1
     printf("MIA -> DRIVER_STEERING\r\n");
-    printf("assigned default driver steering = %d\r\n", driver_steering.MOTOR_STEERING_direction);
+    printf("Assigned default driver steering = %d\r\n", driver_steering.MOTOR_STEERING_direction);
 #endif
     // gpio__set(board_io__get_led2());
   }
@@ -78,7 +78,7 @@ void can_driver__driver_coordinates_mia() {
   if (dbc_service_mia_DRIVER_COORDINATES(&driver_coordinates, mia_increment_value)) {
 #if DRIVER_NODE_DEBUG == 1
     printf("MIA -> DRIVER_COORDINATES\r\n");
-    printf("assigned default driver coordinates = %f %f\r\n", (double)driver_coordinates.DRIVER_COORDINATES_latitude,
+    printf("Assigned default driver coordinates = %f %f\r\n", (double)driver_coordinates.DRIVER_COORDINATES_latitude,
            (double)driver_coordinates.DRIVER_COORDINATES_longitude);
 #endif
   }
@@ -155,11 +155,8 @@ static void can_driver__on_decode_driver_coordinates();
 void can_driver__decode_driver_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_DRIVER_HEARTBEAT(&driver_heartbeat, header, bytes)) {
 #if DRIVER_NODE_DEBUG == 1
-    printf("Driver Heartbeat: %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
+    printf("\nDriver Heartbeat: %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
 #endif
-
-    // TODO, Do other things here
-    // ! Make a function for process driver_heartbeat here
     gpio__reset(board_io__get_led0());
   }
 }
@@ -167,7 +164,7 @@ void can_driver__decode_driver_heartbeat(dbc_message_header_t header, uint8_t by
 void can_driver__decode_motor_speed(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_MOTOR_SPEED(&driver_required_motor_speed, header, bytes)) {
 #if DRIVER_NODE_DEBUG == 1
-    printf("Driver Required motor speed: %f\r\n", (double)driver_required_motor_speed.MOTOR_SPEED_processed);
+    printf("Required motor speed from driver: %f\r\n", (double)driver_required_motor_speed.MOTOR_SPEED_processed);
 #endif
 
     // TODO, Do other things here
