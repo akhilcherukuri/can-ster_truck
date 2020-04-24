@@ -6,6 +6,7 @@
 #include "Mockboard_io.h"
 #include "Mockcan_handler.h"
 #include "Mockdriver_obstacle.h"
+#include "Mockgpio.h"
 #include "Mockultrasonic_wrapper.h"
 
 #include "can_sensor_node.c"
@@ -17,6 +18,9 @@ void setUp() {
 }
 
 void test__can_sensor_heartbeat_mia_true(void) {
+  gpio_s gpio_unused = {};
+  gpio__set_Expect(gpio_unused);
+  board_io__get_led3_ExpectAndReturn(gpio_unused);
   for (int i = 100; i <= 3000; i += 100) {
     can_sensor__sensor_heartbeat_mia();
     TEST_ASSERT_EQUAL_UINT32(sensor_heartbeat.mia_info.mia_counter, i);

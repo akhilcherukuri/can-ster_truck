@@ -26,7 +26,7 @@ void test_can_motor__motor_speed_feedback_mia_false() {}
 
 void test_can_motor__motor_heartbeat_mia_true() {
   gpio_s gpio;
-  board_io__get_led1_ExpectAndReturn(gpio);
+  board_io__get_led2_ExpectAndReturn(gpio);
   gpio__set_Expect(gpio);
 
   can_motor__motor_heartbeat_mia();

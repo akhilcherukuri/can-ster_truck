@@ -45,6 +45,7 @@ void can_sensor__sensor_heartbeat_mia() {
 #endif
 
     // TODO: Set external MIA LED
+    gpio__set(board_io__get_led3());
   }
 }
 
@@ -116,6 +117,7 @@ void can_sensor__decode_sensor_heartbeat(dbc_message_header_t header, uint8_t by
 
     // TODO, Do other things here
     // ! Add sensor heartbeat processing code here
+    gpio__reset(board_io__get_led3());
   }
 }
 

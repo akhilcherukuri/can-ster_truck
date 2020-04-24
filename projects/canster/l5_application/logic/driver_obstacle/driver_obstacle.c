@@ -2,12 +2,16 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#define DRIVER_OBSTACLE_DEBUG 1
+
+#if DRIVER_OBSTACLE_DEBUG == 1
 #include <stdio.h>
+#endif
 
 /**
  * STATIC VARIABLES
  */
-static const uint8_t DISTANCE_THRESHOLD = 30; // cms
+static const uint8_t DISTANCE_THRESHOLD = 100; // cms
 
 static dbc_SENSOR_SONARS_s sensor_sonar;
 static dbc_GEO_DEGREE_s geo_degree;
@@ -42,22 +46,29 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
   motor_speed_value = 5; // fwd med
   if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD) {
     // Position yourself to the GPS Coordinates and move towards the target
-    // motor_steering.MOTOR_STEERING_direction = 0;
-
     motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
+    #if DRIVER_OBSTACLE_DEBUG == 1
     printf("\nSteering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
+    #endif
   } else {
-    if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD && sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD) {
-      motor_speed_value = 3; // neutral = stops
+    /* To check if turning radius is healthy and large enough */
+    if (sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD / 2.0)) {
+      motor_speed_value = 3; // neutral = stop
     } else {
-      // Obstacle is detected, DODGE
-      if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
-        motor_steering.MOTOR_STEERING_direction = -1; // driver_obstacle__obstacle_detected();
-      } else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right) {
-        motor_steering.MOTOR_STEERING_direction = 1;
+      if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD &&
+          sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD) {
+        motor_speed_value = 3; // neutral = stop
+      } else {
+        if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
+          motor_steering.MOTOR_STEERING_direction = -1; // driver_obstacle__obstacle_detected();
+        } else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right) {
+          motor_steering.MOTOR_STEERING_direction = 1;
+        }
       }
     }
+    #if DRIVER_OBSTACLE_DEBUG == 1
     printf("\nSteering value computed due to Ultrasonic sensor obstacles: %d", motor_steering.MOTOR_STEERING_direction);
+    #endif
   }
 
   return motor_steering;
