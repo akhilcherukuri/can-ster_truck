@@ -30,26 +30,26 @@ void driver_obstacle__geo_controller_direction(dbc_GEO_DEGREE_s *degree) {
 }
 
 // Generate the motor commands here
-// TODO, Return a value out
-dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
+// TODO, Add Speed value here as well
+dbc_DRIVER_STEERING_s driver_obstacle__get_motor_commands() {
   // 0 -> straight
-  dbc_MOTOR_STEERING_s motor_steering = {{0}, 0};
+  dbc_DRIVER_STEERING_s driver_steering = {};
 
   if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD) {
     if (sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD && sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD) {
       // Position yourself to the GPS Coordinates and move towards the target
-      motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
+      driver_steering.DRIVER_STEERING_direction = driver_obstacle__move_to_destination();
     } else {
       // Either left or right obstacle is near while going straight
       // Tilt slight in the opposite direction
-      motor_steering.MOTOR_STEERING_direction = driver_obstacle__tilt_left_or_right();
+      driver_steering.DRIVER_STEERING_direction = driver_obstacle__tilt_left_or_right();
     }
   } else {
     // Obstacle is detected, DODGE
-    motor_steering.MOTOR_STEERING_direction = driver_obstacle__obstacle_detected();
+    driver_steering.DRIVER_STEERING_direction = driver_obstacle__obstacle_detected();
   }
 
-  return motor_steering;
+  return driver_steering;
 }
 
 /**

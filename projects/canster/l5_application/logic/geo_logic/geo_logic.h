@@ -10,6 +10,6 @@
 
 #include "project.h"
 
-void geo_logic__update_destination_coordinate(dbc_DRIVER_COORDINATES_s *destination);
+void geo_logic__update_destination_coordinate(dbc_SENSOR_BT_COORDINATES_s *destination);
 
 float geo_logic__compute_required_bearing();
