@@ -23,7 +23,7 @@ void periodic_callbacks__initialize(void) {
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {
-  can_handler__handle_all_mia();
+  can_handler__handle_all_mia_1hz();
 
   // gps_coordinates_s coordinates = gps__get_coordinates();
   // printf("Coordinates: %f %f\r\n", (double)coordinates.latitude, (double)coordinates.longitude);
@@ -31,7 +31,7 @@ void periodic_callbacks__1Hz(uint32_t callback_count) {
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
-  can_handler__handle_all_incoming_messages();
+  can_handler__handle_all_incoming_messages_10hz();
   can_handler__transmit_message_10hz();
 
   // gps__run_once();

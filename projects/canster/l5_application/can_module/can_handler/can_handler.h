@@ -6,9 +6,9 @@
 #include "project.h"
 #include "who_am_i.h"
 
-void can_handler__handle_all_mia(void);
+void can_handler__handle_all_mia_1hz(void);
 
-void can_handler__handle_all_incoming_messages(void);
+void can_handler__handle_all_incoming_messages_10hz(void);
 void can_handler__transmit_message_10hz();
 
 /**
