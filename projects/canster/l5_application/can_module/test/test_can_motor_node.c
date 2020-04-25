@@ -12,17 +12,10 @@
 
 void setUp() {
   motor_heartbeat.mia_info.mia_counter = 0;
-  motor_wheel_speed_current_val.mia_info.mia_counter = 0;
+  motor_info.mia_info.mia_counter = 0;
 }
 
 void tearDown() {}
-
-#if BOARD_MOTOR_NODE == 1
-void test_can_motor__motor_heartbeat_mia_true() {}
-void test_can_motor__motor_heartbeat_mia_false() {}
-void test_can_motor__motor_speed_feedback_mia_true() {}
-void test_can_motor__motor_speed_feedback_mia_false() {}
-#else
 
 void test_can_motor__motor_heartbeat_mia_true() {
   gpio_s gpio;
@@ -49,29 +42,27 @@ void test_can_motor__motor_heartbeat_mia_false() {
   TEST_ASSERT_EQUAL_UINT32(motor_heartbeat.mia_info.mia_counter, 1000);
 }
 
-void test_can_motor__motor_speed_feedback_mia_true() {
+void test_can_motor__motor_info_mia_true() {
   // gpio_s gpio;
   // board_io__get_led1_ExpectAndReturn(gpio);
   // gpio__set_Expect(gpio);
 
-  can_motor__motor_speed_feedback_mia();
-  TEST_ASSERT_EQUAL_UINT32(motor_wheel_speed_current_val.mia_info.mia_counter, 1000);
+  can_motor__motor_info_mia();
+  TEST_ASSERT_EQUAL_UINT32(motor_info.mia_info.mia_counter, 1000);
 
-  can_motor__motor_speed_feedback_mia();
-  TEST_ASSERT_EQUAL_UINT32(motor_wheel_speed_current_val.mia_info.mia_counter, 2000);
+  can_motor__motor_info_mia();
+  TEST_ASSERT_EQUAL_UINT32(motor_info.mia_info.mia_counter, 2000);
 
-  can_motor__motor_speed_feedback_mia();
-  TEST_ASSERT_EQUAL_UINT32(motor_wheel_speed_current_val.mia_info.mia_counter, 3000);
+  can_motor__motor_info_mia();
+  TEST_ASSERT_EQUAL_UINT32(motor_info.mia_info.mia_counter, 3000);
 }
 
-void test_can_motor__motor_speed_feedback_mia_false() {
-  can_motor__motor_speed_feedback_mia();
-  TEST_ASSERT_EQUAL_UINT32(motor_wheel_speed_current_val.mia_info.mia_counter, 1000);
+void test_can_motor__motor_info_mia_false() {
+  can_motor__motor_info_mia();
+  TEST_ASSERT_EQUAL_UINT32(motor_info.mia_info.mia_counter, 1000);
 
-  motor_wheel_speed_current_val.mia_info.mia_counter = 0;
+  motor_info.mia_info.mia_counter = 0;
 
-  can_motor__motor_speed_feedback_mia();
-  TEST_ASSERT_EQUAL_UINT32(motor_wheel_speed_current_val.mia_info.mia_counter, 1000);
+  can_motor__motor_info_mia();
+  TEST_ASSERT_EQUAL_UINT32(motor_info.mia_info.mia_counter, 1000);
 }
-
-#endif

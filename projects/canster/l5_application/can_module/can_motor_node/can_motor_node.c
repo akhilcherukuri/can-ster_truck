@@ -15,21 +15,21 @@
  *
  */
 static dbc_MOTOR_HEARTBEAT_s motor_heartbeat;
-static dbc_MOTOR_SPEED_FEEDBACK_s motor_wheel_speed_current_val;
+static dbc_MOTOR_INFO_s motor_info;
 
 /**
- * Getters here
+ * DONE, Getters here
  */
-const dbc_MOTOR_HEARTBEAT_s *can_motor__get_heartbeat() { return &motor_heartbeat; }
-const dbc_MOTOR_SPEED_FEEDBACK_s *can_motor__get_motor_speed_feedback() { return &motor_wheel_speed_current_val; }
+void can_motor__get_heartbeat(dbc_MOTOR_HEARTBEAT_s *return_heartbeat) { *return_heartbeat = motor_heartbeat; }
+void can_motor__get_motor_info(dbc_MOTOR_INFO_s *return_info) { *return_info = motor_info; }
 
 #if BOARD_MOTOR_NODE == 1
 static void can_motor__transmit_motor_heartbeat();
-static void can_motor__transmit_motor_speed_feedback();
+static void can_motor__transmit_motor_info();
 
 void can_motor__transmit_all_messages(void) {
   can_motor__transmit_motor_heartbeat();
-  can_motor__transmit_motor_speed_feedback();
+  can_motor__transmit_motor_info();
 }
 
 static void can_motor__transmit_motor_heartbeat() {
@@ -41,20 +41,21 @@ static void can_motor__transmit_motor_heartbeat() {
   }
 }
 
-static void can_motor__transmit_motor_speed_feedback() {
-  dbc_MOTOR_SPEED_FEEDBACK_s motor_feedback_speed_to_motor = {{0}, 60.0};
+static void can_motor__transmit_motor_info() {
+  dbc_MOTOR_INFO_s message_motor_info = {};
 
   // TODO, Attach the RPM Sensor hardware code here
 
-  if (!dbc_encode_and_send_MOTOR_SPEED_FEEDBACK(NULL, &motor_feedback_speed_to_motor)) {
+  if (!dbc_encode_and_send_MOTOR_INFO(NULL, &message_motor_info)) {
 #if DEBUG_MOTOR_NODE == 1
     printf("Failed to encode and send current Motor speed data to DRIVER Node\r\n");
 #endif
   }
 }
+
 #else
-// Empty function
 void can_motor__transmit_all_messages(void) {}
+#endif
 
 /**
  * MIA is applicable only when BOARD_MOTOR_NODE != 1
@@ -71,19 +72,17 @@ void can_motor__motor_heartbeat_mia() {
   }
 }
 
-void can_motor__motor_speed_feedback_mia() {
+void can_motor__motor_info_mia() {
   const uint32_t mia_increment_value = 1000;
-  if (dbc_service_mia_MOTOR_SPEED_FEEDBACK(&motor_wheel_speed_current_val, mia_increment_value)) {
+  if (dbc_service_mia_MOTOR_INFO(&motor_info, mia_increment_value)) {
 #if DEBUG_MOTOR_NODE == 1
     printf("MIA -> MOTOR_SPEED_FEEDBACK\r\n");
 #endif
-    printf("assigned default motor speed for feedback = %f\r\n",
-           (double)motor_wheel_speed_current_val.MOTOR_SPEED_current);
+    printf("assigned default motor speed for feedback rps = %f, kph = %f\r\n", (double)motor_info.MOTOR_INFO_rps,
+           (double)motor_info.MOTOR_INFO_kph);
     // gpio__set(board_io__get_led1());
   }
 }
-
-#endif
 
 /**
  * DECODE FUNCTIONS
@@ -99,10 +98,10 @@ void can_motor__decode_motor_heartbeat(dbc_message_header_t header, uint8_t byte
 
 /* Should be received only by DRIVER Node for the purpose of feedback monitoring */
 void can_motor__decode_motor_speed_feedback(dbc_message_header_t header, uint8_t bytes[8]) {
-  if (dbc_decode_MOTOR_SPEED_FEEDBACK(&motor_wheel_speed_current_val, header, bytes)) {
+  if (dbc_decode_MOTOR_INFO(&motor_info, header, bytes)) {
 #if DEBUG_MOTOR_NODE == 1
-    printf("Current Motor Wheel Speed Value from RPM Sensor via MOTOR Node: %lf\r\n",
-           (double)motor_wheel_speed_current_val.MOTOR_SPEED_current);
+    printf("Current Motor Wheel Speed Value from RPM Sensor via MOTOR Node: rps = %lf, kph = %f\r\n",
+           (double)motor_info.MOTOR_INFO_rps, (double)motor_info.MOTOR_INFO_kph);
 #endif
   }
 }
