@@ -11,11 +11,9 @@
 /**
  * STATIC VARIABLES
  */
-static const uint8_t DISTANCE_THRESHOLD = 100; // cms
-
+static const uint8_t DISTANCE_THRESHOLD_CM = 100.0;
 static dbc_SENSOR_SONARS_s sensor_sonar;
 static dbc_GEO_DEGREE_s geo_degree;
-
 static float motor_speed_value;
 
 /**
@@ -23,10 +21,10 @@ static float motor_speed_value;
  */
 static int16_t driver_obstacle__tilt_left_or_right();
 static int16_t driver_obstacle__obstacle_detected();
+static int16_t driver_obstacle__turn_according_to_degree(float);
 
-static int16_t driver_obstacle__turn_according_to_degree(float diff);
 /**
- * FUNCTIONS
+ * NON-STATIC FUNCTIONS
  */
 void driver_obstacle__process_input(dbc_SENSOR_SONARS_s *sonar) {
   sensor_sonar = *sonar; // copy
@@ -38,31 +36,29 @@ void driver_obstacle__set_geo_controller_direction(dbc_GEO_DEGREE_s *degree) {
 
 float driver_obstacle__get_motor_speed_value() { return motor_speed_value; }
 
-// Generate the motor commands here
-// TODO, Return a value out
+// TODO: Attach LIDAR code also
 dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
-  // 0 -> straight
   dbc_MOTOR_STEERING_s motor_steering = {{0}, 0};
   motor_speed_value = 5; // fwd med
-  if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD) {
-    // Position yourself to the GPS Coordinates and move towards the target
+  if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD_CM) {
+    // No obstacles ahead, so position yourself according to the GPS Coordinates and move towards destination
     motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
 #if DRIVER_OBSTACLE_DEBUG == 1
     printf("\nSteering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
 #endif
   } else {
-    /* To check if turning radius is healthy and large enough */
-    if ((double)sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD / 2.0)) {
+    /* Check if turning radius is healthy and large enough */
+    if ((double)sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD_CM / 2.0)) {
       motor_speed_value = 3; // neutral = stop
     } else {
-      if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD &&
-          sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD) {
+      if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD_CM &&
+          sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD_CM) {
         motor_speed_value = 3; // neutral = stop
       } else {
         if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
-          motor_steering.MOTOR_STEERING_direction = -1; // driver_obstacle__obstacle_detected();
+          motor_steering.MOTOR_STEERING_direction = -2; // driver_obstacle__obstacle_detected();
         } else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right) {
-          motor_steering.MOTOR_STEERING_direction = 1;
+          motor_steering.MOTOR_STEERING_direction = 2;
         }
       }
     }
@@ -70,13 +66,8 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
     printf("\nSteering value computed due to Ultrasonic sensor obstacles: %d", motor_steering.MOTOR_STEERING_direction);
 #endif
   }
-
   return motor_steering;
 }
-
-/**
- * STATIC FUNCTION DECLARATIONS
- */
 
 /**
  * NOTE: + means right, - means left
@@ -110,7 +101,6 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
  *
  */
 int16_t driver_obstacle__move_to_destination() {
-  // DONE, Write this logic
   float diff = geo_degree.GEO_DEGREE_current - geo_degree.GEO_DEGREE_required;
   if (abs(diff) > 180) {
     if (diff < 0) {
@@ -125,10 +115,13 @@ int16_t driver_obstacle__move_to_destination() {
   return driver_obstacle__turn_according_to_degree(diff);
 }
 
+/**
+ * STATIC FUNCTIONS
+ */
+
 // TODO, Stop Condition
 static int16_t driver_obstacle__turn_according_to_degree(float diff) {
   int16_t rval = 0;
-
   if (diff > 0) {
     // Go little right
     rval = 1;
@@ -138,19 +131,19 @@ static int16_t driver_obstacle__turn_according_to_degree(float diff) {
   } else {
     // We have reached our destination (STOP Condition)
   }
-
   return rval;
 }
 
 static int16_t driver_obstacle__tilt_left_or_right() {
   int16_t return_value = 0;
 
-  if (sensor_sonar.SENSOR_SONARS_left <= DISTANCE_THRESHOLD && sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD) {
+  if (sensor_sonar.SENSOR_SONARS_left <= DISTANCE_THRESHOLD_CM &&
+      sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD_CM) {
     // Move a little right
     return_value = +1;
 
-  } else if (sensor_sonar.SENSOR_SONARS_right <= DISTANCE_THRESHOLD &&
-             sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD) {
+  } else if (sensor_sonar.SENSOR_SONARS_right <= DISTANCE_THRESHOLD_CM &&
+             sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD_CM) {
     // Move a little left
     return_value = -1;
 
@@ -170,11 +163,11 @@ static int16_t driver_obstacle__obstacle_detected() {
   int16_t return_value = 0;
 
   if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right &&
-      sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD) {
+      sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD_CM) {
     // Move left
     return_value = -2;
   } else if (sensor_sonar.SENSOR_SONARS_right > sensor_sonar.SENSOR_SONARS_left &&
-             sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD) {
+             sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD_CM) {
     // Move right
     return_value = +2;
   } else {

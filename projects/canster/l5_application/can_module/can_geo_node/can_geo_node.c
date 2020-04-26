@@ -113,7 +113,6 @@ void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]
     printf("\nGeo Heartbeat: %d\r\n", geo_heartbeat.GEO_HEARTBEAT_cmd);
 #endif
 
-    // Do something here
     gpio__reset(board_io__get_led1());
   }
 }
@@ -122,48 +121,16 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
 
   if (dbc_decode_GEO_DEGREE(&geo_degree, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
-    printf("Geo Degree: current: %f, required: %f\r\n", (double)geo_degree.GEO_DEGREE_current,
-           (double)geo_degree.GEO_DEGREE_required);
+    printf("Geo Degree: current(from compass): %lf, required(from computed haversine bearing angle): %lf\r\n",
+           (double)(geo_degree.GEO_DEGREE_current), (double)geo_degree.GEO_DEGREE_required);
 #endif
-
-    // Do something here
-
     can_geo__on_decode_geo_degree();
   }
 }
 
+/* Only for testing */
 static void can_geo__on_decode_geo_degree(void) {
-
   driver_obstacle__set_geo_controller_direction(&geo_degree);
   int16_t steer_dir = driver_obstacle__move_to_destination();
-
-  printf("\nComputed steering value based on GEO curr/reqd logic. TODO: Send to motor %d", steer_dir);
+  printf("\nComputed steering value based on GEO curr/reqd logic %d", steer_dir);
 }
-
-// static void can_geo__on_decode_geo_degree(void) {
-//   driver_obstacle__get_geo_controller_direction(&geo_degree);
-//   // get_geo_degree(&geo_degree);
-
-//   gpio_s left = {0, 6};
-//   gpio_s right = {0, 8};
-//   gpio__reset(left);
-//   gpio__reset(right);
-
-//   char str[128] = {0};
-//   int16_t steer_dir = driver_obstacle__move_to_destination();
-//   if (steer_dir == 1) {
-//     strcpy(str, "\nSteering SLIGHT RIGHT in order to reach destination\n");
-//     gpio__set(right);
-//     pwm1__set_duty_cycle(PWM1__2_0, 9.75);
-//     // delay__ms(100);
-//   } else if (steer_dir == -1) {
-//     strcpy(str, "\nSteering SLIGHT LEFT in order to reach destination\n");
-//     gpio__set(left);
-//     pwm1__set_duty_cycle(PWM1__2_0, 6.75);
-//     // delay__ms(100);
-//   } else if (steer_dir == 0)
-//     strcpy(str, "\nNo Steering. Continuing in same direciton in order to reach destination\n");
-//   str[strlen(str)] = '\0';
-//   printf("Current %f and required %f coordinates\r\n%s\n", (double)geo_degree.GEO_DEGREE_current,
-//          (double)geo_degree.GEO_DEGREE_required, str);
-// }

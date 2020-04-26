@@ -29,16 +29,16 @@ void test_driver_obstacle__obstacle_detected_right() {
 }
 
 void test_driver_obstacle__tilt_left(void) {
-  sensor_sonar.SENSOR_SONARS_right = DISTANCE_THRESHOLD - 10;
-  sensor_sonar.SENSOR_SONARS_left = DISTANCE_THRESHOLD + 10;
+  sensor_sonar.SENSOR_SONARS_right = DISTANCE_THRESHOLD_CM - 10.0;
+  sensor_sonar.SENSOR_SONARS_left = DISTANCE_THRESHOLD_CM + 10.0;
 
   int16_t left = driver_obstacle__tilt_left_or_right();
   TEST_ASSERT_EQUAL_INT16(left, -1);
 }
 
 void test_driver_obstacle__tilt_right(void) {
-  sensor_sonar.SENSOR_SONARS_right = DISTANCE_THRESHOLD + 10;
-  sensor_sonar.SENSOR_SONARS_left = DISTANCE_THRESHOLD - 10;
+  sensor_sonar.SENSOR_SONARS_right = DISTANCE_THRESHOLD_CM + 10.0;
+  sensor_sonar.SENSOR_SONARS_left = DISTANCE_THRESHOLD_CM - 10.0;
 
   int16_t right = driver_obstacle__tilt_left_or_right();
   TEST_ASSERT_EQUAL_INT16(right, 1);
@@ -130,15 +130,15 @@ void test_driver_obstacle__move_to_destination_bottom_quadrant() {
 }
 
 void test_driver_obstacle__get_motor_commands_left_right() {
-  sensor_sonar.SENSOR_SONARS_middle = (DISTANCE_THRESHOLD)-5;
+  sensor_sonar.SENSOR_SONARS_middle = (DISTANCE_THRESHOLD_CM)-5.0;
   sensor_sonar.SENSOR_SONARS_left = 150;
   sensor_sonar.SENSOR_SONARS_right = 30;
 
   dbc_MOTOR_STEERING_s steering = driver_obstacle__get_motor_commands();
-  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, -1);
+  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, -2);
 
   sensor_sonar.SENSOR_SONARS_left = 30;
   sensor_sonar.SENSOR_SONARS_right = 150;
   steering = driver_obstacle__get_motor_commands();
-  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, 1);
+  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, 2);
 }
