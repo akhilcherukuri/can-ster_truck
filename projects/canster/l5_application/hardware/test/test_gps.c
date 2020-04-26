@@ -153,6 +153,37 @@ void test_gps_parse_rmc(void) {
   TEST_ASSERT_EQUAL_FLOAT(gps_p.longitude, 1131.00);
 }
 
+void test_gps_parse_rmc_negative(void) {
+  char gps_input[] = "$GPRMC,123519,A,4807.038,N,01131.000,W,022.4,084.4,230394,003.1,W*6A\r\n";
+  for (int i = 0; i < sizeof(gps_input); i++) {
+    TEST_ASSERT_TRUE(line_buffer__add_byte(&line, gps_input[i]));
+    // ? debugging
+    // printf("%x ", gps_line[i]);
+  }
+
+  gps__handle_line();
+
+  TEST_ASSERT_EQUAL_STRING(parsed_rmc.id, "$GPRMC");
+  TEST_ASSERT_EQUAL_UINT32(parsed_rmc.fix, 123519);
+  TEST_ASSERT_EQUAL_CHAR(parsed_rmc.status, 'A');
+
+  TEST_ASSERT_EQUAL_FLOAT(parsed_rmc.latitude, 4807.038);
+  TEST_ASSERT_EQUAL_CHAR(parsed_rmc.latitude_direction, 'N');
+
+  TEST_ASSERT_EQUAL_FLOAT(parsed_rmc.longitude, 1131.00);
+  TEST_ASSERT_EQUAL_CHAR(parsed_rmc.longitude_direction, 'W');
+
+  TEST_ASSERT_EQUAL_FLOAT(parsed_rmc.speed, 22.4);
+  TEST_ASSERT_EQUAL_FLOAT(parsed_rmc.track_angle, 84.4);
+
+  TEST_ASSERT_EQUAL_UINT32(parsed_rmc.date, 230394);
+
+  // Get coordinates
+  gps_coordinates_s gps_p = gps__get_coordinates();
+  TEST_ASSERT_EQUAL_FLOAT(gps_p.latitude, 4807.038);
+  TEST_ASSERT_EQUAL_FLOAT(gps_p.longitude, -1131.00);
+}
+
 void test_gps__is_valid(void) {
   parsed_rmc.status = 'V'; // Not valid / Warning
   bool isvalid = gps__is_valid();

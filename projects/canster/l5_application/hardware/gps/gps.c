@@ -184,6 +184,14 @@ static void gps__parse_rmc(char *gps_line) {
 static void gps__update_coordinates(float latitude, float longitude) {
   coordinates.latitude = latitude;
   coordinates.longitude = longitude;
+
+  if (parsed_rmc.latitude_direction == 'S') {
+    coordinates.latitude = -coordinates.latitude;
+  }
+
+  if (parsed_rmc.longitude_direction == 'W') {
+    coordinates.longitude = -coordinates.longitude;
+  }
 }
 
 /**

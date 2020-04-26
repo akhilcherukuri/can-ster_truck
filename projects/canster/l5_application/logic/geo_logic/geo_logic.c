@@ -14,6 +14,9 @@ void geo_logic__update_destination_coordinate(dbc_DRIVER_COORDINATES_s *destinat
 float geo_logic__compute_required_bearing() {
   // Get the data here
   gps_coordinates_s current_coordinate = gps__get_coordinates();
+  current_coordinate.latitude = current_coordinate.latitude / 100;
+  current_coordinate.longitude = current_coordinate.longitude / 100;
+
   // destination_coordinate.DRIVER_COORDINATES_latitude
   // destination_coordinate.DRIVER_COORDINATES_longitude
 
