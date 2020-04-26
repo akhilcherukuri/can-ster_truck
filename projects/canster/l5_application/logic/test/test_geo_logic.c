@@ -37,7 +37,7 @@ void test_geo_logic__compute_required_bearing_dont_move(void) {
   destination_coordinate.DRIVER_COORDINATES_longitude = 20.3;
 
   float bearing = geo_logic__compute_required_bearing();
-  TEST_ASSERT_EQUAL_FLOAT(bearing, 0.0);
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 180);
 }
 
 void test_geo_logic__compute_required_bearing(void) {
@@ -50,7 +50,7 @@ void test_geo_logic__compute_required_bearing(void) {
   destination_coordinate.DRIVER_COORDINATES_longitude = 20.3;
 
   float bearing = geo_logic__compute_required_bearing();
-  TEST_ASSERT_EQUAL_FLOAT(bearing, 62.58239);
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 242);
 }
 
 /**
@@ -72,5 +72,5 @@ void test_geo_logic__compute_required_bearing_real(void) {
   destination_coordinate.DRIVER_COORDINATES_longitude = -122.165280;
 
   float bearing = geo_logic__compute_required_bearing();
-  TEST_ASSERT_EQUAL_FLOAT(bearing, -71.28366);
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 108);
 }

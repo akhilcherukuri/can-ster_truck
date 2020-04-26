@@ -28,6 +28,8 @@ float geo_logic__compute_required_bearing() {
 
   float bearing_angle = atan2(y, x) * 180.0 / PI; // convert to degree value
 
+  bearing_angle = ((uint32_t)(bearing_angle + 180)) % 360;
+
   // return the bearing angle
   return bearing_angle;
 }
