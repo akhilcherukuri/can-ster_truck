@@ -15,6 +15,7 @@
 void setUp() {
   geo_heartbeat.mia_info.mia_counter = 0;
   geo_degree.mia_info.mia_counter = 0;
+  geo_destination.mia_info.mia_counter = 0;
 }
 
 void tearDown() {}
@@ -73,6 +74,31 @@ void test_can_geo__geo_degree_mia_true() {
 
   can_geo__geo_degree_mia();
   TEST_ASSERT_EQUAL_INT(geo_degree.mia_info.mia_counter, 3000);
+}
+
+void test_can__geo_destination_reached_mia_true() {
+
+  can_geo__geo_destination_reached_mia();
+  TEST_ASSERT_EQUAL_INT(geo_destination.mia_info.mia_counter, 1000);
+
+  can_geo__geo_destination_reached_mia();
+  TEST_ASSERT_EQUAL_INT(geo_destination.mia_info.mia_counter, 2000);
+
+  can_geo__geo_destination_reached_mia();
+  TEST_ASSERT_EQUAL_INT(geo_destination.mia_info.mia_counter, 3000);
+  TEST_ASSERT_EQUAL_INT(geo_destination.GEO_DESTINATION_REACHED_cmd, GEO_DESTINATION_REACHED_cmd_NOT_REACHED);
+}
+
+void test_can__geo_destination_reached_mia_false() {
+  can_geo__geo_destination_reached_mia();
+  TEST_ASSERT_EQUAL_INT(geo_destination.mia_info.mia_counter, 1000);
+
+  can_geo__geo_destination_reached_mia();
+  TEST_ASSERT_EQUAL_INT(geo_destination.mia_info.mia_counter, 2000);
+
+  geo_destination.mia_info.mia_counter = 0;
+  can_geo__geo_destination_reached_mia();
+  TEST_ASSERT_EQUAL_INT(geo_destination.mia_info.mia_counter, 1000);
 }
 
 /**
