@@ -10,6 +10,8 @@
 #include "Mockdriver_obstacle.h"
 #include "Mockgeo_logic.h"
 
+#include "Mockgps.h"
+
 #include "can_geo_node.c"
 
 void setUp() {
@@ -127,6 +129,14 @@ void test_can_geo__transmit_geo_degree(void) {
 
   dbc_send_can_message_ExpectAnyArgsAndReturn(true);
   can_geo__transmit_geo_degree();
+}
+
+void test_can_geo__transmit_geo_coordinates_debug() {
+  gps_coordinates_s coordinates;
+  gps__get_coordinates_ExpectAndReturn(coordinates);
+
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+  can_geo__transmit_geo_coordinates_debug();
 }
 
 #else

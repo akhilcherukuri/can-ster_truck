@@ -5,6 +5,8 @@
 #include "driver_obstacle.h"
 #include "geo_logic.h"
 
+#include "gps.h"
+
 /**
  * Constants
  */
@@ -40,11 +42,16 @@ static void can_geo__transmit_geo_heartbeat();
 static void can_geo__transmit_geo_degree();
 static void can_geo__transmit_geo_destination_reached();
 
+// Debug Message
+static void can_geo__transmit_geo_coordinates_debug();
+
 // Transmit
 void can_geo__transmit_all_messages(void) {
   can_geo__transmit_geo_heartbeat();
   can_geo__transmit_geo_degree();
   can_geo__transmit_geo_destination_reached();
+
+  can_geo__transmit_geo_coordinates_debug();
 }
 
 static void can_geo__transmit_geo_heartbeat() {
@@ -81,6 +88,22 @@ static void can_geo__transmit_geo_destination_reached() {
   if (!dbc_encode_and_send_GEO_DESTINATION_REACHED(NULL, &message)) {
 #if GEO_NODE_DEBUG == 1
     printf("Failed to encode and send Geo Destination\r\n");
+#endif
+  }
+}
+
+// Debug
+static void can_geo__transmit_geo_coordinates_debug() {
+
+  gps_coordinates_s coordinates = gps__get_coordinates();
+  dbc_GEO_CURRENT_COORDINATES_s message = {};
+
+  message.GEO_CURRENT_COORDINATES_latitude = coordinates.latitude;
+  message.GEO_CURRENT_COORDINATES_longitude = coordinates.longitude;
+
+  if (!dbc_encode_and_send_GEO_CURRENT_COORDINATES(NULL, &message)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Failed to encode and send Geo Coordinates\r\n");
 #endif
   }
 }

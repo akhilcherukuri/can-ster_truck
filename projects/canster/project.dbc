@@ -71,6 +71,10 @@ BO_ 700 GEO_DEGREE: 8 GEO
 BO_ 800 GEO_DESTINATION_REACHED: 1 GEO
  SG_ GEO_DESTINATION_REACHED_cmd: 0|8@1+ (1,0) [0|0] "" DRIVER
 
+BO_ 900 GEO_CURRENT_COORDINATES: 8 GEO
+ SG_ GEO_CURRENT_COORDINATES_latitude: 0|32@1- (0.00000001,0) [-360|360] "" DBG
+ SG_ GEO_CURRENT_COORDINATES_longitude: 32|32@1- (0.00000001,0) [-360|360] "" DBG
+
 CM_ BU_ DRIVER "The driver controller driving the car";
 CM_ BU_ MOTOR "The motor controller of the car";
 CM_ BU_ SENSOR "The sensor controller of the car";
