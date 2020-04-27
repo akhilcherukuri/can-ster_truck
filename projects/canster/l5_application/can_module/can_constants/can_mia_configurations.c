@@ -35,3 +35,7 @@ const dbc_DRIVER_COORDINATES_s dbc_mia_replacement_DRIVER_COORDINATES;
 const dbc_GEO_DEGREE_s dbc_mia_replacement_GEO_DEGREE;
 const dbc_GEO_HEARTBEAT_s dbc_mia_replacement_GEO_HEARTBEAT;
 const dbc_GEO_DESTINATION_REACHED_s dbc_mia_replacement_GEO_DESTINATION_REACHED;
+
+// Only used when MIA is defined
+const uint32_t dbc_mia_threshold_GEO_CURRENT_COORDINATES = 3000;
+const dbc_GEO_CURRENT_COORDINATES_s dbc_mia_replacement_GEO_CURRENT_COORDINATES;

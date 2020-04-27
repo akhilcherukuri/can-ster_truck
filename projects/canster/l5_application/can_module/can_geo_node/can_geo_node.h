@@ -19,6 +19,9 @@ void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]
 void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]);
 void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_t bytes[8]);
 
+// DEBUG
+void can_geo__decode_geo_current_coordinates_debug(dbc_message_header_t header, uint8_t bytes[8]);
+
 // Getters for all static variables
 // ! NO SETTERS
 // ! DO NOT DISCARD THE CONST QUALIFIER

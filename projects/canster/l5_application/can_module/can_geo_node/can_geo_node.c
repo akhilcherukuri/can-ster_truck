@@ -186,6 +186,19 @@ void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_
   }
 }
 
+void can_geo__decode_geo_current_coordinates_debug(dbc_message_header_t header, uint8_t bytes[8]) {
+  dbc_GEO_CURRENT_COORDINATES_s gps_current_coordinate = {};
+  if (dbc_decode_GEO_CURRENT_COORDINATES(&gps_current_coordinate, header, bytes)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Current Latitude: %f, Longitude: %f\r\n", (double)gps_current_coordinate.GEO_CURRENT_COORDINATES_latitude,
+           (double)gps_current_coordinate.GEO_CURRENT_COORDINATES_longitude);
+#endif
+
+    // TODO, Put a function here
+    // TODO, Debug to Bluetooth or Driver!
+  }
+}
+
 static void can_geo__on_decode_geo_degree(void) {
   driver_obstacle__geo_controller_directions(&geo_degree);
   printf("on_decode_geo_degree: %f %f\r\n", (double)geo_degree.GEO_DEGREE_current,
