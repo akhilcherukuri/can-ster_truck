@@ -149,8 +149,11 @@ void test_gps_parse_rmc(void) {
 
   // Get coordinates
   gps_coordinates_s gps_p = gps__get_coordinates();
-  TEST_ASSERT_EQUAL_FLOAT(gps_p.latitude, 4807.038);
-  TEST_ASSERT_EQUAL_FLOAT(gps_p.longitude, 1131.00);
+
+  float latitude_degree = 48 + (7.038 / 60);
+  float longitude_degree = 11 + (31.00 / 60);
+  TEST_ASSERT_EQUAL_FLOAT(gps_p.latitude, latitude_degree);
+  TEST_ASSERT_EQUAL_FLOAT(gps_p.longitude, longitude_degree);
 }
 
 void test_gps_parse_rmc_negative(void) {
@@ -180,8 +183,28 @@ void test_gps_parse_rmc_negative(void) {
 
   // Get coordinates
   gps_coordinates_s gps_p = gps__get_coordinates();
-  TEST_ASSERT_EQUAL_FLOAT(gps_p.latitude, 4807.038);
-  TEST_ASSERT_EQUAL_FLOAT(gps_p.longitude, -1131.00);
+
+  float latitude_degree = 48 + (07.038 / 60);
+  float longitude_degree = -(11 + (31.00 / 60));
+
+  TEST_ASSERT_EQUAL_FLOAT(gps_p.latitude, latitude_degree);
+  TEST_ASSERT_EQUAL_FLOAT(gps_p.longitude, longitude_degree);
+}
+
+// Tested from here
+// http://www.toptechboy.com/arduino/lesson-24-understanding-gps-nmea-sentences/
+void test_gps__update_coordinates() {
+  parsed_rmc.latitude = 3051.8007;
+  parsed_rmc.latitude_direction = 'N';
+
+  parsed_rmc.longitude = 10035.9989;
+  parsed_rmc.longitude_direction = 'W';
+
+  gps__update_coordinates(parsed_rmc.latitude, parsed_rmc.longitude);
+
+  gps_coordinates_s coordinates = gps__get_coordinates();
+  TEST_ASSERT_EQUAL_FLOAT(coordinates.latitude, 30.8633);
+  TEST_ASSERT_EQUAL_FLOAT(coordinates.longitude, -100.5999);
 }
 
 void test_gps__is_valid(void) {

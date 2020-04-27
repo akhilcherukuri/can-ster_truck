@@ -182,6 +182,15 @@ static void gps__parse_rmc(char *gps_line) {
 }
 
 static void gps__update_coordinates(float latitude, float longitude) {
+
+  latitude = latitude / 100;
+  longitude = longitude / 100;
+  float latitude_minutes = ((latitude - (uint32_t)latitude) * 100) / 60;
+  float longitude_minutes = ((longitude - (uint32_t)longitude) * 100) / 60;
+
+  latitude = (uint32_t)latitude + latitude_minutes;
+  longitude = (uint32_t)longitude + longitude_minutes;
+
   coordinates.latitude = latitude;
   coordinates.longitude = longitude;
 

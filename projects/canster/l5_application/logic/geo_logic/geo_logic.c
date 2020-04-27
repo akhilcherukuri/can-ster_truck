@@ -31,11 +31,6 @@ void geo_logic__update_destination_coordinate(dbc_DRIVER_COORDINATES_s *destinat
 float geo_logic__compute_required_bearing() {
   // Get the data here
   gps_coordinates_s current_coordinate = gps__get_coordinates();
-  current_coordinate.latitude = current_coordinate.latitude / 100;
-  current_coordinate.longitude = current_coordinate.longitude / 100;
-
-  // destination_coordinate.DRIVER_COORDINATES_latitude
-  // destination_coordinate.DRIVER_COORDINATES_longitude
 
   // DONE, Compute the Haversine formula here
   float delta_longitude = destination_coordinate.DRIVER_COORDINATES_longitude - current_coordinate.longitude;
@@ -58,8 +53,6 @@ float geo_logic__compute_required_bearing() {
 
 float geo_logic__distance_from_destination() {
   gps_coordinates_s current_coordinate = gps__get_coordinates();
-  current_coordinate.latitude = current_coordinate.latitude / 100;
-  current_coordinate.longitude = current_coordinate.longitude / 100;
 
   float current_coordinate_latitude_radian = geo_logic__degree_to_radian(current_coordinate.latitude);
   float destination_coordinate_latitude_radian =

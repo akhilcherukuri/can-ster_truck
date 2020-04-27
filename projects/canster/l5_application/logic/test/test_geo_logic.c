@@ -29,8 +29,8 @@ void test_geo_logic__update_destination_coordinate(void) {
 
 void test_geo_logic__compute_required_bearing_dont_move(void) {
   gps_coordinates_s coordinates = {};
-  coordinates.latitude = 1020;
-  coordinates.longitude = 2030;
+  coordinates.latitude = 10.2;
+  coordinates.longitude = 20.3;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
   destination_coordinate.DRIVER_COORDINATES_latitude = 10.2;
@@ -42,8 +42,8 @@ void test_geo_logic__compute_required_bearing_dont_move(void) {
 
 void test_geo_logic__compute_required_bearing(void) {
   gps_coordinates_s coordinates = {};
-  coordinates.latitude = 520;
-  coordinates.longitude = 1030;
+  coordinates.latitude = 5.2;
+  coordinates.longitude = 10.3;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
   destination_coordinate.DRIVER_COORDINATES_latitude = 10.2;
@@ -64,8 +64,8 @@ void test_geo_logic__compute_required_bearing(void) {
  */
 void test_geo_logic__compute_required_bearing_real(void) {
   gps_coordinates_s coordinates = {};
-  coordinates.latitude = 3733.8207;
-  coordinates.longitude = -12188.6330;
+  coordinates.latitude = 37.338207;
+  coordinates.longitude = -121.886330;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
   destination_coordinate.DRIVER_COORDINATES_latitude = 37.441810;
@@ -77,8 +77,8 @@ void test_geo_logic__compute_required_bearing_real(void) {
 
 void test_geo_logic__distance_from_destination_real(void) {
   gps_coordinates_s coordinates = {};
-  coordinates.latitude = 3733.8207;
-  coordinates.longitude = -12188.6330;
+  coordinates.latitude = 37.338207;
+  coordinates.longitude = -121.886330;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
   destination_coordinate.DRIVER_COORDINATES_latitude = 37.441810;
@@ -90,8 +90,8 @@ void test_geo_logic__distance_from_destination_real(void) {
 
 void test_geo_logic__distance_from_destination_reached(void) {
   gps_coordinates_s coordinates = {};
-  coordinates.latitude = 3744.1810;
-  coordinates.longitude = -12216.5280;
+  coordinates.latitude = 37.441810;
+  coordinates.longitude = -122.165280;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
   destination_coordinate.DRIVER_COORDINATES_latitude = 37.441810;
@@ -103,8 +103,8 @@ void test_geo_logic__distance_from_destination_reached(void) {
 
 void test_geo_logic__distance_from_destination_tiny_increment(void) {
   gps_coordinates_s coordinates = {};
-  coordinates.latitude = 3744.1813; // step change by 3
-  coordinates.longitude = -12216.5280;
+  coordinates.latitude = 37.441813; // step change by 3
+  coordinates.longitude = -122.165280;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
   destination_coordinate.DRIVER_COORDINATES_latitude = 37.441810;
@@ -116,8 +116,8 @@ void test_geo_logic__distance_from_destination_tiny_increment(void) {
 
 void test_geo_logic__compute_destination_reached_true() {
   gps_coordinates_s coordinates = {};
-  coordinates.latitude = 3744.1813; // step change by 3
-  coordinates.longitude = -12216.5280;
+  coordinates.latitude = 37.441813; // step change by 3
+  coordinates.longitude = -122.165280;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
   destination_coordinate.DRIVER_COORDINATES_latitude = 37.441810;
@@ -130,8 +130,8 @@ void test_geo_logic__compute_destination_reached_true() {
 
 void test_geo_logic__compute_destination_reached_false() {
   gps_coordinates_s coordinates = {};
-  coordinates.latitude = 3744.1823; // step change by 23
-  coordinates.longitude = -12216.5280;
+  coordinates.latitude = 37.441823; // step change by 23
+  coordinates.longitude = -122.165280;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
   destination_coordinate.DRIVER_COORDINATES_latitude = 37.441810;
