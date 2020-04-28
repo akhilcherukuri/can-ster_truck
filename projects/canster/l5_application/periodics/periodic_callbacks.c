@@ -7,14 +7,20 @@
 #include "can_handler.h"
 
 #include "gps.h"
+#include "gps_wrapper.h"
 
 void periodic_callbacks__initialize(void) {
   can_bus__initialize();
 
   gps__init();
+  gps_wrapper__init();
 }
 
-void periodic_callbacks__1Hz(uint32_t callback_count) { can_handler__handle_all_mia(); }
+void periodic_callbacks__1Hz(uint32_t callback_count) {
+  can_handler__handle_all_mia();
+
+  gps_wrapper__update_led_when_valid();
+}
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
   can_handler__handle_all_incoming_messages();
