@@ -39,6 +39,7 @@ void can_handler__handle_all_mia(void) {
   // Geo Node MIA Functions
   can_geo__geo_heartbeat_mia();
   can_geo__geo_degree_mia();
+  can_geo__geo_destination_reached_mia();
 }
 
 void can_handler__handle_all_incoming_messages(void) {
@@ -82,6 +83,7 @@ void can_handler__handle_all_incoming_messages(void) {
     // Geo Node Decode Functions
     can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);
     can_geo__decode_geo_degree(header, recv_message.data.bytes);
+    can_geo__decode_geo_destination_reached(header, recv_message.data.bytes);
   }
 }
 
