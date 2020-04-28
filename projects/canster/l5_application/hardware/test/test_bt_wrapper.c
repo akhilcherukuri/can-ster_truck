@@ -3,6 +3,13 @@
 #include "Mockbt.h"
 #include "Mockgps.h"
 
+// Read
+#include "Mockcan_driver_node.h"
+#include "Mockcan_geo_node.h"
+#include "Mockcan_motor_node.h"
+
+#include "Mockultrasonic_wrapper.h"
+
 #include "bt_wrapper.c"
 
 void setUp() {
@@ -46,6 +53,25 @@ void test_bt_wrapper__parse_loc_false(void) {
 
 // TODO, Write these tests for android debugging
 
-void test_bt_wrapper__update_decoded_messages(void) { bt_wrapper__update_decoded_messages(); }
+void test_bt_wrapper__update_decoded_messages(void) {
+  can_geo__get_current_coordinates_ExpectAndReturn(current_coordinates);
+  ultrasonic__get_distance_from_all_sensors_Expect(&sensor_sonar);
+  can_motor__get_motor_speed_feedback_ExpectAndReturn(motor_current_speed);
+  can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
 
-void test_bt_wrapper__write_once(void) { bt_wrapper__write_once(); }
+  can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
+
+  bt_wrapper__update_decoded_messages();
+}
+
+void test_bt_wrapper__write_once(void) {
+  can_geo__get_current_coordinates_ExpectAndReturn(current_coordinates);
+  ultrasonic__get_distance_from_all_sensors_Expect(&sensor_sonar);
+  can_motor__get_motor_speed_feedback_ExpectAndReturn(motor_current_speed);
+  can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
+
+  can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
+
+  bt__write_Expect(bt_buffer);
+  bt_wrapper__write_once();
+}

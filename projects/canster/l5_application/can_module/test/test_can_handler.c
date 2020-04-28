@@ -22,19 +22,32 @@ void test_can_handler__handle_all_mia() {
 }
 
 void test_can_handler__handle_all_incoming_messages(void) {
-
   can__msg_t recv_message = {};
+
   can__rx_ExpectAndReturn(CAN_PORT, &recv_message, 0, true);
+
   const dbc_message_header_t header = {
       .message_id = recv_message.msg_id,
       .message_dlc = recv_message.frame_fields.data_len,
   };
 
-  (void)header; // uncomment if used
+  // (void)header; // uncomment if used
 
+  // DRIVER
   can_driver__decode_driver_heartbeat_ExpectAnyArgs();
+  can_driver__decode_motor_steering_ExpectAnyArgs();
+
+  // MOTOR
   can_motor__decode_motor_heartbeat_ExpectAnyArgs();
+  can_motor__decode_motor_speed_feedback_ExpectAnyArgs();
+
+  // GEO
   can_geo__decode_geo_heartbeat_ExpectAnyArgs();
+  can_geo__decode_geo_degree_ExpectAnyArgs();
+
+  // DEBUG
+  can_geo__decode_geo_current_coordinates_debug_ExpectAnyArgs();
+
   can__rx_ExpectAndReturn(CAN_PORT, &recv_message, 0, false);
   can_handler__handle_all_incoming_messages();
 }
