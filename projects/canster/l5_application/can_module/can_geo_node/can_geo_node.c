@@ -26,15 +26,16 @@
  */
 static dbc_GEO_HEARTBEAT_s geo_heartbeat;
 static dbc_GEO_DEGREE_s geo_degree;
-
+static dbc_GEO_CURRENT_COORDINATES_s geo_current_coordinates;
 /**
  * Functions
  */
 // Getters for all static variables
 // ! NO SETTERS
 // ! DO NOT DISCARD THE CONST QUALIFIER
-const dbc_GEO_DEGREE_s *can_geo__get_geo_degree() { return &geo_degree; }
-const dbc_GEO_HEARTBEAT_s *can_geo__get_heartbeat() { return &geo_heartbeat; }
+dbc_GEO_DEGREE_s can_geo__get_geo_degree() { return geo_degree; }
+dbc_GEO_HEARTBEAT_s can_geo__get_heartbeat() { return geo_heartbeat; }
+dbc_GEO_CURRENT_COORDINATES_s can_geo__get_current_coordinates() { return geo_current_coordinates; }
 
 #if BOARD_GEO_NODE == 1
 
@@ -127,6 +128,15 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
 
     // Do something here
     can_geo__on_decode_geo_degree();
+  }
+}
+
+void can_geo__decode_geo_current_coordinates_debug(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_GEO_CURRENT_COORDINATES(&geo_current_coordinates, header, bytes)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Current: Latitude %f, Longitude %f\r\n", (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_latitude,
+           (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_longitude);
+#endif
   }
 }
 
