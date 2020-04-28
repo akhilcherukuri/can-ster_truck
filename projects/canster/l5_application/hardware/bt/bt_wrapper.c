@@ -22,6 +22,7 @@ static dbc_SENSOR_SONARS_s sensor_sonar;
 // GEO
 static dbc_GEO_CURRENT_COORDINATES_s current_coordinates;
 static dbc_GEO_DEGREE_s geo_degree;
+static dbc_GEO_DESTINATION_REACHED_s geo_destination_reached;
 
 // MOTOR
 static dbc_MOTOR_SPEED_FEEDBACK_s motor_current_speed;
@@ -77,17 +78,19 @@ static void bt_wrapper__update_decoded_messages(void) {
   geo_degree = can_geo__get_geo_degree();
 
   driver_steering = can_driver__get_driver_steering();
+  geo_destination_reached = can_geo__get_destination_reached();
 }
 
 // TODO, Update this when `update_decoded_messages` is done
 static void bt_wrapper__update_write_buffer(void) {
-  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char), "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d\r\n",
+  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char), "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d\r\n",
            (double)current_coordinates.GEO_CURRENT_COORDINATES_latitude,
            (double)current_coordinates.GEO_CURRENT_COORDINATES_longitude, (double)destination_coordinate.latitude,
            (double)destination_coordinate.longitude, (double)sensor_sonar.SENSOR_SONARS_left,
            (double)sensor_sonar.SENSOR_SONARS_middle, (double)sensor_sonar.SENSOR_SONARS_right,
            (double)motor_current_speed.MOTOR_SPEED_current, (double)geo_degree.GEO_DEGREE_current,
-           (double)geo_degree.GEO_DEGREE_required, driver_steering.MOTOR_STEERING_direction);
+           (double)geo_degree.GEO_DEGREE_required, driver_steering.MOTOR_STEERING_direction,
+           geo_destination_reached.GEO_DESTINATION_REACHED_cmd);
 }
 
 /**

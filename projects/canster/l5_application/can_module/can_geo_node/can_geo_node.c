@@ -26,7 +26,10 @@
  */
 static dbc_GEO_HEARTBEAT_s geo_heartbeat;
 static dbc_GEO_DEGREE_s geo_degree;
+static dbc_GEO_DESTINATION_REACHED_s geo_destination;
+
 static dbc_GEO_CURRENT_COORDINATES_s geo_current_coordinates;
+
 /**
  * Functions
  */
@@ -36,6 +39,8 @@ static dbc_GEO_CURRENT_COORDINATES_s geo_current_coordinates;
 dbc_GEO_DEGREE_s can_geo__get_geo_degree() { return geo_degree; }
 dbc_GEO_HEARTBEAT_s can_geo__get_heartbeat() { return geo_heartbeat; }
 dbc_GEO_CURRENT_COORDINATES_s can_geo__get_current_coordinates() { return geo_current_coordinates; }
+
+dbc_GEO_DESTINATION_REACHED_s can_geo__get_destination_reached() { return geo_destination; }
 
 #if BOARD_GEO_NODE == 1
 
@@ -103,6 +108,17 @@ void can_geo__geo_degree_mia() {
   }
 }
 
+void can_geo__geo_destination_reached_mia() {
+  const uint32_t increment = 1000;
+  if (dbc_service_mia_GEO_DESTINATION_REACHED(&geo_destination, increment)) {
+#if GEO_NODE_DEBUG == 1
+    printf("MIA -> GEO_DESTINATION_REACHED\r\n");
+#endif
+
+    // ! Do something here
+  }
+}
+
 /**
  * DECODE
  */
@@ -128,6 +144,16 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
 
     // Do something here
     can_geo__on_decode_geo_degree();
+  }
+}
+
+void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_GEO_DESTINATION_REACHED(&geo_destination, header, bytes)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Geo Destination Reached: %d\r\n", geo_destination.GEO_DESTINATION_REACHED_cmd);
+#endif
+
+    // Do something here
   }
 }
 

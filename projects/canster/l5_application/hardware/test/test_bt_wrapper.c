@@ -60,6 +60,7 @@ void test_bt_wrapper__update_decoded_messages(void) {
   can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
 
   can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
+  can_geo__get_destination_reached_ExpectAndReturn(geo_destination_reached);
 
   bt_wrapper__update_decoded_messages();
 }
@@ -71,6 +72,7 @@ void test_bt_wrapper__write_once(void) {
   can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
 
   can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
+  can_geo__get_destination_reached_ExpectAndReturn(geo_destination_reached);
 
   bt__write_Expect(bt_buffer);
   bt_wrapper__write_once();
