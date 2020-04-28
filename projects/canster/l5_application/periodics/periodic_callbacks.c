@@ -10,6 +10,9 @@
 #include "motor_wrapper.h"
 #include "ultrasonic_wrapper.h"
 
+#include "bt.h"
+#include "bt_wrapper.h"
+
 #include <stdio.h>
 
 /******************************************************************************
@@ -20,13 +23,21 @@
 void periodic_callbacks__initialize(void) {
   can_bus__initialize();
   ultrasonic__init_all_sensors();
+
+  bt__init();
 }
 
-void periodic_callbacks__1Hz(uint32_t callback_count) { can_handler__handle_all_mia(); }
+void periodic_callbacks__1Hz(uint32_t callback_count) {
+  can_handler__handle_all_mia();
+
+  bt_wrapper__write_once();
+}
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
   can_handler__handle_all_incoming_messages();
   can_handler__transmit_message_10hz();
+
+  bt_wrapper__read_once();
 }
 
 void periodic_callbacks__100Hz(uint32_t callback_count) {}
