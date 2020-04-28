@@ -12,9 +12,7 @@
 #endif
 
 /**
- *
  * STATIC VARIABLES
- *
  */
 static dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
 static dbc_SENSOR_SONARS_s sensor_sonar;
@@ -25,7 +23,7 @@ static dbc_SENSOR_SONARS_s sensor_sonar;
 static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *sonar);
 
 /**
- * Getters here
+ * GETTERS
  */
 const dbc_SENSOR_SONARS_s *can_sensor__get_sensor_sonar() { return &sensor_sonar; }
 const dbc_SENSOR_HEARTBEAT_s *can_sensor__get_heartbeat() { return &sensor_heartbeat; }
@@ -41,8 +39,6 @@ void can_sensor__sensor_heartbeat_mia() {
     printf("MIA -> SENSOR_HEARTBEAT\r\n");
     printf("assigned default sensor heartbeat = %d\r\n", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
 #endif
-
-    // Do other things here
     gpio__set(board_io__get_led3());
   }
 }
@@ -56,21 +52,10 @@ void can_sensor__sensor_sonar_mia() {
     printf("assigned default sensor sonar values = %d:%d:%d\r\n", sensor_sonar.SENSOR_SONARS_left,
            sensor_sonar.SENSOR_SONARS_middle, sensor_sonar.SENSOR_SONARS_right);
 #endif
-
-    // DONE, Add more here
-    // gpio__set(board_io__get_led2());
     can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
 
-/**
- * TRANSMIT FUNCTIONS
- * #if BOARD_XYZ_NODE == 1
- *  -> logic
- * #else
- *  -> empty function
- * #endif
- */
 #if BOARD_SENSOR_NODE == 1
 static void can_sensor__transmit_sensor_heartbeat();
 static void can_sensor__transmit_sensor_sonar();
@@ -114,11 +99,8 @@ void can_sensor__transmit_all_messages(void) {}
 void can_sensor__decode_sensor_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_SENSOR_HEARTBEAT(&sensor_heartbeat, header, bytes)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("\nSensor Heartbeat: %d\r\n", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
+    printf("\nSensor Heartbeat: %d", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
 #endif
-
-    // TODO, Do other things here
-    // ! Add sensor heartbeat processing code here
     gpio__reset(board_io__get_led3());
   }
 }
@@ -126,12 +108,9 @@ void can_sensor__decode_sensor_heartbeat(dbc_message_header_t header, uint8_t by
 void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_SENSOR_SONARS(&sensor_sonar, header, bytes)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nMiddle = %d\r\n",
+    printf("\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nMiddle = %d",
            sensor_sonar.SENSOR_SONARS_left, sensor_sonar.SENSOR_SONARS_right, sensor_sonar.SENSOR_SONARS_middle);
 #endif
-
-    // TODO, Do other things here
-    // ! Added sensor sonar processing code here
     can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }

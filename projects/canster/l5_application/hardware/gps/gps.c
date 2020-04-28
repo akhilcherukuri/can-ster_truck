@@ -129,7 +129,7 @@ static void gps__handle_line() {
   if (line_buffer__remove_line(&line, gps_line, sizeof(gps_line))) {
 
     // ? debugging
-    printf("Data: %s\r\n", gps_line);
+    printf("\nGPS Data: %s\r\n", gps_line);
     gps__format_gps_line(gps_line, gps_id);
 
     // For now just parse gga

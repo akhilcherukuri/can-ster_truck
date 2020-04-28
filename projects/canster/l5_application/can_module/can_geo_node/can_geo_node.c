@@ -83,12 +83,14 @@ static void can_geo__transmit_geo_degree() {
 
 static void can_geo__transmit_geo_destination_reached() {
   dbc_GEO_DESTINATION_REACHED_s message = {};
-  // TODO, Should come from a geo_logic file
+  message = geo_logic__compute_destination_reached();
 
   if (!dbc_encode_and_send_GEO_DESTINATION_REACHED(NULL, &message)) {
 #if GEO_NODE_DEBUG == 1
-    printf("Failed to encode and send Geo Destination\r\n");
+    printf("\nFailed to encode and send Geo Destination");
 #endif
+  } else {
+    printf("\nDestination reached val: (1 - yes, 0 - no): %d", message.GEO_DESTINATION_REACHED_cmd);
   }
 }
 
