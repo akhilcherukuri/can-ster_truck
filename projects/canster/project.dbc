@@ -65,11 +65,15 @@ BO_ 600 DRIVER_COORDINATES: 8 DRIVER
  SG_ DRIVER_COORDINATES_longitude: 32|32@1+ (0.0001,0) [0|0] "" GEO
 
 BO_ 700 GEO_DEGREE: 8 GEO
- SG_ GEO_DEGREE_current: 0|32@1+ (0.1,0) [0|0] "" DRIVER
- SG_ GEO_DEGREE_required: 32|32@1+ (0.1,0) [0|0] "" DRIVER
+ SG_ GEO_DEGREE_current: 0|32@1- (0.00001,-360) [0|0] "" DRIVER
+ SG_ GEO_DEGREE_required: 32|32@1- (0.00001,-360) [0|0] "" DRIVER
 
 BO_ 800 GEO_DESTINATION_REACHED: 1 GEO
  SG_ GEO_DESTINATION_REACHED_cmd: 0|8@1+ (1,0) [0|0] "" DRIVER
+
+BO_ 900 GEO_CURRENT_COORDINATES: 8 GEO
+ SG_ GEO_CURRENT_COORDINATES_latitude: 0|32@1- (0.00001,-360) [0|0] "" DBG
+ SG_ GEO_CURRENT_COORDINATES_longitude: 32|32@1- (0.00001,-360) [0|0] "" DBG
 
 CM_ BU_ DRIVER "The driver controller driving the car";
 CM_ BU_ MOTOR "The motor controller of the car";
