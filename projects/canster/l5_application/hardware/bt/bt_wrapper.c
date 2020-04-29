@@ -83,7 +83,7 @@ static void bt_wrapper__update_decoded_messages(void) {
 
 // TODO, Update this when `update_decoded_messages` is done
 static void bt_wrapper__update_write_buffer(void) {
-  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char), "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d\r\n",
+  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char), "$canster,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d\n",
            (double)current_coordinates.GEO_CURRENT_COORDINATES_latitude,
            (double)current_coordinates.GEO_CURRENT_COORDINATES_longitude, (double)destination_coordinate.latitude,
            (double)destination_coordinate.longitude, (double)sensor_sonar.SENSOR_SONARS_left,
