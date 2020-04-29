@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #define DRIVER_OBSTACLE_DEBUG 1
+#define STEERING_BASED_ON_SENSOR_VALUES 1
 
 #if DRIVER_OBSTACLE_DEBUG == 1
 #include <stdio.h>
@@ -47,6 +48,8 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
   } else {
 
     motor_speed_value = 5; // fwd med
+    motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
+#if STEERING_BASED_ON_SENSOR_VALUES == 1
     if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD_CM) {
       // No obstacles ahead, so position yourself according to the GPS Coordinates and move towards destination
       motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
@@ -55,6 +58,7 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
 #endif
     } else {
       /* Check if turning radius is healthy and large enough */
+      // TODO: Refactor the code
       if ((double)sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD_CM / 2.0)) {
         motor_speed_value = 3; // neutral = stop
       } else {
@@ -74,6 +78,7 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
              motor_steering.MOTOR_STEERING_direction);
 #endif
     }
+#endif
   }
   return motor_steering;
 }
