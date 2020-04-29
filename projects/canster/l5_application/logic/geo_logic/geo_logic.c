@@ -16,8 +16,7 @@ static float geo_logic__radian_to_degree(float radian);
  */
 static const float PI = 3.141592654;
 static const uint32_t EARTH_RADIUS = 6371 * 1000;
-static const uint32_t DESTINATION_REACHED_RADIUS_METERS = 1;
-// static const uint32_t DESTINATION_REACHED_RADIUS_METERS = 4; // Uncomment for testing
+static const float DESTINATION_REACHED_RADIUS_METERS = 4.0;
 
 /**
  * STATE VARIABLES
