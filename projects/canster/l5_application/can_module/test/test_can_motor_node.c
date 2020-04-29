@@ -10,6 +10,8 @@
 #include "can_motor_node.c"
 #include "who_am_i.h"
 
+#include "Mockrpm.h"
+
 void setUp() {
   motor_heartbeat.mia_info.mia_counter = 0;
   motor_wheel_speed_current_val.mia_info.mia_counter = 0;

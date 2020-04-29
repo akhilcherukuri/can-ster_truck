@@ -36,7 +36,9 @@ static dbc_DRIVER_COORDINATES_s driver_coordinates;
  * Getter functions
  */
 const dbc_MOTOR_STEERING_s *can_driver__get_driver_steering() { return &driver_steering; }
-const dbc_MOTOR_SPEED_s *can_driver__get_driver_required_motor_speed() { return &driver_required_motor_speed; }
+dbc_MOTOR_SPEED_s can_driver__get_driver_required_motor_speed() {
+  return driver_required_motor_speed;
+}
 const dbc_DRIVER_HEARTBEAT_s *can_driver__get_driver_heartbeat() { return &driver_heartbeat; }
 const dbc_DRIVER_COORDINATES_s *can_driver__get_driver_coordinates() { return &driver_coordinates; }
 bool get_mia_steering() { return mia_steering; }

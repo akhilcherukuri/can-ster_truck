@@ -69,6 +69,8 @@ float rpm__calculate_speed_kph() {
   return speed_kph;
 }
 
+float get_speed_kph(void) { return speed_kph; }
+
 /**
  * STATIC FUNCTION DEFINITIONS
  */
