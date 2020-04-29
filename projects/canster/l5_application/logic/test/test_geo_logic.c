@@ -134,8 +134,8 @@ void test_geo_logic__compute_destination_reached_false() {
   coordinates.longitude = -122.165280;
   gps__get_coordinates_ExpectAndReturn(coordinates);
 
-  destination_coordinate.DRIVER_COORDINATES_latitude = 37.441810;
-  destination_coordinate.DRIVER_COORDINATES_longitude = -122.165280;
+  destination_coordinate.DRIVER_COORDINATES_latitude = 37.441869;
+  destination_coordinate.DRIVER_COORDINATES_longitude = -122.165326;
 
   dbc_GEO_DESTINATION_REACHED_s destination_reached = geo_logic__compute_destination_reached();
 
