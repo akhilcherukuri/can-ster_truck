@@ -167,6 +167,8 @@ float speed_to_pwm_adjustment(double target_speed, double rpm_current_speed) {
       }
     }
   }
+  if (desired_direction_value == 3)
+    offset = 0;
   return offset;
 }
 

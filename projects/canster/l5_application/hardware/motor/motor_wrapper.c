@@ -39,7 +39,7 @@ static void motor__run_state_machine_10hz(current_motor_state_e, uint32_t);
 void motor__run_10hz(uint32_t callback_count) {
   bool mia_steering = get_mia_steering();
   if (mia_steering == true) {
-    esc__neutral();
+    esc__direction_processor(3);
   } else {
     dbc_MOTOR_STEERING_s *decoded_steering_value_from_driver = can_driver__get_driver_steering();
     servo__steer_processor(decoded_steering_value_from_driver->MOTOR_STEERING_direction);

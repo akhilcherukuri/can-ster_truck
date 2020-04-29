@@ -3,6 +3,7 @@
 #include "board_io.h"
 #include "gpio.h"
 
+#include "rpm.h"
 #define DEBUG_MOTOR_NODE 1
 
 #if DEBUG_MOTOR_NODE == 1
@@ -29,7 +30,7 @@ static void can_motor__transmit_motor_speed_feedback();
 
 void can_motor__transmit_all_messages(void) {
   can_motor__transmit_motor_heartbeat();
-  // can_motor__transmit_motor_speed_feedback();
+  can_motor__transmit_motor_speed_feedback();
 }
 
 static void can_motor__transmit_motor_heartbeat() {
@@ -42,7 +43,8 @@ static void can_motor__transmit_motor_heartbeat() {
 }
 
 static void can_motor__transmit_motor_speed_feedback() {
-  dbc_MOTOR_SPEED_FEEDBACK_s motor_feedback_speed_to_motor = {{0}, 60.0};
+  float speed_to_transmit = get_speed_kph();
+  dbc_MOTOR_SPEED_FEEDBACK_s motor_feedback_speed_to_motor = {{0}, speed_to_transmit};
 
   // TODO, Attach the RPM Sensor hardware code here
 
