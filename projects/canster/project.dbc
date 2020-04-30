@@ -47,20 +47,23 @@ BO_ 103 SENSOR_HEARTBEAT: 1 SENSOR
  SG_ SENSOR_HEARTBEAT_cmd: 0|8@1+ (1,0) [0|0] "" DRIVER,GEO,MOTOR
 
 BO_ 200 DRIVER_STEERING: 2 DRIVER
- SG_ DRIVER_STEERING_direction: 0|8@1- (1,0) [-2|3] "" MOTOR
+ SG_ DRIVER_STEERING_direction: 0|8@1- (1,0) [-2|2] "" MOTOR
  SG_ DRIVER_STEERING_speed: 8|8@1- (1,0) [-3|3] "" MOTOR
 
 BO_ 300 GEO_DEGREE: 8 GEO
  SG_ GEO_DEGREE_current: 0|32@1+ (0.1,0) [0|0] "" DRIVER
  SG_ GEO_DEGREE_required: 32|32@1+ (0.1,0) [0|0] "" DRIVER
 
+BO_ 310 GEO_DESTINATION_REACHED: 1 GEO
+ SG_ GEO_DESTINATION_REACHED_cmd: 0|8@1+ (1,0) [0|0] "" DRIVER
+
 BO_ 400 MOTOR_INFO: 4 MOTOR
  SG_ MOTOR_INFO_rps: 0|16@1+ (0.1,0) [0|0] "" DRIVER
  SG_ MOTOR_INFO_kph: 16|16@1+ (0.1,0) [0|0] "" DRIVER
 
 BO_ 500 SENSOR_BT_COORDINATES: 8 SENSOR
- SG_ SENSOR_BT_COORDINATES_latitude: 0|32@1+ (0.0001,0) [0|0] "" GEO
- SG_ SENSOR_BT_COORDINATES_longitude: 32|32@1+ (0.0001,0) [0|0] "" GEO
+ SG_ SENSOR_BT_COORDINATES_latitude: 0|32@1+ (0.0001,0) [0|0] "" GEO,DRIVER
+ SG_ SENSOR_BT_COORDINATES_longitude: 32|32@1+ (0.0001,0) [0|0] "" GEO,DRIVER
 
 BO_ 510 SENSOR_LIDAR: 8 SENSOR
  SG_ SENSOR_LIDAR_middle: 0|16@1+ (1,0) [0|0] "" DRIVER
@@ -75,6 +78,18 @@ BO_ 520 SENSOR_SONARS: 8 SENSOR
  SG_ SENSOR_SONARS_back_left : 36|12@1+ (0.001,0) [0|0] "cm" DRIVER
  SG_ SENSOR_SONARS_back_right : 48|12@1+ (0.001,0) [0|0] "cm" DRIVER
 
+BO_ 600 GEO_CURRENT_COORDINATES: 8 GEO
+ SG_ GEO_CURRENT_COORDINATES_latitude: 0|32@1- (0.00001,-360) [0|0] "" DBG
+ SG_ GEO_CURRENT_COORDINATES_longitude: 32|32@1- (0.00001,-360) [0|0] "" DBG
+
+BO_ 610 GEO_DEBUG: 8 GEO
+ SG_ GEO_DEBUG_distance_from_destination: 0|32@1+ (0.1,0) [0|0] "m" DBG
+ SG_ GEO_DEBUG_current_waypoint_index: 32|8@1+ (1,0) [0|0] "index" DBG
+
+BO_ 700 MOTOR_DEBUG: 5 MOTOR
+ SG_ MOTOR_DEBUG_lipo_voltage: 0|8@1+ (0.1,0) [0|0] "" DBG
+ SG_ MOTOR_DEBUG_pwm_duty_cycle: 8|32@1+ (0.00001,0) [0|0] "" DBG
+
 CM_ BU_ DRIVER "The driver controller of the car";
 CM_ BU_ GEO "The geo controller of the car";
 CM_ BU_ MOTOR "The motor controller of the car";
@@ -85,12 +100,15 @@ CM_ BO_ 101 "Geo Sync message used to synchronize the controllers";
 CM_ BO_ 102 "Motor Sync message used to synchronize the controllers";
 CM_ BO_ 103 "Sensor Sync message used to synchronize the controllers";
 CM_ BO_ 200 "Steering direction and speed values sent by Driver Node";
-CM_ BO_ 210 "Driver coordinates sent by Driver Node";
 CM_ BO_ 300 "Current and computer/required degree values sent by Geo Node";
+CM_ BO_ 310 "Flag is set to 1 when the Destination is reached";
 CM_ BO_ 400 "Current motor info (rps and kph) sent as feedback to the Driver Node";
 CM_ BO_ 500 "Coordinate BT values sent by Sensor Node";
 CM_ BO_ 510 "Lidar Sector values sent by Sensor Node";
 CM_ BO_ 520 "Ultrasonic Sensor values sent by Sensor Node";
+CM_ BO_ 600 "Debug: Geo Node Current coordiantes from GPS";
+CM_ BO_ 610 "Debug: Generic Geo Debug Messages";
+CM_ BO_ 700 "Debug: Generic Motor Debug Messages";
 
 CM_ SG_ 100 DRIVER_HEARTBEAT_cmd "Heartbeat command from the driver node";
 CM_ SG_ 101 GEO_HEARTBEAT_cmd "Heartbeat command from the geological node";
@@ -100,11 +118,10 @@ CM_ SG_ 103 SENSOR_HEARTBEAT_cmd "Heartbeat command from the sensor node";
 CM_ SG_ 200 DRIVER_STEERING_direction "Calculated Driver Steering values (-2,2) for Motor";
 CM_ SG_ 200 DRIVER_STEERING_speed "Calculated Driver speed values (-3,3) for Motor";
 
-CM_ SG_ 210 DRIVER_COORDINATES_latitude "Latitude coordinate";
-CM_ SG_ 210 DRIVER_COORDINATES_longitude "Longitude coordinate";
-
 CM_ SG_ 300 GEO_DEGREE_current "Current Geo Degree relative to true north";
 CM_ SG_ 300 GEO_DEGREE_required "Calculated Geo Degree computed by Haversine Formula";
+
+CM_ SG_ 310 GEO_DESTINATION_REACHED_cmd "Destination reached enum flag";
 
 CM_ SG_ 400 MOTOR_INFO_rps "Feedback speed (rps) sent by Motor";
 CM_ SG_ 400 MOTOR_INFO_kph "Feedback speed (kph) sent by Motor";
@@ -122,6 +139,15 @@ CM_ SG_ 520 SENSOR_SONARS_right "Ultrasonic Sensor attached to the right side";
 CM_ SG_ 520 SENSOR_SONARS_middle "Ultrasonic Sensor attached to the middle";
 CM_ SG_ 520 SENSOR_SONARS_back_left "Ultrasonic Sensor attached to the back left side";
 CM_ SG_ 520 SENSOR_SONARS_back_right "Ultrasonic Sensor attached to the back right side";
+
+CM_ SG_ 600 GEO_CURRENT_COORDINATES_latitude "Debug: Current GPS Latitude";
+CM_ SG_ 600 GEO_CURRENT_COORDINATES_longitude "Debug: Current GPS Longitude";
+
+CM_ SG_ 610 GEO_DEBUG_distance_from_destination "Debug: Computed distance from destination";
+CM_ SG_ 610 GEO_DEBUG_current_waypoint_index "Debug: Waypoint index selected from the list of waypoints in Geo Logic";
+
+CM_ SG_ 700 MOTOR_DEBUG_lipo_voltage "Debug: Motor Lipo Voltage";
+CM_ SG_ 700 MOTOR_DEBUG_pwm_duty_cycle "Debug: Motor PWM Duty Cycle used to run the motor";
 
 BA_DEF_ "BusType" STRING ;
 BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;
@@ -141,12 +167,15 @@ BA_ "FieldType" SG_ 103 SENSOR_HEARTBEAT_cmd "SENSOR_HEARTBEAT_cmd";
 
 BA_ "FieldType" SG_ 200 DRIVER_STEERING_direction "DRIVER_STEERING_direction";
 BA_ "FieldType" SG_ 200 DRIVER_STEERING_speed "DRIVER_STEERING_speed";
+BA_ "FieldType" SG_ 310 GEO_DESTINATION_REACHED_cmd "GEO_DESTINATION_REACHED_cmd";
 
 VAL_ 100 DRIVER_HEARTBEAT_cmd 2 "DRIVER_HEARTBEAT_cmd_REBOOT" 1 "DRIVER_HEARTBEAT_cmd_SYNC" 0 "DRIVER_HEARTBEAT_cmd_NOOP" ;
 VAL_ 101 GEO_HEARTBEAT_cmd 2 "GEO_HEARTBEAT_cmd_REBOOT" 1 "GEO_HEARTBEAT_cmd_SYNC" 0 "GEO_HEARTBEAT_cmd_NOOP" ;
 VAL_ 102 MOTOR_HEARTBEAT_cmd 2 "MOTOR_HEARTBEAT_cmd_REBOOT" 1 "MOTOR_HEARTBEAT_cmd_SYNC" 0 "MOTOR_HEARTBEAT_cmd_NOOP" ;
 VAL_ 103 SENSOR_HEARTBEAT_cmd 2 "SENSOR_HEARTBEAT_cmd_REBOOT" 1 "SENSOR_HEARTBEAT_cmd_SYNC" 0 "SENSOR_HEARTBEAT_cmd_NOOP" ;
 
-VAL_ 200 DRIVER_STEERING_direction -2 "DRIVER_STEERING_direction_LEFT" -1 "DRIVER_STEERING_direction_SLIGHT_LEFT" 0 "DRIVER_STEERING_direction_STRAIGHT" 1 "DRIVER_STEERING_direction_SLIGHT_RIGHT" 2 "DRIVER_STEERING_direction_RIGHT" 3 "DRIVER_STEERING_direction_REVERSE";
+VAL_ 200 DRIVER_STEERING_direction -2 "DRIVER_STEERING_direction_LEFT" -1 "DRIVER_STEERING_direction_SLIGHT_LEFT" 0 "DRIVER_STEERING_direction_STRAIGHT" 1 "DRIVER_STEERING_direction_SLIGHT_RIGHT" 2 "DRIVER_STEERING_direction_RIGHT";
 
 VAL_ 200 DRIVER_STEERING_speed -3 "DRIVER_STEERING_speed_REVERSE_FAST" -2 "DRIVER_STEERING_speed_REVERSE_MEDIUM" -1 "DRIVER_STEERING_speed_REVERSE_SLOW" 0 "DRIVER_STEERING_speed_NEUTRAL" 1 "DRIVER_STEERING_speed_FORWARD_SLOW" 2 "DRIVER_STEERING_speed_FORWARD_MEDIUM" 3 "DRIVER_STEERING_speed_FORWARD_FAST";
+
+VAL_ 310 GEO_DESTINATION_REACHED_cmd 1 "GEO_DESTINATION_REACHED_cmd_REACHED" 0 "GEO_DESTINATION_REACHED_cmd_NOT_REACHED";
