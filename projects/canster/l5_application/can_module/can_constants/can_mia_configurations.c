@@ -30,6 +30,12 @@ const dbc_MOTOR_INFO_s dbc_mia_replacement_MOTOR_INFO;
 // Geo
 const uint32_t dbc_mia_threshold_GEO_DEGREE = 3000;
 const uint32_t dbc_mia_threshold_GEO_HEARTBEAT = 3000;
+const uint32_t dbc_mia_threshold_GEO_DESTINATION_REACHED = 3000;
+const uint32_t dbc_mia_threshold_GEO_CURRENT_COORDINATES = 3000;
+const uint32_t dbc_mia_threshold_GEO_DEBUG = 3000;
 
 const dbc_GEO_DEGREE_s dbc_mia_replacement_GEO_DEGREE;
 const dbc_GEO_HEARTBEAT_s dbc_mia_replacement_GEO_HEARTBEAT;
+const dbc_GEO_DESTINATION_REACHED_s dbc_mia_replacement_GEO_DESTINATION_REACHED;
+const dbc_GEO_CURRENT_COORDINATES_s dbc_mia_replacement_GEO_CURRENT_COORDINATES;
+const dbc_GEO_DEBUG_s dbc_mia_replacement_GEO_DEBUG;

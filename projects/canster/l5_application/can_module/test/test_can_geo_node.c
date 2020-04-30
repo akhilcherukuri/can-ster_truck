@@ -7,6 +7,8 @@
 #include "Mockcan_handler.h"
 
 #include "Mockcompass.h"
+#include "Mockgps.h"
+
 #include "Mockdriver_obstacle.h"
 #include "Mockgeo_logic.h"
 
@@ -15,6 +17,11 @@
 void setUp() {
   geo_heartbeat.mia_info.mia_counter = 0;
   geo_degree.mia_info.mia_counter = 0;
+  geo_destination_reached.mia_info.mia_counter = 0;
+
+  // DEBUG
+  geo_current_coordinates.mia_info.mia_counter = 0;
+  geo_debug.mia_info.mia_counter = 0;
 }
 
 void tearDown() {}
@@ -75,6 +82,32 @@ void test_can_geo__geo_degree_mia_true() {
   TEST_ASSERT_EQUAL_INT(geo_degree.mia_info.mia_counter, 3000);
 }
 
+void test_can_geo__geo_destination_reached_false() {
+  can_geo__geo_destination_reached();
+  TEST_ASSERT_EQUAL_INT(geo_destination_reached.mia_info.mia_counter, 1000);
+
+  can_geo__geo_destination_reached();
+  TEST_ASSERT_EQUAL_INT(geo_destination_reached.mia_info.mia_counter, 2000);
+
+  geo_destination_reached.mia_info.mia_counter = 0;
+
+  can_geo__geo_destination_reached();
+  TEST_ASSERT_EQUAL_INT(geo_destination_reached.mia_info.mia_counter, 1000);
+}
+
+void test_can_geo__geo_destination_reached_true() {
+  // Run an LED on MIA
+
+  can_geo__geo_destination_reached();
+  TEST_ASSERT_EQUAL_INT(geo_destination_reached.mia_info.mia_counter, 1000);
+
+  can_geo__geo_destination_reached();
+  TEST_ASSERT_EQUAL_INT(geo_destination_reached.mia_info.mia_counter, 2000);
+
+  can_geo__geo_destination_reached();
+  TEST_ASSERT_EQUAL_INT(geo_destination_reached.mia_info.mia_counter, 3000);
+}
+
 /**
  * DECODE
  */
@@ -103,9 +136,31 @@ void test_can_geo__transmit_geo_degree(void) {
   can_geo__transmit_geo_degree();
 }
 
+void test_can_geo__transmit_geo_destination_reached(void) {
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+  can_geo__transmit_geo_destination_reached();
+}
+
+void test_can_geo__transmit_geo_current_coordinates(void) {
+  gps_coordinates_s current_coordinates;
+  gps__get_coordinates_ExpectAndReturn(current_coordinates);
+
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+  can_geo__transmit_geo_current_coordinates();
+}
+
+void test_can_geo__transmit_geo_debug() {
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+  can_geo__transmit_geo_debug();
+}
+
 #else
 void test_can_geo__transmit_geo_heartbeat(void) {}
 void test_can_geo__transmit_geo_degree(void) {}
+void test_can_geo__transmit_geo_destination_reached(void) {}
+
+void test_can_geo__transmit_geo_current_coordinates(void) {}
+void test_can_geo__transmit_geo_debug(void) {}
 #endif
 
 // Getter Tests
