@@ -13,6 +13,7 @@
 #include "Mockcan_handler.h"
 
 // Include the source we wish to test
+#include "Mocklidar_wrapper.h"
 #include "Mockmotor_wrapper.h"
 #include "Mockultrasonic_wrapper.h"
 
@@ -30,6 +31,7 @@ void test__periodic_callbacks__initialize(void) {
   ultrasonic__init_all_sensors_Expect();
 
   bt__init_Expect();
+  lidar__init_Expect();
 
   periodic_callbacks__initialize();
 }
@@ -38,6 +40,9 @@ void test__periodic_callbacks__1Hz(void) {
   can_handler__handle_all_mia_Expect();
 
   bt_wrapper__write_once_Expect();
+
+  lidar__run_1hz_Expect(0);
+
   periodic_callbacks__1Hz(0);
 }
 
@@ -47,4 +52,10 @@ void test__periodic_callbacks__10Hz(void) {
 
   bt_wrapper__read_once_Expect();
   periodic_callbacks__10Hz(0);
+}
+
+void test__periodic_callbacks__1000Hz(void) {
+  lidar__run_1000Hz_Expect();
+
+  periodic_callbacks__1000Hz(0);
 }

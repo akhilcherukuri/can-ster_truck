@@ -7,6 +7,7 @@
 #include "Mockcan_handler.h"
 #include "Mockdriver_obstacle.h"
 #include "Mockgpio.h"
+#include "Mocklidar_data_handler.h"
 #include "Mockultrasonic_wrapper.h"
 
 #include "can_sensor_node.c"
