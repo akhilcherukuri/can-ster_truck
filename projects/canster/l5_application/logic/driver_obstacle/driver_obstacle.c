@@ -24,7 +24,7 @@ void driver_obstacle__process_input(dbc_SENSOR_SONARS_s *sonar) {
   sensor_sonar = *sonar; // copy
 }
 
-void driver_obstacle__geo_controller_direction(dbc_GEO_DEGREE_s *degree) {
+void driver_obstacle__geo_controller_directions(dbc_GEO_DEGREE_s *degree) {
   geo_degree = *degree; // copy
 }
 

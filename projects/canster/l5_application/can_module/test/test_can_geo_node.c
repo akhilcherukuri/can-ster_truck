@@ -12,8 +12,6 @@
 #include "Mockdriver_obstacle.h"
 #include "Mockgeo_logic.h"
 
-#include "Mockgps.h"
-
 #include "can_geo_node.c"
 
 void setUp() {
@@ -139,6 +137,9 @@ void test_can_geo__transmit_geo_degree(void) {
 }
 
 void test_can_geo__transmit_geo_destination_reached(void) {
+  dbc_GEO_DESTINATION_REACHED_s message = {};
+  geo_logic__compute_destination_reached_ExpectAndReturn(message);
+
   dbc_send_can_message_ExpectAnyArgsAndReturn(true);
   can_geo__transmit_geo_destination_reached();
 }

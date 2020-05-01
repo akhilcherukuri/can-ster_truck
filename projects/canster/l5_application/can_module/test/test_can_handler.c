@@ -23,7 +23,7 @@ void test_can_handler__handle_all_mia_1hz() {
   can_sensor__sensor_heartbeat_mia_Expect();
   can_driver__driver_heartbeat_mia_Expect();
   can_motor__motor_heartbeat_mia_Expect();
-  can_handler__handle_all_mia();
+  can_handler__handle_all_mia_1hz();
 }
 
 void test_can_handler__handle_all_incoming_messages_10hz(void) {

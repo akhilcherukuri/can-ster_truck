@@ -21,12 +21,6 @@ static const float DESTINATION_REACHED_RADIUS_METERS = 4.0;
 /**
  * STATE VARIABLES
  */
-// static dbc_DRIVER_COORDINATES_s destination_coordinate = {{0}, 37.340679, -121.894371}; // Uncomment for testing
-static dbc_DRIVER_COORDINATES_s destination_coordinate;
-
-/**
- * NON-STATIC FUNCTIONS
- */
 static dbc_SENSOR_BT_COORDINATES_s destination_coordinate;
 
 void geo_logic__update_destination_coordinate(dbc_SENSOR_BT_COORDINATES_s *destination) {
@@ -37,12 +31,12 @@ float geo_logic__compute_required_bearing() {
   gps_coordinates_s current_coordinate = gps__get_coordinates();
 
   /* Haversine Formula for getting required bearing angle */
-  float delta_longitude = destination_coordinate.DRIVER_COORDINATES_longitude - current_coordinate.longitude;
+  float delta_longitude = destination_coordinate.SENSOR_BT_COORDINATES_longitude - current_coordinate.longitude;
 
-  float y = sinf(delta_longitude) * cosf(destination_coordinate.DRIVER_COORDINATES_latitude);
+  float y = sinf(delta_longitude) * cosf(destination_coordinate.SENSOR_BT_COORDINATES_latitude);
 
-  float x = cosf(current_coordinate.latitude) * sinf(destination_coordinate.DRIVER_COORDINATES_latitude) -
-            sinf(current_coordinate.latitude) * cosf(destination_coordinate.DRIVER_COORDINATES_latitude) *
+  float x = cosf(current_coordinate.latitude) * sinf(destination_coordinate.SENSOR_BT_COORDINATES_latitude) -
+            sinf(current_coordinate.latitude) * cosf(destination_coordinate.SENSOR_BT_COORDINATES_latitude) *
                 cosf(delta_longitude);
 
   float bearing_angle = atan2f(y, x);
@@ -59,17 +53,17 @@ float geo_logic__distance_from_destination() {
   printf("\nCurrent coordinates from GPS = Lat: %lf Long: %lf", (double)current_coordinate.latitude,
          (double)current_coordinate.longitude);
   printf("\nDestination coordinates from Sensor Node (Bluetooth app) = Lat: %lf Long: %lf",
-         (double)destination_coordinate.DRIVER_COORDINATES_latitude,
-         (double)destination_coordinate.DRIVER_COORDINATES_longitude);
+         (double)destination_coordinate.SENSOR_BT_COORDINATES_latitude,
+         (double)destination_coordinate.SENSOR_BT_COORDINATES_longitude);
 
   float current_coordinate_latitude_radian = geo_logic__degree_to_radian(current_coordinate.latitude);
   float destination_coordinate_latitude_radian =
-      geo_logic__degree_to_radian(destination_coordinate.DRIVER_COORDINATES_latitude);
+      geo_logic__degree_to_radian(destination_coordinate.SENSOR_BT_COORDINATES_latitude);
 
   float delta_latitude =
-      geo_logic__degree_to_radian(destination_coordinate.DRIVER_COORDINATES_latitude - current_coordinate.latitude);
-  float delta_longitude =
-      geo_logic__degree_to_radian(destination_coordinate.DRIVER_COORDINATES_longitude - current_coordinate.longitude);
+      geo_logic__degree_to_radian(destination_coordinate.SENSOR_BT_COORDINATES_latitude - current_coordinate.latitude);
+  float delta_longitude = geo_logic__degree_to_radian(destination_coordinate.SENSOR_BT_COORDINATES_longitude -
+                                                      current_coordinate.longitude);
 
   float a = sinf(delta_latitude / 2) * sinf(delta_latitude / 2) +
             cosf(current_coordinate_latitude_radian) * cosf(destination_coordinate_latitude_radian) *

@@ -108,33 +108,6 @@ static void can_geo__transmit_geo_destination_reached() {
 }
 
 // Debug
-static void can_geo__transmit_geo_coordinates_debug() {
-
-  gps_coordinates_s coordinates = gps__get_coordinates();
-  dbc_GEO_CURRENT_COORDINATES_s message = {};
-
-  message.GEO_CURRENT_COORDINATES_latitude = coordinates.latitude;
-  message.GEO_CURRENT_COORDINATES_longitude = coordinates.longitude;
-
-  if (!dbc_encode_and_send_GEO_CURRENT_COORDINATES(NULL, &message)) {
-#if GEO_NODE_DEBUG == 1
-    printf("Failed to encode and send Geo Coordinates\r\n");
-#endif
-  }
-}
-
-static void can_geo__transmit_geo_destination_reached() {
-  // TODO, Construct the message here from geo_logic
-  dbc_GEO_DESTINATION_REACHED_s message = {};
-
-  if (!dbc_encode_and_send_GEO_DESTINATION_REACHED(NULL, &message)) {
-#if GEO_NODE_DEBUG == 1
-    printf("Failed to encode and send Geo Destination reached\r\n");
-#endif
-  }
-}
-
-// Debug
 static void can_geo__transmit_geo_current_coordinates() {
   gps_coordinates_s current_coordiantes = gps__get_coordinates();
 
@@ -194,7 +167,7 @@ void can_geo__geo_degree_mia() {
 
 void can_geo__geo_destination_reached_mia() {
   const uint32_t increment = 1000;
-  if (dbc_service_mia_GEO_DESTINATION_REACHED(&geo_destination, increment)) {
+  if (dbc_service_mia_GEO_DESTINATION_REACHED(&geo_destination_reached, increment)) {
 #if GEO_NODE_DEBUG == 1
     printf("MIA -> GEO_DESTINATION_REACHED\r\n");
 #endif
@@ -244,9 +217,9 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
 }
 
 void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_t bytes[8]) {
-  if (dbc_decode_GEO_DESTINATION_REACHED(&geo_destination, header, bytes)) {
+  if (dbc_decode_GEO_DESTINATION_REACHED(&geo_destination_reached, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
-    printf("Geo Destination Reached: %d\r\n", geo_destination.GEO_DESTINATION_REACHED_cmd);
+    printf("Geo Destination Reached: %d\r\n", geo_destination_reached.GEO_DESTINATION_REACHED_cmd);
 #endif
 
     // Do something here
@@ -263,16 +236,6 @@ void can_geo__decode_geo_current_coordinates_debug(dbc_message_header_t header, 
 
     // TODO, Put a function here
     // TODO, Debug to Bluetooth or Driver!
-  }
-}
-
-void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_t bytes[8]) {
-  if (dbc_decode_GEO_DESTINATION_REACHED(&geo_destination_reached, header, bytes)) {
-#if GEO_NODE_DEBUG == 1
-    printf("Geo Destination Reached: %d\r\n", geo_destination_reached.GEO_DESTINATION_REACHED_cmd);
-#endif
-
-    // Do something here
   }
 }
 
