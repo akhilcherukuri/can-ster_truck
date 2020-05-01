@@ -23,9 +23,11 @@ const dbc_DRIVER_STEERING_s dbc_mia_replacement_DRIVER_STEERING;
 // Motor
 const uint32_t dbc_mia_threshold_MOTOR_HEARTBEAT = 3000;
 const uint32_t dbc_mia_threshold_MOTOR_INFO = 3000;
+const uint32_t dbc_mia_threshold_MOTOR_DEBUG = 3000;
 
 const dbc_MOTOR_HEARTBEAT_s dbc_mia_replacement_MOTOR_HEARTBEAT;
 const dbc_MOTOR_INFO_s dbc_mia_replacement_MOTOR_INFO;
+const dbc_MOTOR_DEBUG_s dbc_mia_replacement_MOTOR_DEBUG;
 
 // Geo
 const uint32_t dbc_mia_threshold_GEO_DEGREE = 3000;
