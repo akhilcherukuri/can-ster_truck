@@ -15,7 +15,7 @@
 /**
  * Defined functions
  */
-void can_handler__handle_all_mia(void) {
+void can_handler__handle_all_mia_1hz(void) {
   // Module function
   /**
    * NOTE, We will uncomment these functions depending on which node we are
@@ -41,7 +41,7 @@ void can_handler__handle_all_mia(void) {
   // can_geo__geo_degree_mia();
 }
 
-void can_handler__handle_all_incoming_messages(void) {
+void can_handler__handle_all_incoming_messages_10hz(void) {
   can__msg_t recv_message = {};
 
   while (can__rx(CAN_PORT, &recv_message, 0)) {

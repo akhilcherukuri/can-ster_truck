@@ -32,8 +32,7 @@ void test__periodic_callbacks__initialize(void) {
 }
 
 void test__periodic_callbacks__1Hz(void) {
-  // gps__run_once_Expect();
-  can_handler__handle_all_mia_Expect();
+  can_handler__handle_all_mia_1hz_Expect();
 
   gps_wrapper__update_led_when_valid_Expect();
 
@@ -41,7 +40,7 @@ void test__periodic_callbacks__1Hz(void) {
 }
 
 void test__periodic_callbacks__10Hz(void) {
-  can_handler__handle_all_incoming_messages_Expect();
+  can_handler__handle_all_incoming_messages_10hz_Expect();
   can_handler__transmit_message_10hz_Expect();
 
   gps__run_once_Expect();

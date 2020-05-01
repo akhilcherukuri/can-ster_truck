@@ -27,7 +27,9 @@ static dbc_DRIVER_COORDINATES_s destination_coordinate;
 /**
  * NON-STATIC FUNCTIONS
  */
-void geo_logic__update_destination_coordinate(dbc_DRIVER_COORDINATES_s *destination) {
+static dbc_SENSOR_BT_COORDINATES_s destination_coordinate;
+
+void geo_logic__update_destination_coordinate(dbc_SENSOR_BT_COORDINATES_s *destination) {
   destination_coordinate = *destination;
 }
 
