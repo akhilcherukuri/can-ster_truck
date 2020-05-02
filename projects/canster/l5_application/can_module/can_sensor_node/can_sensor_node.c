@@ -25,8 +25,8 @@ static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *sonar);
 /**
  * GETTERS
  */
-const dbc_SENSOR_SONARS_s *can_sensor__get_sensor_sonar() { return &sensor_sonar; }
-const dbc_SENSOR_HEARTBEAT_s *can_sensor__get_heartbeat() { return &sensor_heartbeat; }
+dbc_SENSOR_SONARS_s can_sensor__get_sensor_sonar() { return sensor_sonar; }
+dbc_SENSOR_HEARTBEAT_s can_sensor__get_heartbeat() { return sensor_heartbeat; }
 
 /**
  * MIA
@@ -49,8 +49,8 @@ void can_sensor__sensor_sonar_mia() {
   if (dbc_service_mia_SENSOR_SONARS(&sensor_sonar, mia_increment_value)) {
 #if SENSOR_NODE_DEBUG == 1
     printf("MIA -> SENSOR_SONAR\r\n");
-    printf("assigned default sensor sonar values = %d:%d:%d\r\n", sensor_sonar.SENSOR_SONARS_left,
-           sensor_sonar.SENSOR_SONARS_middle, sensor_sonar.SENSOR_SONARS_right);
+    printf("assigned default sensor sonar values = %f:%f:%f\r\n", (double)sensor_sonar.SENSOR_SONARS_left,
+           (double)sensor_sonar.SENSOR_SONARS_middle, (double)sensor_sonar.SENSOR_SONARS_right);
 #endif
     can_sensor__update_driver_obstacle(&sensor_sonar);
   }
@@ -108,8 +108,9 @@ void can_sensor__decode_sensor_heartbeat(dbc_message_header_t header, uint8_t by
 void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_SENSOR_SONARS(&sensor_sonar, header, bytes)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nMiddle = %d",
-           sensor_sonar.SENSOR_SONARS_left, sensor_sonar.SENSOR_SONARS_right, sensor_sonar.SENSOR_SONARS_middle);
+    printf("\nSensor values from SENSOR Node:\r\nLeft = %f\r\nRight = %f\r\nMiddle = %f",
+           (double)sensor_sonar.SENSOR_SONARS_left, (double)sensor_sonar.SENSOR_SONARS_right,
+           (double)sensor_sonar.SENSOR_SONARS_middle);
 #endif
     can_sensor__update_driver_obstacle(&sensor_sonar);
   }
