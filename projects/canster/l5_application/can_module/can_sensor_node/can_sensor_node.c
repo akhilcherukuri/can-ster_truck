@@ -16,6 +16,8 @@
  */
 static dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
 static dbc_SENSOR_SONARS_s sensor_sonar;
+static dbc_SENSOR_BT_COORDINATES_s sensor_bt_coordinates;
+static dbc_SENSOR_LIDAR_s sensor_lidar;
 
 /**
  * STATIC FUNCTIONS
@@ -27,6 +29,8 @@ static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *sonar);
  */
 dbc_SENSOR_SONARS_s can_sensor__get_sensor_sonar() { return sensor_sonar; }
 dbc_SENSOR_HEARTBEAT_s can_sensor__get_heartbeat() { return sensor_heartbeat; }
+dbc_SENSOR_BT_COORDINATES_s can_sensor__get_bt_coordinates() { return sensor_bt_coordinates; }
+dbc_SENSOR_LIDAR_s can_sensor__get_lidar() { return sensor_lidar; }
 
 /**
  * MIA
@@ -53,6 +57,30 @@ void can_sensor__sensor_sonar_mia() {
            (double)sensor_sonar.SENSOR_SONARS_middle, (double)sensor_sonar.SENSOR_SONARS_right);
 #endif
     can_sensor__update_driver_obstacle(&sensor_sonar);
+  }
+}
+
+void can_sensor__sensor_bt_coordinates_mia() {
+  const uint32_t mia_increment_value = 1000;
+
+  if (dbc_service_mia_SENSOR_BT_COORDINATES(&sensor_bt_coordinates, mia_increment_value)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("MIA -> SENSOR_BT_COORDINATES\r\n");
+#endif
+
+    // Do something here
+  }
+}
+
+void can_sensor__sensor_lidar_mia() {
+  const uint32_t mia_increment_value = 1000;
+
+  if (dbc_service_mia_SENSOR_LIDAR(&sensor_lidar, mia_increment_value)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("MIA -> SENSOR_LIDAR\r\n");
+#endif
+
+    // Do something here
   }
 }
 
@@ -113,6 +141,29 @@ void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[
            (double)sensor_sonar.SENSOR_SONARS_middle);
 #endif
     can_sensor__update_driver_obstacle(&sensor_sonar);
+  }
+}
+
+void can_sensor__decode_sensor_bt_coordinates(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_SENSOR_BT_COORDINATES(&sensor_bt_coordinates, header, bytes)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("Sensor Coordinates Latitude %f, Longitude %f\r\n",
+           (double)sensor_bt_coordinates.SENSOR_BT_COORDINATES_latitude,
+           (double)sensor_bt_coordinates.SENSOR_BT_COORDINATES_longitude);
+#endif
+
+    // TODO, Add other things here
+  }
+}
+
+void can_sensor__decode_sensor_lidar(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_SENSOR_LIDAR(&sensor_lidar, header, bytes)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("Sensor Lidar: %d %d %d %d\r\n", sensor_lidar.SENSOR_LIDAR_back, sensor_lidar.SENSOR_LIDAR_middle,
+           sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right);
+#endif
+
+    // TODO, Add other things here
   }
 }
 
