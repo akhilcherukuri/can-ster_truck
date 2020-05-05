@@ -22,6 +22,7 @@ void tearDown(void) {}
 void test_can_handler__handle_all_mia() {
   can_sensor__sensor_sonar_mia_Expect();
   can_sensor__sensor_heartbeat_mia_Expect();
+  can_sensor__sensor_lidar_mia_Expect();
   can_motor__motor_heartbeat_mia_Expect();
   can_geo__geo_heartbeat_mia_Expect();
   can_geo__geo_degree_mia_Expect();
@@ -39,12 +40,19 @@ void test_can_handler__handle_all_incoming_messages(void) {
       .message_dlc = recv_message.frame_fields.data_len,
   };
 
-  (void)header; // uncomment if used
+  // (void)header; // uncomment if used
 
+  // SENSOR
   // can_sensor__decode_sensor_heartbeat_IgnoreArg_header();
   can_sensor__decode_sensor_heartbeat_ExpectAnyArgs();
   can_sensor__decode_sensor_sonar_ExpectAnyArgs();
+  can_sensor__decode_sensor_lidar_ExpectAnyArgs();
+
+  // MOTOR
   can_motor__decode_motor_heartbeat_ExpectAnyArgs();
+  can_motor__decode_motor_speed_feedback_ExpectAnyArgs();
+
+  // GEO
   can_geo__decode_geo_heartbeat_ExpectAnyArgs();
   can_geo__decode_geo_degree_ExpectAnyArgs();
   can_geo__decode_geo_destination_reached_ExpectAnyArgs();

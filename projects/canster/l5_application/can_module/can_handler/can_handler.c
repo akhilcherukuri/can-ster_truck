@@ -25,6 +25,7 @@ void can_handler__handle_all_mia(void) {
   // Senor Node MIA Functions
   can_sensor__sensor_sonar_mia();
   can_sensor__sensor_heartbeat_mia();
+  can_sensor__sensor_lidar_mia();
 
   // Driver Node MIA Functions
   // can_driver__motor_speed_mia();
@@ -58,7 +59,7 @@ void can_handler__handle_all_incoming_messages(void) {
 #endif
 
     // Module function
-    (void)header;
+    // (void)header;
 
     /**
      * NOTE
@@ -69,6 +70,7 @@ void can_handler__handle_all_incoming_messages(void) {
     // Sensor Node Decode functions
     can_sensor__decode_sensor_heartbeat(header, recv_message.data.bytes);
     can_sensor__decode_sensor_sonar(header, recv_message.data.bytes);
+    can_sensor__decode_sensor_lidar(header, recv_message.data.bytes);
 
     // Driver Node Decode functions
     // can_driver__decode_driver_heartbeat(header, recv_message.data.bytes);
@@ -78,7 +80,7 @@ void can_handler__handle_all_incoming_messages(void) {
 
     // Motor Node Decode functions
     can_motor__decode_motor_heartbeat(header, recv_message.data.bytes);
-    // can_motor__decode_motor_speed_feedback(header, recv_message.data.bytes);
+    can_motor__decode_motor_speed_feedback(header, recv_message.data.bytes);
 
     // Geo Node Decode Functions
     can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);

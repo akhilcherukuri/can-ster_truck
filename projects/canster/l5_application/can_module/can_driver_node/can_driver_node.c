@@ -15,7 +15,7 @@
 
 #include "driver_state.h"
 
-#define DRIVER_NODE_DEBUG 1
+#define DRIVER_NODE_DEBUG 0
 
 #if DRIVER_NODE_DEBUG == 1
 #include <stdio.h>
@@ -29,10 +29,11 @@ static dbc_DRIVER_COORDINATES_s driver_coordinates;
 /**
  * Getter functions
  */
-const dbc_MOTOR_STEERING_s *can_driver__get_driver_steering() { return &driver_steering; }
-const dbc_MOTOR_SPEED_s *can_driver__get_driver_required_motor_speed() { return &driver_required_motor_speed; }
-const dbc_DRIVER_HEARTBEAT_s *can_driver__get_driver_heartbeat() { return &driver_heartbeat; }
-const dbc_DRIVER_COORDINATES_s *can_driver__get_driver_coordinates() { return &driver_coordinates; }
+dbc_MOTOR_STEERING_s can_driver__get_driver_steering() { return driver_steering; }
+dbc_MOTOR_SPEED_s can_driver__get_driver_required_motor_speed() { return driver_required_motor_speed; }
+dbc_DRIVER_HEARTBEAT_s can_driver__get_driver_heartbeat() { return driver_heartbeat; }
+dbc_DRIVER_COORDINATES_s can_driver__get_driver_coordinates() { return driver_coordinates; }
+
 /**
  * MIA
  */

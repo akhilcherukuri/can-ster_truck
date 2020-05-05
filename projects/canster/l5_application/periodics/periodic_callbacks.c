@@ -6,7 +6,9 @@
 #include "can_bus_initializer.h"
 #include "can_handler.h"
 
-#include "gps.h"
+// #include "gps.h"
+
+#include "lcd_ui.h"
 #include "motor_wrapper.h"
 #include "ultrasonic_wrapper.h"
 
@@ -17,9 +19,15 @@
  * For 1Hz, the function must return within 1000ms
  * For 1000Hz, the function must return within 1ms
  */
-void periodic_callbacks__initialize(void) { can_bus__initialize(); }
+void periodic_callbacks__initialize(void) {
+  can_bus__initialize();
+  lcd_ui__init();
+}
 
-void periodic_callbacks__1Hz(uint32_t callback_count) { can_handler__handle_all_mia(); }
+void periodic_callbacks__1Hz(uint32_t callback_count) {
+  can_handler__handle_all_mia();
+  lcd_ui__run_once_1hz();
+}
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
   can_handler__handle_all_incoming_messages();

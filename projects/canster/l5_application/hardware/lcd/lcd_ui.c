@@ -1,9 +1,13 @@
 #include "lcd_ui.h"
 
-#include <stdint.h>
-
 #include "lcd.h"
 #include "lcd_wrapper.h"
+
+#include <stdint.h>
+
+#include "project.h"
+
+#include "can_motor_node.h"
 
 /**
  * UI Indexes here
@@ -30,6 +34,7 @@ static bool geo_mia_led;
 static bool motor_mia_led;
 
 static uint16_t kph_meter;
+dbc_MOTOR_SPEED_FEEDBACK_s current_speed_s;
 
 static uint16_t rpm_leddigit;
 static uint16_t cdegree_leddigit;
@@ -60,7 +65,12 @@ void lcd_ui__run_once_1hz(void) {
  * STATIC FUNCTION DEFINITIONS
  */
 // TODO, Update these values from the decode functions
-static void lcd_ui__update_sensor_values(void) {}
+static void lcd_ui__update_sensor_values(void) {
+  const dbc_MOTOR_SPEED_FEEDBACK_s *speed_reference = can_motor__get_motor_speed_feedback();
+
+  current_speed_s = *speed_reference;
+  kph_meter = (uint16_t)current_speed_s.MOTOR_SPEED_current;
+}
 
 static void lcd_ui__update_ui(void) {
 

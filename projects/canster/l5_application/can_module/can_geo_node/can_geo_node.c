@@ -11,7 +11,7 @@
 /**
  * Constants
  */
-#define GEO_NODE_DEBUG 1
+#define GEO_NODE_DEBUG 0
 
 #if GEO_NODE_DEBUG == 1
 #include <stdio.h>
@@ -154,5 +154,7 @@ void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_
 static void can_geo__on_decode_geo_degree(void) {
   driver_obstacle__set_geo_controller_direction(&geo_degree);
   int16_t steer_dir = driver_obstacle__move_to_destination();
+#if GEO_NODE_DEBUG == 1
   printf("\nComputed steering value based on GEO curr/reqd logic %d", steer_dir);
+#endif
 }

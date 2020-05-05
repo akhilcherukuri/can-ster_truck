@@ -13,8 +13,10 @@
 #include "Mockcan_handler.h"
 
 // Include the source we wish to test
+#include "Mocklcd_ui.h"
 #include "Mockmotor_wrapper.h"
 #include "Mockultrasonic_wrapper.h"
+
 #include "periodic_callbacks.h"
 
 void setUp(void) {}
@@ -23,16 +25,21 @@ void tearDown(void) {}
 
 void test__periodic_callbacks__initialize(void) {
   can_bus__initialize_Expect();
+  lcd_ui__init_Expect();
+
   periodic_callbacks__initialize();
 }
 
 void test__periodic_callbacks__1Hz(void) {
   can_handler__handle_all_mia_Expect();
+  lcd_ui__run_once_1hz_Expect();
+
   periodic_callbacks__1Hz(0);
 }
 
 void test__periodic_callbacks__10Hz(void) {
   can_handler__handle_all_incoming_messages_Expect();
   can_handler__transmit_message_10hz_Expect();
+
   periodic_callbacks__10Hz(0);
 }

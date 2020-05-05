@@ -20,6 +20,7 @@
  */
 static dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
 static dbc_SENSOR_SONARS_s sensor_sonar;
+static dbc_SENSOR_LIDAR_s sensor_lidar;
 
 /**
  * STATIC FUNCTIONS
@@ -31,6 +32,7 @@ static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *);
  */
 const dbc_SENSOR_SONARS_s *can_sensor__get_sensor_sonar() { return &sensor_sonar; }
 const dbc_SENSOR_HEARTBEAT_s *can_sensor__get_heartbeat() { return &sensor_heartbeat; }
+const dbc_SENSOR_LIDAR_s *can_sensor__get_sensor_lidar() { return &sensor_lidar; }
 
 /**
  * MIA
@@ -61,6 +63,23 @@ void can_sensor__sensor_sonar_mia() {
 
     // TODO: Set external MIA LED
     can_sensor__update_driver_obstacle(&sensor_sonar);
+  }
+}
+
+void can_sensor__sensor_lidar_mia() {
+  const uint32_t mia_increment_value = 100;
+
+  if (dbc_service_mia_SENSOR_LIDAR(&sensor_lidar, mia_increment_value)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("MIA -> SENSOR_LIDAR\r\n");
+    printf("\nAssigned default sensor sonar values = \r\nLeft: %d\r\nRight: %d\r\nFront: %d\r\nRear: %d\r\n",
+           sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
+           sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
+#endif
+
+    // TODO: Set external MIA LED
+    // gpio_set(board_io_get_led2());
+    // can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
 
@@ -132,6 +151,21 @@ void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[
     // TODO, Do other things here
     // ! Added sensor sonar processing code here
     can_sensor__update_driver_obstacle(&sensor_sonar);
+  }
+}
+
+void can_sensor__decode_sensor_lidar(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_SENSOR_LIDAR(&sensor_lidar, header, bytes)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nFront = %d\r\nRear = %d\r\n",
+           sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
+           sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
+#endif
+
+    // TODO, Do other things here
+    // ! Added sensor sonar processing code here
+    // gpio_reset(board_io_get_led2());
+    // can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
 

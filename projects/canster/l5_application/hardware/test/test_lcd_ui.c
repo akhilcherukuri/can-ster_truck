@@ -3,13 +3,22 @@
 #include "Mocklcd.h"
 #include "Mocklcd_wrapper.h"
 
+#include "Mockcan_motor_node.h"
+
+#include "project.h"
+
 #include "lcd_ui.c"
 
 void setUp() {}
 void tearDown() {}
 
 // ! Update the tests here as needed
-void test_lcd_ui__update_sensor_values(void) { lcd_ui__update_sensor_values(); }
+void test_lcd_ui__update_sensor_values(void) {
+  const dbc_MOTOR_SPEED_FEEDBACK_s *speed_reference;
+  can_motor__get_motor_speed_feedback_ExpectAndReturn(speed_reference);
+
+  lcd_ui__update_sensor_values();
+}
 
 // ! Update the tests as the UI changes
 void test_lcd_ui__update_ui(void) {
