@@ -25,4 +25,4 @@ void can_sensor__decode_sensor_lidar(dbc_message_header_t header, uint8_t bytes[
 dbc_SENSOR_SONARS_s can_sensor__get_sensor_sonar();
 dbc_SENSOR_HEARTBEAT_s can_sensor__get_heartbeat();
 dbc_SENSOR_BT_COORDINATES_s can_sensor__get_bt_coordinates();
-dbc_SENSOR_LIDAR_s can_sensor__get_lidar();
+const dbc_SENSOR_LIDAR_s *can_sensor__get_sensor_lidar();

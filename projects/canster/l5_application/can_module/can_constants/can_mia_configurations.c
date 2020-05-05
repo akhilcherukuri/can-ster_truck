@@ -11,7 +11,7 @@ const uint32_t dbc_mia_threshold_SENSOR_LIDAR = 3000;
 const dbc_SENSOR_HEARTBEAT_s dbc_mia_replacement_SENSOR_HEARTBEAT;
 const dbc_SENSOR_SONARS_s dbc_mia_replacement_SENSOR_SONARS;
 const dbc_SENSOR_BT_COORDINATES_s dbc_mia_replacement_SENSOR_BT_COORDINATES;
-const dbc_SENSOR_LIDAR_s dbc_mia_replacement_SENSOR_LIDAR;
+const dbc_SENSOR_LIDAR_s dbc_mia_replacement_SENSOR_LIDAR = {{0}, 0, 0, 0, 0};
 
 // Driver
 const uint32_t dbc_mia_threshold_DRIVER_HEARTBEAT = 3000;
