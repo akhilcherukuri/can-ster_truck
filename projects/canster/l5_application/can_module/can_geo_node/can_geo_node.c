@@ -27,8 +27,8 @@ static dbc_GEO_DESTINATION_REACHED_s geo_destination;
 /**
  * GETTERS
  */
-const dbc_GEO_DEGREE_s *can_geo__get_geo_degree() { return &geo_degree; }
-const dbc_GEO_HEARTBEAT_s *can_geo__get_heartbeat() { return &geo_heartbeat; }
+dbc_GEO_DEGREE_s can_geo__get_geo_degree() { return geo_degree; }
+dbc_GEO_HEARTBEAT_s can_geo__get_heartbeat() { return geo_heartbeat; }
 
 #if BOARD_GEO_NODE == 1
 

@@ -20,8 +20,8 @@ static dbc_MOTOR_SPEED_FEEDBACK_s motor_wheel_speed_current_val;
 /**
  * Getters here
  */
-const dbc_MOTOR_HEARTBEAT_s *can_motor__get_heartbeat() { return &motor_heartbeat; }
-const dbc_MOTOR_SPEED_FEEDBACK_s *can_motor__get_motor_speed_feedback() { return &motor_wheel_speed_current_val; }
+dbc_MOTOR_HEARTBEAT_s can_motor__get_heartbeat() { return motor_heartbeat; }
+dbc_MOTOR_SPEED_FEEDBACK_s can_motor__get_motor_speed_feedback() { return motor_wheel_speed_current_val; }
 
 #if BOARD_MOTOR_NODE == 1
 static void can_motor__transmit_motor_heartbeat();

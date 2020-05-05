@@ -14,8 +14,7 @@ void tearDown() {}
 
 // ! Update the tests here as needed
 void test_lcd_ui__update_sensor_values(void) {
-  const dbc_MOTOR_SPEED_FEEDBACK_s *speed_reference;
-  can_motor__get_motor_speed_feedback_ExpectAndReturn(speed_reference);
+  can_motor__get_motor_speed_feedback_ExpectAndReturn(current_speed_s);
 
   lcd_ui__update_sensor_values();
 }

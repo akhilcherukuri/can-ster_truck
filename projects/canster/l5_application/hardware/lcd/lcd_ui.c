@@ -66,9 +66,7 @@ void lcd_ui__run_once_1hz(void) {
  */
 // TODO, Update these values from the decode functions
 static void lcd_ui__update_sensor_values(void) {
-  const dbc_MOTOR_SPEED_FEEDBACK_s *speed_reference = can_motor__get_motor_speed_feedback();
-
-  current_speed_s = *speed_reference;
+  current_speed_s = can_motor__get_motor_speed_feedback();
   kph_meter = (uint16_t)current_speed_s.MOTOR_SPEED_current;
 }
 

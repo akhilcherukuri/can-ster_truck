@@ -21,7 +21,5 @@ void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_
 // void driver_obstacle__get_geo_controller_direction(dbc_GEO_DEGREE_s *);
 
 // Getters for all static variables
-// ! NO SETTERS
-// ! DO NOT DISCARD THE CONST QUALIFIER
-const dbc_GEO_DEGREE_s *can_geo__get_geo_degree();
-const dbc_GEO_HEARTBEAT_s *can_geo__get_heartbeat();
+dbc_GEO_DEGREE_s can_geo__get_geo_degree();
+dbc_GEO_HEARTBEAT_s can_geo__get_heartbeat();
