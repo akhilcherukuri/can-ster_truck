@@ -30,7 +30,7 @@ static const gpio__function_e PWM_GPIO_FUNCTION = GPIO__FUNCTION_1;
 /**
  * STATIC CONST FLOAT VARIABLES
  */
-static const double PWM_ADJUSTMENT_OFFSET = 0.005;
+static const double PWM_ADJUSTMENT_OFFSET = 0.002;
 static const double tolerance = 0.5;
 
 static const float FORWARD_SLOW = 15.875;
