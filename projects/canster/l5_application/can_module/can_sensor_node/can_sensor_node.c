@@ -98,11 +98,13 @@ void can_sensor__sensor_lidar_mia() {
 static void can_sensor__transmit_sensor_heartbeat();
 static void can_sensor__transmit_sensor_sonar();
 static void can_sensor__transmit_sensor_lidar();
+static void can_sensor__transmit_sensor_bt_coordinates();
 
 void can_sensor__transmit_all_messages(void) {
   can_sensor__transmit_sensor_heartbeat();
   can_sensor__transmit_sensor_sonar();
   can_sensor__transmit_sensor_lidar();
+  can_sensor__transmit_sensor_bt_coordinates();
 }
 
 static void can_sensor__transmit_sensor_heartbeat() {
@@ -138,6 +140,17 @@ static void can_sensor__transmit_sensor_lidar() {
   if (!dbc_encode_and_send_SENSOR_LIDAR(NULL, &sensor_lidar_data)) {
 #if SENSOR_NODE_DEBUG == 1
     printf("Failed to encode and send Sensor Lidar\r\n");
+#endif
+  }
+}
+
+static void can_sensor__transmit_sensor_bt_coordinates() {
+  dbc_SENSOR_BT_COORDINATES_s message_bt_coordinates = {};
+  // TODO, Put your values here
+
+  if (!dbc_encode_and_send_SENSOR_BT_COORDINATES(NULL, &message_bt_coordinates)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("Failed to encode and send Sensor BT Coordinates\r\n");
 #endif
   }
 }
