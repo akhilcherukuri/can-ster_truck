@@ -7,6 +7,8 @@
 #include "Mockcan_handler.h"
 #include "Mockgpio.h"
 
+#include "Mocklcd_ui.h"
+
 #include "can_motor_node.c"
 #include "who_am_i.h"
 
@@ -25,6 +27,9 @@ void test_can_motor__motor_speed_feedback_mia_false() {}
 #else
 
 void test_can_motor__motor_heartbeat_mia_true() {
+
+  set_lcd_mia_led_Expect(MOTOR_LED_MIA, false);
+
   gpio_s gpio;
   board_io__get_led2_ExpectAndReturn(gpio);
   gpio__set_Expect(gpio);

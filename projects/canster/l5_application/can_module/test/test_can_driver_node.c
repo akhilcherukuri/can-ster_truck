@@ -12,6 +12,8 @@
 
 #include "Mockdriver_state.h"
 
+#include "Mocklcd_ui.h"
+
 #include "can_driver_node.c"
 #include "who_am_i.h"
 
@@ -26,6 +28,8 @@ void tearDown() {}
  * MIA
  */
 void test_can_driver__driver_heartbeat_mia_true() {
+  set_lcd_mia_led_Expect(DRIVER_LED_MIA, false);
+
   gpio_s gpio;
   board_io__get_led0_ExpectAndReturn(gpio);
   gpio__set_Expect(gpio);

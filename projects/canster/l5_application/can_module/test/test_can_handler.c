@@ -56,6 +56,7 @@ void test_can_handler__handle_all_incoming_messages(void) {
   can_geo__decode_geo_heartbeat_ExpectAnyArgs();
   can_geo__decode_geo_degree_ExpectAnyArgs();
   can_geo__decode_geo_destination_reached_ExpectAnyArgs();
+  can_geo__decode_geo_current_coordinates_ExpectAnyArgs();
 
   // TODO, Add more decode functions here as you build your node logic
 
