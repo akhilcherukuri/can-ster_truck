@@ -135,8 +135,7 @@ void test_driver_obstacle__get_motor_commands_left_right() {
   // Come back to this later
   TEST_IGNORE();
 
-  const dbc_SENSOR_LIDAR_s *lidar_reference;
-  can_sensor__get_sensor_lidar_ExpectAndReturn(lidar_reference);
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar);
 
   sensor_sonar.SENSOR_SONARS_middle = (DISTANCE_THRESHOLD_CM)-5.0;
   sensor_sonar.SENSOR_SONARS_left = 150;

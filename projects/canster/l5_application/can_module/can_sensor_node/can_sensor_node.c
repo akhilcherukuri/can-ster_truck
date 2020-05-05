@@ -30,9 +30,9 @@ static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *);
 /**
  * Getters here
  */
-const dbc_SENSOR_SONARS_s *can_sensor__get_sensor_sonar() { return &sensor_sonar; }
-const dbc_SENSOR_HEARTBEAT_s *can_sensor__get_heartbeat() { return &sensor_heartbeat; }
-const dbc_SENSOR_LIDAR_s *can_sensor__get_sensor_lidar() { return &sensor_lidar; }
+dbc_SENSOR_SONARS_s can_sensor__get_sensor_sonar() { return sensor_sonar; }
+dbc_SENSOR_HEARTBEAT_s can_sensor__get_heartbeat() { return sensor_heartbeat; }
+dbc_SENSOR_LIDAR_s can_sensor__get_sensor_lidar() { return sensor_lidar; }
 
 /**
  * MIA
