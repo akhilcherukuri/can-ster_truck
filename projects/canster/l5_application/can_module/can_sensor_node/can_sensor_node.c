@@ -30,7 +30,7 @@ static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *sonar);
 dbc_SENSOR_SONARS_s can_sensor__get_sensor_sonar() { return sensor_sonar; }
 dbc_SENSOR_HEARTBEAT_s can_sensor__get_heartbeat() { return sensor_heartbeat; }
 dbc_SENSOR_BT_COORDINATES_s can_sensor__get_bt_coordinates() { return sensor_bt_coordinates; }
-const dbc_SENSOR_LIDAR_s *can_sensor__get_sensor_lidar() { return &sensor_lidar; }
+dbc_SENSOR_LIDAR_s can_sensor__get_sensor_lidar() { return sensor_lidar; }
 
 /**
  * MIA
@@ -82,10 +82,6 @@ void can_sensor__sensor_lidar_mia() {
            sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
            sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
 #endif
-
-    // TODO: Set external MIA LED
-    // gpio_set(board_io_get_led2());
-    // can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
 
