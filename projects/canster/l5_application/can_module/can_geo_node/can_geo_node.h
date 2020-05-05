@@ -18,8 +18,10 @@ void can_geo__geo_destination_reached_mia();
 void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]);
 void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]);
 void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_t bytes[8]);
+void can_geo__decode_geo_current_coordinates(dbc_message_header_t header, uint8_t bytes[8]);
 // void driver_obstacle__get_geo_controller_direction(dbc_GEO_DEGREE_s *);
 
 // Getters for all static variables
 dbc_GEO_DEGREE_s can_geo__get_geo_degree();
 dbc_GEO_HEARTBEAT_s can_geo__get_heartbeat();
+dbc_GEO_CURRENT_COORDINATES_s can_geo__get_current_coordinates();

@@ -23,12 +23,14 @@
 static dbc_GEO_HEARTBEAT_s geo_heartbeat;
 static dbc_GEO_DEGREE_s geo_degree;
 static dbc_GEO_DESTINATION_REACHED_s geo_destination;
+static dbc_GEO_CURRENT_COORDINATES_s geo_current_coordinates;
 
 /**
  * GETTERS
  */
 dbc_GEO_DEGREE_s can_geo__get_geo_degree() { return geo_degree; }
 dbc_GEO_HEARTBEAT_s can_geo__get_heartbeat() { return geo_heartbeat; }
+dbc_GEO_CURRENT_COORDINATES_s can_geo__get_current_coordinates() { return geo_current_coordinates; }
 
 #if BOARD_GEO_NODE == 1
 
@@ -147,6 +149,17 @@ void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_
     } else {
       set_destination_reached_status(false);
     }
+  }
+}
+
+void can_geo__decode_geo_current_coordinates(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_GEO_CURRENT_COORDINATES(&geo_current_coordinates, header, bytes)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Geo Current Coordinates %f %f\r\n", (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_latitude,
+           (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_longitude);
+#endif
+
+    // Do other things here
   }
 }
 
