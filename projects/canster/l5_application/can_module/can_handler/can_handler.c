@@ -86,6 +86,7 @@ void can_handler__handle_all_incoming_messages(void) {
     can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);
     can_geo__decode_geo_degree(header, recv_message.data.bytes);
     can_geo__decode_geo_destination_reached(header, recv_message.data.bytes);
+    can_geo__decode_geo_current_coordinates(header, recv_message.data.bytes);
   }
 }
 

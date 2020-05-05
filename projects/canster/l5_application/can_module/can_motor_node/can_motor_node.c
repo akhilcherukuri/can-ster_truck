@@ -1,7 +1,11 @@
+#include <stdbool.h>
+
 #include "can_motor_node.h"
 
 #include "board_io.h"
 #include "gpio.h"
+
+#include "lcd_ui.h"
 
 #define DEBUG_MOTOR_NODE 0
 
@@ -53,12 +57,8 @@ static void can_motor__transmit_motor_speed_feedback() {
   }
 }
 #else
-// Empty function
 void can_motor__transmit_all_messages(void) {}
 
-/**
- * MIA is applicable only when BOARD_MOTOR_NODE != 1
- */
 void can_motor__motor_heartbeat_mia() {
   const uint32_t mia_increment_value = 1000;
 
@@ -67,6 +67,7 @@ void can_motor__motor_heartbeat_mia() {
     printf("MIA -> MOTOR_HEARTBEAT\r\n");
     printf("assigned default motor heartbeat = %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
 #endif
+    set_lcd_mia_led(MOTOR_LED_MIA, false);
     gpio__set(board_io__get_led2());
   }
 }
@@ -79,8 +80,6 @@ void can_motor__motor_speed_feedback_mia() {
     printf("assigned default motor speed for feedback = %f\r\n",
            (double)motor_wheel_speed_current_val.MOTOR_SPEED_current);
 #endif
-
-    // gpio__set(board_io__get_led1());
   }
 }
 
@@ -94,6 +93,7 @@ void can_motor__decode_motor_heartbeat(dbc_message_header_t header, uint8_t byte
 #if DEBUG_MOTOR_NODE == 1
     printf("\nMotor Heartbeat: %d\r\n", motor_heartbeat.MOTOR_HEARTBEAT_cmd);
 #endif
+    set_lcd_mia_led(MOTOR_LED_MIA, true);
     gpio__reset(board_io__get_led2());
   }
 }

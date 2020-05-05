@@ -302,114 +302,6 @@ StaticText
     WordWrap                     Yes
 end
 Label
-    Name                         Label0
-    Alias                        label_rpm
-    4DGLFont.Font                FONT1
-    4DGLFont.Bold                No
-    4DGLFont.Italic              No
-    4DGLFont.Inverse             No
-    4DGLFont.Underline           No
-    4DGLFont.MagWidth            2
-    4DGLFont.MagHeight           2
-    4DGLFont.Opaque              Yes
-    BGcolor                      BLACK
-    Caption                      RPM
-    FGcolor                      WHITE
-    Left                         10
-    Top                          115
-end
-Label
-    Name                         Label1
-    Alias                        label_current_degree
-    4DGLFont.Font                FONT1
-    4DGLFont.Bold                No
-    4DGLFont.Italic              No
-    4DGLFont.Inverse             No
-    4DGLFont.Underline           No
-    4DGLFont.MagWidth            2
-    4DGLFont.MagHeight           2
-    4DGLFont.Opaque              Yes
-    BGcolor                      BLACK
-    Caption                      CDegree
-    FGcolor                      WHITE
-    Left                         10
-    Top                          160
-end
-Label
-    Name                         Label2
-    Alias                        label_required_degree
-    4DGLFont.Font                FONT1
-    4DGLFont.Bold                No
-    4DGLFont.Italic              No
-    4DGLFont.Inverse             No
-    4DGLFont.Underline           No
-    4DGLFont.MagWidth            2
-    4DGLFont.MagHeight           2
-    4DGLFont.Opaque              Yes
-    BGcolor                      BLACK
-    Caption                      RDegree
-    FGcolor                      WHITE
-    Left                         10
-    Top                          205
-end
-LedDigits
-    Name                         Leddigits0
-    Alias                        led_rpm
-    Color                        BLACK
-    Decimals                     0
-    Digits                       2
-    Height                       35
-    LeadingZero                  Yes
-    Left                         135
-    OutlineColor                 BLACK
-    Palette.High                 clLime
-    Palette.Low                  0x005100
-    Top                          105
-    Width                        60
-    OnChanged                    ''
-    OnTouchMoving                ''
-    OnTouchPressed               ''
-    OnTouchReleased              ''
-end
-LedDigits
-    Name                         Leddigits1
-    Alias                        led_cdegree
-    Color                        BLACK
-    Decimals                     0
-    Digits                       2
-    Height                       35
-    LeadingZero                  Yes
-    Left                         135
-    OutlineColor                 BLACK
-    Palette.High                 clLime
-    Palette.Low                  0x005100
-    Top                          150
-    Width                        60
-    OnChanged                    ''
-    OnTouchMoving                ''
-    OnTouchPressed               ''
-    OnTouchReleased              ''
-end
-LedDigits
-    Name                         Leddigits2
-    Alias                        led_rdegree
-    Color                        BLACK
-    Decimals                     0
-    Digits                       2
-    Height                       35
-    LeadingZero                  Yes
-    Left                         135
-    OutlineColor                 BLACK
-    Palette.High                 clLime
-    Palette.Low                  0x005100
-    Top                          195
-    Width                        60
-    OnChanged                    ''
-    OnTouchMoving                ''
-    OnTouchPressed               ''
-    OnTouchReleased              ''
-end
-Label
     Name                         Label3
     Alias                        label_mia
     4DGLFont.Font                FONT1
@@ -423,57 +315,270 @@ Label
     BGcolor                      BLACK
     Caption                      MIA
     FGcolor                      WHITE
-    Left                         188
+    Left                         192
     Top                          8
-end
-Label
-    Name                         Label4
-    Alias                        label_destination_latitude
-    4DGLFont.Font                FONT1
-    4DGLFont.Bold                No
-    4DGLFont.Italic              No
-    4DGLFont.Inverse             No
-    4DGLFont.Underline           No
-    4DGLFont.MagWidth            2
-    4DGLFont.MagHeight           2
-    4DGLFont.Opaque              Yes
-    BGcolor                      BLACK
-    Caption                      DLat
-    FGcolor                      WHITE
-    Left                         10
-    Top                          250
-end
-Label
-    Name                         Label5
-    Alias                        label_destination_longitude
-    4DGLFont.Font                FONT1
-    4DGLFont.Bold                No
-    4DGLFont.Italic              No
-    4DGLFont.Inverse             No
-    4DGLFont.Underline           No
-    4DGLFont.MagWidth            2
-    4DGLFont.MagHeight           2
-    4DGLFont.Opaque              Yes
-    BGcolor                      BLACK
-    Caption                      DLong
-    FGcolor                      WHITE
-    Left                         10
-    Top                          295
 end
 LedDigits
     Name                         Leddigits3
-    Alias                        Leddigits3
+    Alias                        led_curr_lat
     Color                        BLACK
     Decimals                     2
     Digits                       6
-    Height                       35
+    Height                       23
     LeadingZero                  Yes
-    Left                         90
+    Left                         136
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  0x005100
-    Top                          240
-    Width                        150
+    Top                          200
+    Width                        92
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+LedDigits
+    Name                         Leddigits0
+    Alias                        led_rps
+    Color                        BLACK
+    Decimals                     1
+    Digits                       3
+    Height                       26
+    LeadingZero                  Yes
+    Left                         136
+    OutlineColor                 BLACK
+    Palette.High                 clLime
+    Palette.Low                  0x005100
+    Top                          104
+    Width                        45
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+StaticText
+    Name                         Statictext4
+    Alias                        label_curr_lat
+    Alignment                    Left
+    AutoSize                     Yes
+    Caption                      Current_Lat
+    Color                        BLACK
+    Font.Color                   WHITE
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       23
+    Left                         8
+    Top                          196
+    Transparent                  Yes
+    Width                        98
+    WordWrap                     Yes
+end
+StaticText
+    Name                         Statictext5
+    Alias                        label_curr_long
+    Alignment                    Left
+    AutoSize                     Yes
+    Caption                      Current_Long
+    Color                        BLACK
+    Font.Color                   WHITE
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       24
+    Left                         8
+    Top                          224
+    Transparent                  Yes
+    Width                        114
+    WordWrap                     Yes
+end
+StaticText
+    Name                         Statictext6
+    Alias                        label_reqd_heading
+    Alignment                    Left
+    AutoSize                     Yes
+    Caption                      RDegree
+    Color                        BLACK
+    Font.Color                   WHITE
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       23
+    Left                         8
+    Top                          168
+    Transparent                  Yes
+    Width                        73
+    WordWrap                     Yes
+end
+StaticText
+    Name                         Statictext7
+    Alias                        label_curr_heading
+    Alignment                    Left
+    AutoSize                     Yes
+    Caption                      CDegree
+    Color                        BLACK
+    Font.Color                   WHITE
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       23
+    Left                         8
+    Top                          140
+    Transparent                  Yes
+    Width                        72
+    WordWrap                     Yes
+end
+StaticText
+    Name                         Statictext8
+    Alias                        label_rps
+    Alignment                    Left
+    AutoSize                     Yes
+    Caption                      RPS
+    Color                        BLACK
+    Font.Color                   WHITE
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       23
+    Left                         8
+    Top                          112
+    Transparent                  Yes
+    Width                        33
+    WordWrap                     Yes
+end
+StaticText
+    Name                         Statictext9
+    Alias                        label_sensor_left
+    Alignment                    Left
+    AutoSize                     Yes
+    Caption                      L
+    Color                        BLACK
+    Font.Color                   WHITE
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       23
+    Left                         35
+    Top                          256
+    Transparent                  Yes
+    Width                        14
+    WordWrap                     Yes
+end
+StaticText
+    Name                         Statictext10
+    Alias                        label_sensor_mid
+    Alignment                    Left
+    AutoSize                     Yes
+    Caption                      M
+    Color                        BLACK
+    Font.Color                   WHITE
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       23
+    Left                         113
+    Top                          256
+    Transparent                  Yes
+    Width                        15
+    WordWrap                     Yes
+end
+StaticText
+    Name                         Statictext11
+    Alias                        label_sensor_right
+    Alignment                    Left
+    AutoSize                     Yes
+    Caption                      R
+    Color                        BLACK
+    Font.Color                   WHITE
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       23
+    Left                         193
+    Top                          256
+    Transparent                  Yes
+    Width                        12
+    WordWrap                     Yes
+end
+LedDigits
+    Name                         Leddigits1
+    Alias                        led_curr_heading
+    Color                        BLACK
+    Decimals                     1
+    Digits                       4
+    Height                       26
+    LeadingZero                  Yes
+    Left                         136
+    OutlineColor                 BLACK
+    Palette.High                 clLime
+    Palette.Low                  0x005100
+    Top                          137
+    Width                        61
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+LedDigits
+    Name                         Leddigits6
+    Alias                        led_sensor_mid
+    Color                        BLACK
+    Decimals                     1
+    Digits                       4
+    Height                       30
+    LeadingZero                  Yes
+    Left                         88
+    OutlineColor                 BLACK
+    Palette.High                 clLime
+    Palette.Low                  0x005100
+    Top                          280
+    Width                        64
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+LedDigits
+    Name                         Leddigits7
+    Alias                        led_sensor_right
+    Color                        BLACK
+    Decimals                     1
+    Digits                       4
+    Height                       30
+    LeadingZero                  Yes
+    Left                         168
+    OutlineColor                 BLACK
+    Palette.High                 clLime
+    Palette.Low                  0x005100
+    Top                          280
+    Width                        64
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+LedDigits
+    Name                         Leddigits2
+    Alias                        led_reqd_heading
+    Color                        BLACK
+    Decimals                     1
+    Digits                       4
+    Height                       26
+    LeadingZero                  Yes
+    Left                         136
+    OutlineColor                 BLACK
+    Palette.High                 clLime
+    Palette.Low                  0x005100
+    Top                          168
+    Width                        61
     OnChanged                    ''
     OnTouchMoving                ''
     OnTouchPressed               ''
@@ -481,18 +586,37 @@ LedDigits
 end
 LedDigits
     Name                         Leddigits4
-    Alias                        Leddigits4
+    Alias                        led_curr_long
     Color                        BLACK
     Decimals                     2
     Digits                       6
-    Height                       35
+    Height                       24
     LeadingZero                  Yes
-    Left                         90
+    Left                         136
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  0x005100
-    Top                          285
-    Width                        150
+    Top                          227
+    Width                        92
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+LedDigits
+    Name                         Leddigits5
+    Alias                        led_sensor_left
+    Color                        BLACK
+    Decimals                     1
+    Digits                       4
+    Height                       30
+    LeadingZero                  Yes
+    Left                         9
+    OutlineColor                 BLACK
+    Palette.High                 clLime
+    Palette.Low                  0x005100
+    Top                          280
+    Width                        64
     OnChanged                    ''
     OnTouchMoving                ''
     OnTouchPressed               ''

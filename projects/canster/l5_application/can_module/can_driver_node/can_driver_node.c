@@ -4,16 +4,16 @@
  * - `driver_state__update_destination_coordinate()` inside `can_sensor__on_decode`
  * -
  */
-
 #include "can_driver_node.h"
+#include <stdbool.h>
 
 #include "board_io.h"
 #include "gpio.h"
 
 #include "driver_obstacle.h"
-#include "geo_logic.h"
-
 #include "driver_state.h"
+#include "geo_logic.h"
+#include "lcd_ui.h"
 
 #define DRIVER_NODE_DEBUG 0
 
@@ -42,9 +42,10 @@ void can_driver__driver_heartbeat_mia() {
 
   if (dbc_service_mia_DRIVER_HEARTBEAT(&driver_heartbeat, mia_increment_value)) {
 #if DRIVER_NODE_DEBUG == 1
-    printf("MIA -> DRIVER_HEARTBEAT\r\n");
-    printf("assigned default driver heartbeat = %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
+    printf("\nMIA -> DRIVER_HEARTBEAT");
+    printf("\nAssigned default driver heartbeat = %d", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
 #endif
+    set_lcd_mia_led(DRIVER_LED_MIA, false);
     gpio__set(board_io__get_led0());
   }
 }
@@ -54,11 +55,10 @@ void can_driver__motor_speed_mia() {
 
   if (dbc_service_mia_MOTOR_SPEED(&driver_required_motor_speed, mia_increment_value)) {
 #if DRIVER_NODE_DEBUG == 1
-    printf("MIA -> DRIVER_REQUIRED_MOTOR_SPEED\r\n");
-    printf("assigned default driver required motor speed = %f\r\n",
+    printf("\nMIA -> DRIVER_REQUIRED_MOTOR_SPEED");
+    printf("\nAssigned default driver required motor speed = %f",
            (double)driver_required_motor_speed.MOTOR_SPEED_processed);
 #endif
-    // gpio__set(board_io__get_led2());
   }
 }
 
@@ -70,7 +70,6 @@ void can_driver__motor_steering_mia() {
     printf("MIA -> DRIVER_STEERING\r\n");
     printf("assigned default driver steering = %d\r\n", driver_steering.MOTOR_STEERING_direction);
 #endif
-    // gpio__set(board_io__get_led2());
   }
 }
 
@@ -158,9 +157,7 @@ void can_driver__decode_driver_heartbeat(dbc_message_header_t header, uint8_t by
 #if DRIVER_NODE_DEBUG == 1
     printf("Driver Heartbeat: %d\r\n", driver_heartbeat.DRIVER_HEARTBEAT_cmd);
 #endif
-
-    // TODO, Do other things here
-    // ! Make a function for process driver_heartbeat here
+    set_lcd_mia_led(DRIVER_LED_MIA, true);
     gpio__reset(board_io__get_led0());
   }
 }

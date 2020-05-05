@@ -32,11 +32,11 @@ void test_lcd_ui__update_ui(void) {
   lcd_wrapper__write_meter_ExpectAndReturn(LCD_METER_KPH_INDEX, kph_meter % 11, UNUSED_RETURN_BOOL);
 
   // These will be in the Range of 0-99
-  lcd_wrapper__write_leddigit_ExpectAndReturn(LCD_LEDDIGIT_RPM_INDEX, rpm_leddigit % 100, UNUSED_RETURN_BOOL);
-  lcd_wrapper__write_leddigit_ExpectAndReturn(LCD_LEDDIGIT_CURRENTDEGREE_INDEX, cdegree_leddigit % 100,
-                                              UNUSED_RETURN_BOOL);
-  lcd_wrapper__write_leddigit_ExpectAndReturn(LCD_LEDDIGIT_REQUIREDDEGREE_INDEX, rdegree_leddigit % 100,
-                                              UNUSED_RETURN_BOOL);
+  lcd_wrapper__write_leddigit_ExpectAndReturn(LCD_LEDDIGIT_RPM_INDEX, rpm_leddigit, UNUSED_RETURN_BOOL);
+  lcd_wrapper__write_leddigit_ExpectAndReturn(LCD_LEDDIGIT_CURRENTDEGREE_INDEX, cdegree_leddigit, UNUSED_RETURN_BOOL);
+  lcd_wrapper__write_leddigit_ExpectAndReturn(LCD_LEDDIGIT_REQUIREDDEGREE_INDEX, rdegree_leddigit, UNUSED_RETURN_BOOL);
+  lcd_wrapper__write_leddigit_ExpectAndReturn(LCD_LEDDIGIT_CURR_LAT_INDEX, curr_lat_leddigit, UNUSED_RETURN_BOOL);
+  lcd_wrapper__write_leddigit_ExpectAndReturn(LCD_LEDDIGIT_CURR_LONG_INDEX, curr_long_leddigit, UNUSED_RETURN_BOOL);
 
   lcd_ui__update_ui();
 }

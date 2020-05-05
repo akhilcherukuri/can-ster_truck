@@ -1,12 +1,11 @@
 #include "can_geo_node.h"
 
 #include "board_io.h"
-#include "gpio.h"
-
 #include "compass.h"
-
 #include "driver_obstacle.h"
 #include "geo_logic.h"
+#include "gpio.h"
+#include "lcd_ui.h"
 
 /**
  * Constants
@@ -88,6 +87,7 @@ void can_geo__geo_heartbeat_mia() {
     printf("\nMIA -> GEO_HEARTBEAT");
     printf("\nAssigned default geo heartbeat: %d", geo_heartbeat.GEO_HEARTBEAT_cmd);
 #endif
+    set_lcd_mia_led(GEO_LED_MIA, false);
     gpio__set(board_io__get_led1());
   }
 }
@@ -123,7 +123,7 @@ void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]
 #if GEO_NODE_DEBUG == 1
     printf("\nGeo Heartbeat: %d\r\n", geo_heartbeat.GEO_HEARTBEAT_cmd);
 #endif
-
+    set_lcd_mia_led(GEO_LED_MIA, true);
     gpio__reset(board_io__get_led1());
   }
 }
@@ -136,6 +136,7 @@ void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
            (double)(geo_degree.GEO_DEGREE_current), (double)geo_degree.GEO_DEGREE_required);
 #endif
     can_geo__on_decode_geo_degree();
+    set_lcd_current_and_required_heading(geo_degree.GEO_DEGREE_current, geo_degree.GEO_DEGREE_required);
   }
 }
 
@@ -155,11 +156,9 @@ void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_
 void can_geo__decode_geo_current_coordinates(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_GEO_CURRENT_COORDINATES(&geo_current_coordinates, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
-    printf("Geo Current Coordinates %f %f\r\n", (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_latitude,
+    printf("\nGeo Current Coordinates %lf %lf", (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_latitude,
            (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_longitude);
 #endif
-
-    // Do other things here
   }
 }
 

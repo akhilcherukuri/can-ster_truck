@@ -1,13 +1,16 @@
+#include <stdbool.h>
+
 #include "can_sensor_node.h"
-#include "project.h"
 
 #include "board_io.h"
 #include "gpio.h"
+#include "project.h"
 
 #include "driver_obstacle.h"
+#include "lcd_ui.h"
 #include "ultrasonic_wrapper.h"
 
-#define SENSOR_NODE_DEBUG 1
+#define SENSOR_NODE_DEBUG 0
 
 #if SENSOR_NODE_DEBUG == 1
 #include <stdio.h>
@@ -38,30 +41,27 @@ dbc_SENSOR_LIDAR_s can_sensor__get_sensor_lidar() { return sensor_lidar; }
  * MIA
  */
 void can_sensor__sensor_heartbeat_mia() {
-  const uint32_t mia_increment_value = 100;
+  const uint32_t mia_increment_value = 1000;
 
   if (dbc_service_mia_SENSOR_HEARTBEAT(&sensor_heartbeat, mia_increment_value)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("MIA -> SENSOR_HEARTBEAT\r\n");
-    printf("Assigned default sensor heartbeat = %d\r\n", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
+    printf("\nMIA -> SENSOR_HEARTBEAT");
+    printf("\nAssigned default sensor heartbeat = %d", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
 #endif
-
-    // TODO: Set external MIA LED
+    set_lcd_mia_led(SENSOR_LED_MIA, false);
     gpio__set(board_io__get_led3());
   }
 }
 
 void can_sensor__sensor_sonar_mia() {
-  const uint32_t mia_increment_value = 100;
+  const uint32_t mia_increment_value = 1000;
 
   if (dbc_service_mia_SENSOR_SONARS(&sensor_sonar, mia_increment_value)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("MIA -> SENSOR_SONAR\r\n");
-    printf("Assigned default sensor sonar values = L: %lf, M: %lf, R: %lf\r\n", (double)sensor_sonar.SENSOR_SONARS_left,
+    printf("\nMIA -> SENSOR_SONAR");
+    printf("\nAssigned default sensor sonar values = L: %lf, M: %lf, R: %lf", (double)sensor_sonar.SENSOR_SONARS_left,
            (double)sensor_sonar.SENSOR_SONARS_middle, (double)sensor_sonar.SENSOR_SONARS_right);
 #endif
-
-    // TODO: Set external MIA LED
     can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
@@ -71,26 +71,15 @@ void can_sensor__sensor_lidar_mia() {
 
   if (dbc_service_mia_SENSOR_LIDAR(&sensor_lidar, mia_increment_value)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("MIA -> SENSOR_LIDAR\r\n");
+    printf("\nMIA -> SENSOR_LIDAR");
     printf("\nAssigned default sensor sonar values = \r\nLeft: %d\r\nRight: %d\r\nFront: %d\r\nRear: %d\r\n",
            sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
            sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
 #endif
-
-    // TODO: Set external MIA LED
-    // gpio_set(board_io_get_led2());
     // can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
 
-/**
- * TRANSMIT FUNCTIONS
- * #if BOARD_XYZ_NODE == 1
- *  -> logic
- * #else
- *  -> empty function
- * #endif
- */
 #if BOARD_SENSOR_NODE == 1
 static void can_sensor__transmit_sensor_heartbeat();
 static void can_sensor__transmit_sensor_sonar();
@@ -133,9 +122,7 @@ void can_sensor__decode_sensor_heartbeat(dbc_message_header_t header, uint8_t by
 #if SENSOR_NODE_DEBUG == 1
     printf("\nSensor Heartbeat: %d\r\n", sensor_heartbeat.SENSOR_HEARTBEAT_cmd);
 #endif
-
-    // TODO, Do other things here
-    // ! Add sensor heartbeat processing code here
+    set_lcd_mia_led(SENSOR_LED_MIA, true);
     gpio__reset(board_io__get_led3());
   }
 }
@@ -147,9 +134,6 @@ void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[
            (double)sensor_sonar.SENSOR_SONARS_left, (double)sensor_sonar.SENSOR_SONARS_middle,
            (double)sensor_sonar.SENSOR_SONARS_right);
 #endif
-
-    // TODO, Do other things here
-    // ! Added sensor sonar processing code here
     can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
@@ -161,10 +145,7 @@ void can_sensor__decode_sensor_lidar(dbc_message_header_t header, uint8_t bytes[
            sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
            sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
 #endif
-
-    // TODO, Do other things here
-    // ! Added sensor sonar processing code here
-    // gpio_reset(board_io_get_led2());
+    set_lcd_lidar_distance_led(sensor_lidar);
     // can_sensor__update_driver_obstacle(&sensor_sonar);
   }
 }
