@@ -24,6 +24,7 @@ static const float PI = 3.141592654;
  * Static state variables
  */
 static float distance_between_coordinates;
+// static gps_coordinates_s destination_coordinate = {37.340820, -121.894333};
 
 static gps_coordinates_s destination_coordinate;
 

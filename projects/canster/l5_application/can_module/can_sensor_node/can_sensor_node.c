@@ -70,7 +70,7 @@ void can_sensor__sensor_sonar_mia() {
 }
 
 void can_sensor__sensor_lidar_mia() {
-  const uint32_t mia_increment_value = 100;
+  const uint32_t mia_increment_value = 1000;
 
   if (dbc_service_mia_SENSOR_LIDAR(&sensor_lidar, mia_increment_value)) {
 #if SENSOR_NODE_DEBUG == 1
@@ -131,6 +131,9 @@ static void can_sensor__transmit_sensor_lidar() {
   lidar_data_handler__retrieve_distance();
   // within_range();
   lidar_data_handler__get_distances(&sensor_lidar_data);
+  // printf("\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nFront = %d\r\nRear = %d\r\n",
+  //        sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
+  //        sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
 
   if (!dbc_encode_and_send_SENSOR_LIDAR(NULL, &sensor_lidar_data)) {
 #if SENSOR_NODE_DEBUG == 1

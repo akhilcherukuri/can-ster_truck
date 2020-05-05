@@ -72,6 +72,7 @@ void lidar__sample_scan(void) {
 
 void lidar__scan_run_once(int send_once) {
   if (1 == send_once) {
+    // if (1 == send_once % 600) {
     uint8_t request[] = {start_byte, sample_scan};
 
     received_direct_response = false;

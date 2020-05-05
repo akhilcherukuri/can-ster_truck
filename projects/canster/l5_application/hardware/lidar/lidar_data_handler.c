@@ -130,4 +130,7 @@ void lidar_data_handler__get_distances(dbc_SENSOR_LIDAR_s *distances) {
   distances->SENSOR_LIDAR_slight_left = distance_left / 10;
   distances->SENSOR_LIDAR_slight_right = distance_right / 10;
   distances->SENSOR_LIDAR_back = distance_rear / 10;
+
+  printf("\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nFront = %d\r\nRear = %d\r\n",
+         distance_left / 10, distance_right / 10, distance_front / 10, distance_rear / 10);
 }
