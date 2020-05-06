@@ -4,12 +4,13 @@
 #include "board_io.h"
 #include "gpio.h"
 
+#include "bt_wrapper.h"
 #include "driver_obstacle.h"
+#include "gps.h"
+#include "lidar_data_handler.h"
 #include "ultrasonic_wrapper.h"
 
-#include "lidar_data_handler.h"
-
-#define SENSOR_NODE_DEBUG 1
+#define SENSOR_NODE_DEBUG 0
 
 #if SENSOR_NODE_DEBUG == 1
 #include <stdio.h>
@@ -145,7 +146,11 @@ static void can_sensor__transmit_sensor_lidar() {
 }
 
 static void can_sensor__transmit_sensor_bt_coordinates() {
-  dbc_SENSOR_BT_COORDINATES_s message_bt_coordinates = {};
+  dbc_SENSOR_BT_COORDINATES_s message_bt_coordinates = {{0}};
+  gps_coordinates_s dest_coordinates;
+  bt_wrapper__get_destination_coordinates(&dest_coordinates);
+  message_bt_coordinates.SENSOR_BT_COORDINATES_latitude = dest_coordinates.latitude;
+  message_bt_coordinates.SENSOR_BT_COORDINATES_longitude = dest_coordinates.longitude;
   // TODO, Put your values here
 
   if (!dbc_encode_and_send_SENSOR_BT_COORDINATES(NULL, &message_bt_coordinates)) {
@@ -177,7 +182,7 @@ void can_sensor__decode_sensor_heartbeat(dbc_message_header_t header, uint8_t by
 void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_SENSOR_SONARS(&sensor_sonar, header, bytes)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("\nSensor values from SENSOR Node:\r\nLeft = %lf\r\nRight = %lf\r\nMiddle = %lf\r\n",
+    printf("\nSensor values from Ultrasonic sensor:\r\nLeft = %lf\r\nRight = %lf\r\nMiddle = %lf\r\n",
            (double)sensor_sonar.SENSOR_SONARS_left, (double)sensor_sonar.SENSOR_SONARS_right,
            (double)sensor_sonar.SENSOR_SONARS_middle);
 #endif
@@ -192,7 +197,7 @@ void can_sensor__decode_sensor_sonar(dbc_message_header_t header, uint8_t bytes[
 void can_sensor__decode_sensor_lidar(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_SENSOR_LIDAR(&sensor_lidar, header, bytes)) {
 #if SENSOR_NODE_DEBUG == 1
-    printf("\nSensor values from SENSOR Node:\r\nLeft = %d\r\nRight = %d\r\nFront = %d\r\nRear = %d\r\n",
+    printf("\nSensor values from LIDAR sensor:\r\nLeft = %d\r\nRight = %d\r\nFront = %d\r\nRear = %d\r\n",
            sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_slight_right,
            sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
 #endif

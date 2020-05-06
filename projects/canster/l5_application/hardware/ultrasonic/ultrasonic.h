@@ -7,7 +7,7 @@
 
 #include "gpio.h"
 
-#define ULTRASONIC_DEBUG 1
+#define ULTRASONIC_DEBUG 0
 #define ULTRASONIC_ISR_DEBUG 0
 #define MAX_ULTRASONIC_LENGTH 3 // Number of Physical Ultrasonic Sensors in use
 

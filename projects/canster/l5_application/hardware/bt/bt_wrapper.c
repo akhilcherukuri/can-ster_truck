@@ -24,8 +24,6 @@ static const float PI = 3.141592654;
  * Static state variables
  */
 static float distance_between_coordinates;
-// static gps_coordinates_s destination_coordinate = {37.340820, -121.894333};
-
 static gps_coordinates_s destination_coordinate;
 
 // SENSOR
@@ -118,7 +116,8 @@ static void bt_wrapper__parse_loc(char *buffer) {
   char id[10] = {0};
   sscanf(buffer, "%s %f %f", id, &destination_coordinate.latitude, &destination_coordinate.longitude);
 
-  printf("%f %f\r\n", (double)destination_coordinate.latitude, (double)destination_coordinate.longitude);
+  printf("\n\nDestination coordinates = %lf %lf\r\n", (double)destination_coordinate.latitude,
+         (double)destination_coordinate.longitude);
 }
 
 /**
@@ -142,6 +141,11 @@ static float bt_wrapper__compute_distance() {
 
   float c = 2 * atan2f(sqrtf(a), sqrtf(1 - a));
   float d = EARTH_RADIUS * c;
+  printf("\nCurrent Coordinates: Lat = %lf, Long = %lf\nDestination Coordinates: Lat = %lf, Long = %lf\nDistance "
+         "between coordinates = %lf\n",
+         (double)current_coordinates.GEO_CURRENT_COORDINATES_latitude,
+         (double)current_coordinates.GEO_CURRENT_COORDINATES_longitude, (double)destination_coordinate.latitude,
+         (double)destination_coordinate.longitude, (double)d);
   return d;
 }
 
