@@ -2,3 +2,5 @@
 **/.DS_Store
 .sconsign.dblite
 _build_*/*
+projects/canster/.vscode/*
+.vscode/*
