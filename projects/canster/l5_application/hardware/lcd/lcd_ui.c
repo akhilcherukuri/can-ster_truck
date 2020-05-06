@@ -133,10 +133,10 @@ static void lcd_ui__update_sensor_values(void) {
   set_lcd_rps();
   curr_coodinates = can_geo__get_current_coordinates();
   if (curr_coodinates.GEO_CURRENT_COORDINATES_latitude < 0) {
-    curr_coodinates.GEO_CURRENT_COORDINATES_latitude *= (float)-1.0;
+    curr_coodinates.GEO_CURRENT_COORDINATES_latitude *= -1.0;
   }
   if (curr_coodinates.GEO_CURRENT_COORDINATES_longitude < 0) {
-    curr_coodinates.GEO_CURRENT_COORDINATES_longitude *= (float)-1.0;
+    curr_coodinates.GEO_CURRENT_COORDINATES_longitude *= -1.0;
   }
   curr_lat_leddigit =
       (uint16_t)((double)curr_coodinates.GEO_CURRENT_COORDINATES_latitude * PRECISION_FACTOR * PRECISION_FACTOR);

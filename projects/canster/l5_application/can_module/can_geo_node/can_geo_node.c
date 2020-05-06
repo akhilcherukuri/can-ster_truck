@@ -129,7 +129,6 @@ void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]
 }
 
 void can_geo__decode_geo_degree(dbc_message_header_t header, uint8_t bytes[8]) {
-
   if (dbc_decode_GEO_DEGREE(&geo_degree, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
     printf("\nGeo Degree: current(from compass): %lf, required(from computed haversine bearing angle): %lf",
@@ -156,7 +155,8 @@ void can_geo__decode_geo_destination_reached(dbc_message_header_t header, uint8_
 void can_geo__decode_geo_current_coordinates(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_GEO_CURRENT_COORDINATES(&geo_current_coordinates, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
-    printf("\nGeo Current Coordinates %lf %lf", (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_latitude,
+    printf("\nGeo Current Coordinates: Latitude = %lf, Longitude = %lf",
+           (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_latitude,
            (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_longitude);
 #endif
   }

@@ -8,14 +8,14 @@
 #define DRIVER_OBSTACLE_DEBUG 1
 #define STEERING_BASED_ON_SENSOR_VALUES 1
 
-// #if DRIVER_OBSTACLE_DEBUG == 0
+#if DRIVER_OBSTACLE_DEBUG == 1
 #include <stdio.h>
-// #endif
+#endif
 
 /**
  * STATIC VARIABLES
  */
-static const uint8_t DISTANCE_THRESHOLD_CM = 100.0;
+static const uint8_t DISTANCE_THRESHOLD_CM = 100;
 static dbc_SENSOR_SONARS_s sensor_sonar;
 static dbc_SENSOR_LIDAR_s sensor_lidar;
 static dbc_GEO_DEGREE_s geo_degree;
@@ -32,42 +32,37 @@ static int16_t driver_obstacle__turn_according_to_degree(float);
 /**
  * NON-STATIC FUNCTIONS
  */
-void driver_obstacle__process_input(dbc_SENSOR_SONARS_s *sonar) {
-  sensor_sonar = *sonar; // copy
-}
+void driver_obstacle__process_input(dbc_SENSOR_SONARS_s *sonar) { sensor_sonar = *sonar; }
 
-void driver_obstacle__set_geo_controller_direction(dbc_GEO_DEGREE_s *degree) {
-  geo_degree = *degree; // copy
-}
+void driver_obstacle__set_geo_controller_direction(dbc_GEO_DEGREE_s *degree) { geo_degree = *degree; }
 
 float driver_obstacle__get_motor_speed_value() { return motor_speed_value; }
 
 void set_destination_reached_status(bool is_dest_reached) { is_destination_reached = is_dest_reached; }
 
-// TODO: Attach LIDAR code also
 dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
 
   sensor_lidar = can_sensor__get_sensor_lidar();
 
   dbc_MOTOR_STEERING_s motor_steering = {{0}, 0};
   if (is_destination_reached == true) {
-    motor_speed_value = 5; // neutral = stop
+    motor_speed_value = 3; // neutral = stop
   } else {
-
     motor_speed_value = 5; // fwd med
 #if STEERING_BASED_ON_SENSOR_VALUES == 1
 
     // if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD_CM) {
     if (sensor_lidar.SENSOR_LIDAR_middle > 150) {
       // No obstacles ahead, so position yourself according to the GPS Coordinates and move towards destination
-      // motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
-      if (sensor_lidar.SENSOR_LIDAR_slight_left < 100) {
+      motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
+      if (sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM) {
         motor_steering.MOTOR_STEERING_direction = 1;
       }
-      if (sensor_lidar.SENSOR_LIDAR_slight_right < 100) {
+      if (sensor_lidar.SENSOR_LIDAR_slight_right < DISTANCE_THRESHOLD_CM) {
         motor_steering.MOTOR_STEERING_direction = -1;
       }
-      if ((sensor_lidar.SENSOR_LIDAR_slight_left < 100) && (sensor_lidar.SENSOR_LIDAR_slight_right < 100)) {
+      if ((sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM) &&
+          (sensor_lidar.SENSOR_LIDAR_slight_right < DISTANCE_THRESHOLD_CM)) {
         motor_steering.MOTOR_STEERING_direction = 0;
       }
 #if DRIVER_OBSTACLE_DEBUG == 1
@@ -77,12 +72,13 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
       /* Check if turning radius is healthy and large enough */
       // TODO: Refactor the code
       // if ((double)sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD_CM / 2.0)) {
-      if (sensor_lidar.SENSOR_LIDAR_middle <= (100)) {
+      if (sensor_lidar.SENSOR_LIDAR_middle <= DISTANCE_THRESHOLD_CM) {
         motor_speed_value = 3; // neutral = stop
       } else {
         // if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD_CM &&
         //     sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD_CM) {
-        if (sensor_lidar.SENSOR_LIDAR_slight_left < 100 && sensor_lidar.SENSOR_LIDAR_slight_right < 100) {
+        if (sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM &&
+            sensor_lidar.SENSOR_LIDAR_slight_right < DISTANCE_THRESHOLD_CM) {
           motor_speed_value = 3; // neutral = stop
         } else {
           // if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {

@@ -9,7 +9,7 @@
 
 #include "line_buffer.h"
 
-#define LCD_DEBUG 1
+#define LCD_DEBUG 0
 
 #if LCD_DEBUG == 1
 #include <stdio.h>
