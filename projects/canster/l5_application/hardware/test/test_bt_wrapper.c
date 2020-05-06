@@ -67,6 +67,7 @@ void test_bt_wrapper__update_decoded_messages(void) {
   can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
   can_geo__get_destination_reached_ExpectAndReturn(geo_destination_reached);
   can_geo__get_current_coordinates_ExpectAndReturn(current_coordinates);
+  can_geo__get_distance_from_destination_ExpectAndReturn(geo_distance_from_destination);
 
   // DRIVER
   can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
@@ -87,6 +88,7 @@ void test_bt_wrapper__write_once(void) {
   can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
   can_geo__get_destination_reached_ExpectAndReturn(geo_destination_reached);
   can_geo__get_current_coordinates_ExpectAndReturn(current_coordinates);
+  can_geo__get_distance_from_destination_ExpectAndReturn(geo_distance_from_destination);
 
   // DRIVER
   can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
@@ -95,37 +97,4 @@ void test_bt_wrapper__write_once(void) {
   bt__write_Expect(bt_buffer);
 
   bt_wrapper__write_once();
-}
-
-void test_bt_wrapper__compute_distance_real(void) {
-  current_coordinates.GEO_CURRENT_COORDINATES_latitude = 37.338207;
-  current_coordinates.GEO_CURRENT_COORDINATES_longitude = -121.886330;
-
-  destination_coordinate.latitude = 37.441810;
-  destination_coordinate.longitude = -122.165280;
-
-  float distance = bt_wrapper__compute_distance();
-  TEST_ASSERT_EQUAL_FLOAT(distance, 27204.23); // meters
-}
-
-void test_bt_wrapper__compute_distance_reached(void) {
-  current_coordinates.GEO_CURRENT_COORDINATES_latitude = 37.441810;
-  current_coordinates.GEO_CURRENT_COORDINATES_longitude = -122.165280;
-
-  destination_coordinate.latitude = 37.441810;
-  destination_coordinate.longitude = -122.165280;
-
-  float distance = bt_wrapper__compute_distance();
-  TEST_ASSERT_EQUAL_FLOAT(distance, 0); // meters
-}
-
-void test_bt_wrapper__compute_distance_tiny_increment(void) {
-  current_coordinates.GEO_CURRENT_COORDINATES_latitude = 37.441813; // step change by 3
-  current_coordinates.GEO_CURRENT_COORDINATES_longitude = -122.165280;
-
-  destination_coordinate.latitude = 37.441810;
-  destination_coordinate.longitude = -122.165280;
-
-  float distance = bt_wrapper__compute_distance();
-  TEST_ASSERT_EQUAL_FLOAT(distance, 0.424175); // meters
 }

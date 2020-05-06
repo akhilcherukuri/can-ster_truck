@@ -19,12 +19,10 @@
 #include <math.h>
 
 // Const Variables
-static const float PI = 3.141592654;
 
 /**
  * Static state variables
  */
-static float distance_between_coordinates;
 static gps_coordinates_s destination_coordinate;
 
 // SENSOR
@@ -35,6 +33,7 @@ static dbc_SENSOR_LIDAR_s sensor_lidar;
 static dbc_GEO_CURRENT_COORDINATES_s current_coordinates;
 static dbc_GEO_DEGREE_s geo_degree;
 static dbc_GEO_DESTINATION_REACHED_s geo_destination_reached;
+static dbc_GEO_DISTANCE_FROM_DESTINATION_s geo_distance_from_destination;
 
 // MOTOR
 static dbc_MOTOR_SPEED_FEEDBACK_s motor_current_speed;
@@ -99,12 +98,10 @@ static void bt_wrapper__update_decoded_messages(void) {
   geo_degree = can_geo__get_geo_degree();
   geo_destination_reached = can_geo__get_destination_reached();
   current_coordinates = can_geo__get_current_coordinates();
+  geo_distance_from_destination = can_geo__get_distance_from_destination();
 
   // DRIVER
   driver_steering = can_driver__get_driver_steering();
-
-  // OTHER
-  distance_between_coordinates = bt_wrapper__compute_distance();
 }
 
 // TODO, Update this when `update_decoded_messages` is done
@@ -116,7 +113,8 @@ static void bt_wrapper__update_write_buffer(void) {
            sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_slight_right,
            (double)motor_current_speed.MOTOR_SPEED_current, (double)geo_degree.GEO_DEGREE_current,
            (double)geo_degree.GEO_DEGREE_required, driver_steering.MOTOR_STEERING_direction,
-           geo_destination_reached.GEO_DESTINATION_REACHED_cmd, (double)distance_between_coordinates);
+           geo_destination_reached.GEO_DESTINATION_REACHED_cmd,
+           (double)geo_distance_from_destination.GEO_distance_from_destination);
 }
 
 /**
@@ -128,43 +126,4 @@ static void bt_wrapper__parse_loc(char *buffer) {
 
   printf("\n\nDestination coordinates = %lf %lf\r\n", (double)destination_coordinate.latitude,
          (double)destination_coordinate.longitude);
-}
-
-/**
- * STATIC FUNCTIONS
- */
-static float bt_wrapper__compute_distance() {
-  static const uint32_t EARTH_RADIUS = 6371 * 1000;
-
-  float current_coordinate_latitude_radian =
-      bt_wrapper__degree_to_radian(current_coordinates.GEO_CURRENT_COORDINATES_latitude);
-  float destination_coordinate_latitude_radian = bt_wrapper__degree_to_radian(destination_coordinate.latitude);
-
-  float delta_latitude = bt_wrapper__degree_to_radian(destination_coordinate.latitude -
-                                                      current_coordinates.GEO_CURRENT_COORDINATES_latitude);
-  float delta_longitude = bt_wrapper__degree_to_radian(destination_coordinate.longitude -
-                                                       current_coordinates.GEO_CURRENT_COORDINATES_longitude);
-
-  float a = sinf(delta_latitude / 2) * sinf(delta_latitude / 2) +
-            cosf(current_coordinate_latitude_radian) * cosf(destination_coordinate_latitude_radian) *
-                sinf(delta_longitude / 2) * sinf(delta_longitude / 2);
-
-  float c = 2 * atan2f(sqrtf(a), sqrtf(1 - a));
-  float d = EARTH_RADIUS * c;
-  printf("\nCurrent Coordinates: Lat = %lf, Long = %lf\nDestination Coordinates: Lat = %lf, Long = %lf\nDistance "
-         "between coordinates = %lf\n",
-         (double)current_coordinates.GEO_CURRENT_COORDINATES_latitude,
-         (double)current_coordinates.GEO_CURRENT_COORDINATES_longitude, (double)destination_coordinate.latitude,
-         (double)destination_coordinate.longitude, (double)d);
-  return d;
-}
-
-static float bt_wrapper__degree_to_radian(float degree) {
-  float rval = (degree * PI) / 180;
-  return rval;
-}
-
-static float bt_wrapper__radian_to_degree(float radian) {
-  float rval = (radian * 180) / PI;
-  return rval;
 }

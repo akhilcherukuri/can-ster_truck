@@ -29,6 +29,7 @@ static dbc_GEO_DEGREE_s geo_degree;
 static dbc_GEO_DESTINATION_REACHED_s geo_destination;
 
 static dbc_GEO_CURRENT_COORDINATES_s geo_current_coordinates;
+static dbc_GEO_DISTANCE_FROM_DESTINATION_s geo_distance_from_destination;
 
 /**
  * Functions
@@ -41,6 +42,7 @@ dbc_GEO_HEARTBEAT_s can_geo__get_heartbeat() { return geo_heartbeat; }
 dbc_GEO_CURRENT_COORDINATES_s can_geo__get_current_coordinates() { return geo_current_coordinates; }
 
 dbc_GEO_DESTINATION_REACHED_s can_geo__get_destination_reached() { return geo_destination; }
+dbc_GEO_DISTANCE_FROM_DESTINATION_s can_geo__get_distance_from_destination() { return geo_distance_from_destination; }
 
 #if BOARD_GEO_NODE == 1
 
@@ -162,6 +164,15 @@ void can_geo__decode_geo_current_coordinates_debug(dbc_message_header_t header, 
 #if GEO_NODE_DEBUG == 1
     printf("Current: Latitude %f, Longitude %f\r\n", (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_latitude,
            (double)geo_current_coordinates.GEO_CURRENT_COORDINATES_longitude);
+#endif
+  }
+}
+
+void can_geo__decode_geo_distance_from_destination_debug(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_GEO_DISTANCE_FROM_DESTINATION(&geo_distance_from_destination, header, bytes)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Geo Distance from Destination: %f\r\n",
+           (double)geo_distance_from_destination.GEO_distance_from_destination);
 #endif
   }
 }
