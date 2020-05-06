@@ -117,6 +117,10 @@ static void can_driver__transmit_driver_steering() {
 #if DRIVER_NODE_DEBUG == 1
     printf("Failed to encode and send Motor Steering Data\r\n");
 #endif
+  } else {
+#if DRIVER_NODE_DEBUG == 1
+    printf("\nSteering value sent = %d\n", message.MOTOR_STEERING_direction);
+#endif
   }
 }
 
