@@ -54,10 +54,6 @@ static void bt_wrapper__update_write_buffer(void);
 // Static parsers
 static void bt_wrapper__parse_loc(char *buffer);
 
-static float bt_wrapper__compute_distance();
-static float bt_wrapper__degree_to_radian(float degree);
-static float bt_wrapper__radian_to_degree(float radian);
-
 /**
  * Functions
  */

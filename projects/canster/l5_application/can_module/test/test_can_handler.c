@@ -40,6 +40,7 @@ void test_can_handler__handle_all_incoming_messages(void) {
   // MOTOR
   can_motor__decode_motor_heartbeat_ExpectAnyArgs();
   can_motor__decode_motor_speed_feedback_ExpectAnyArgs();
+  can_motor__decode_motor_info_debug_ExpectAnyArgs();
 
   // GEO
   can_geo__decode_geo_heartbeat_ExpectAnyArgs();
@@ -47,6 +48,7 @@ void test_can_handler__handle_all_incoming_messages(void) {
 
   // DEBUG
   can_geo__decode_geo_current_coordinates_debug_ExpectAnyArgs();
+  can_geo__decode_geo_distance_from_destination_debug_ExpectAnyArgs();
 
   can__rx_ExpectAndReturn(CAN_PORT, &recv_message, 0, false);
   can_handler__handle_all_incoming_messages();
