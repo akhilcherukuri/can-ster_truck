@@ -13,6 +13,7 @@
 #include "can_motor_node.h"
 
 // SENSOR
+#include "lidar_data_handler.h"
 #include "ultrasonic_wrapper.h"
 
 #include <math.h>
@@ -28,6 +29,7 @@ static gps_coordinates_s destination_coordinate;
 
 // SENSOR
 static dbc_SENSOR_SONARS_s sensor_sonar;
+static dbc_SENSOR_LIDAR_s sensor_lidar;
 
 // GEO
 static dbc_GEO_CURRENT_COORDINATES_s current_coordinates;
@@ -85,25 +87,33 @@ static void bt_wrapper__read_cb(char *buffer, char *identifier) {
 
 // TODO, Update more data here
 static void bt_wrapper__update_decoded_messages(void) {
-  current_coordinates = can_geo__get_current_coordinates();
+  // SENSORS
   ultrasonic__get_distance_from_all_sensors(&sensor_sonar);
+  lidar_data_handler__get_distances(&sensor_lidar);
 
+  // CAN NODES
+  // MOTOR
   motor_current_speed = can_motor__get_motor_speed_feedback();
+
+  // GEO
   geo_degree = can_geo__get_geo_degree();
-
-  driver_steering = can_driver__get_driver_steering();
   geo_destination_reached = can_geo__get_destination_reached();
+  current_coordinates = can_geo__get_current_coordinates();
 
+  // DRIVER
+  driver_steering = can_driver__get_driver_steering();
+
+  // OTHER
   distance_between_coordinates = bt_wrapper__compute_distance();
 }
 
 // TODO, Update this when `update_decoded_messages` is done
 static void bt_wrapper__update_write_buffer(void) {
-  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char), "$canster,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%d,%d,%f\n",
+  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char), "$canster,%f,%f,%f,%f,%d,%d,%d,%f,%f,%f,%d,%d,%f\n",
            (double)current_coordinates.GEO_CURRENT_COORDINATES_latitude,
            (double)current_coordinates.GEO_CURRENT_COORDINATES_longitude, (double)destination_coordinate.latitude,
-           (double)destination_coordinate.longitude, (double)sensor_sonar.SENSOR_SONARS_left,
-           (double)sensor_sonar.SENSOR_SONARS_middle, (double)sensor_sonar.SENSOR_SONARS_right,
+           (double)destination_coordinate.longitude, sensor_lidar.SENSOR_LIDAR_slight_left,
+           sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_slight_right,
            (double)motor_current_speed.MOTOR_SPEED_current, (double)geo_degree.GEO_DEGREE_current,
            (double)geo_degree.GEO_DEGREE_required, driver_steering.MOTOR_STEERING_direction,
            geo_destination_reached.GEO_DESTINATION_REACHED_cmd, (double)distance_between_coordinates);
