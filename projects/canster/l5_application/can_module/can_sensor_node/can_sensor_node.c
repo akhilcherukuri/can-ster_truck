@@ -146,12 +146,13 @@ static void can_sensor__transmit_sensor_lidar() {
 }
 
 static void can_sensor__transmit_sensor_bt_coordinates() {
-  dbc_SENSOR_BT_COORDINATES_s message_bt_coordinates = {{0}};
-  gps_coordinates_s dest_coordinates;
+  dbc_SENSOR_BT_COORDINATES_s message_bt_coordinates = {};
+
+  gps_coordinates_s dest_coordinates = {};
   bt_wrapper__get_destination_coordinates(&dest_coordinates);
+
   message_bt_coordinates.SENSOR_BT_COORDINATES_latitude = dest_coordinates.latitude;
   message_bt_coordinates.SENSOR_BT_COORDINATES_longitude = dest_coordinates.longitude;
-  // TODO, Put your values here
 
   if (!dbc_encode_and_send_SENSOR_BT_COORDINATES(NULL, &message_bt_coordinates)) {
 #if SENSOR_NODE_DEBUG == 1

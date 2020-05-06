@@ -10,6 +10,9 @@
 #include "Mocklidar_data_handler.h"
 #include "Mockultrasonic_wrapper.h"
 
+#include "Mockbt_wrapper.h"
+#include "Mockgps.h"
+
 #include "can_sensor_node.c"
 #include "who_am_i.h"
 
@@ -57,3 +60,20 @@ void test_can_sensor_sonar_mia_true(void) {
   TEST_ASSERT_EQUAL_UINT32(sensor_sonar.SENSOR_SONARS_middle, 0);
   TEST_ASSERT_EQUAL_UINT32(sensor_sonar.SENSOR_SONARS_right, 0);
 }
+
+#if BOARD_SENSOR_NODE == 1
+
+void test_can_sensor__transmit_sensor_bt_coordinates() {
+  gps_coordinates_s dest_coordinates = {};
+  bt_wrapper__get_destination_coordinates_Expect(NULL);
+  bt_wrapper__get_destination_coordinates_IgnoreArg_dest_coordinate();
+  bt_wrapper__get_destination_coordinates_ReturnThruPtr_dest_coordinate(&dest_coordinates);
+
+  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
+
+  can_sensor__transmit_sensor_bt_coordinates();
+}
+
+#else
+void test_can_sensor__transmit_sensor_bt_coordinates();
+#endif

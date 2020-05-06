@@ -76,9 +76,9 @@ void can_motor__motor_speed_feedback_mia() {
   if (dbc_service_mia_MOTOR_SPEED_FEEDBACK(&motor_wheel_speed_current_val, mia_increment_value)) {
 #if DEBUG_MOTOR_NODE == 1
     printf("MIA -> MOTOR_SPEED_FEEDBACK\r\n");
-#endif
     printf("Assigned default motor speed for feedback = %f\r\n",
            (double)motor_wheel_speed_current_val.MOTOR_SPEED_current);
+#endif
     // gpio__set(board_io__get_led1());
   }
 }
