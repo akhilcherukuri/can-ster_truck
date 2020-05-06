@@ -65,6 +65,7 @@ void can_handler__handle_all_incoming_messages(void) {
 
     // Sensor Node Decode functions
     can_sensor__decode_sensor_heartbeat(header, recv_message.data.bytes);
+    can_sensor__decode_sensor_bt_coordinates(header, recv_message.data.bytes);
     // can_sensor__decode_sensor_sonar(header, recv_message.data.bytes);
 
     // Driver Node Decode functions

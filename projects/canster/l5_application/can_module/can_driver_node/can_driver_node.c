@@ -152,7 +152,6 @@ void can_driver__transmit_all_messages(void) {}
 /**
  * DECODE
  */
-static void can_driver__on_decode_driver_coordinates();
 
 void can_driver__decode_driver_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_DRIVER_HEARTBEAT(&driver_heartbeat, header, bytes)) {
@@ -189,8 +188,4 @@ void can_driver__decode_driver_coordinates(dbc_message_header_t header, uint8_t 
     // TODO: Receive the destination coordinates from Sensor Node (bluetooth app)
     // can_driver__on_decode_driver_coordinates();
   }
-}
-
-static void can_driver__on_decode_driver_coordinates() {
-  geo_logic__update_destination_coordinate(&driver_coordinates);
 }

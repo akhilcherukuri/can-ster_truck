@@ -136,12 +136,3 @@ void test_can_driver__transmit_driver_required_motor_speed() {}
 void test_can_driver__transmit_driver_heartbeat() {}
 void test_can_driver__transmit_driver_coordinates() {}
 #endif
-
-/**
- * DECODE
- */
-void test_can_driver__on_decode_driver_coordinates(void) {
-  dbc_DRIVER_COORDINATES_s driver_coordinate;
-  geo_logic__update_destination_coordinate_Expect(&driver_coordinates);
-  can_driver__on_decode_driver_coordinates();
-}

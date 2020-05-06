@@ -8,6 +8,8 @@
 #include "Mockdriver_obstacle.h"
 #include "Mockgpio.h"
 
+#include "Mockgeo_logic.h"
+
 #include "can_sensor_node.c"
 #include "who_am_i.h"
 

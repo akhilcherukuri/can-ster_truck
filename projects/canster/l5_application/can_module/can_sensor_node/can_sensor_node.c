@@ -4,6 +4,7 @@
 #include "gpio.h"
 
 #include "driver_obstacle.h"
+#include "geo_logic.h"
 
 #define SENSOR_NODE_DEBUG 1
 
@@ -169,6 +170,7 @@ void can_sensor__decode_sensor_bt_coordinates(dbc_message_header_t header, uint8
 #endif
 
     // TODO, Add other things here
+    geo_logic__update_destination_coordinate(&sensor_bt_coordinates);
   }
 }
 
