@@ -18,6 +18,7 @@ void test_can_handler__handle_all_mia() {
   can_driver__driver_heartbeat_mia_Expect();
   can_motor__motor_heartbeat_mia_Expect();
   can_geo__geo_heartbeat_mia_Expect();
+  can_geo__geo_destination_reached_mia_Expect();
   can_handler__handle_all_mia();
 }
 
@@ -45,6 +46,7 @@ void test_can_handler__handle_all_incoming_messages(void) {
   // GEO
   can_geo__decode_geo_heartbeat_ExpectAnyArgs();
   can_geo__decode_geo_degree_ExpectAnyArgs();
+  can_geo__decode_geo_destination_reached_ExpectAnyArgs();
 
   // DEBUG
   can_geo__decode_geo_current_coordinates_debug_ExpectAnyArgs();

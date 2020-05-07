@@ -6,7 +6,6 @@
 
 #include "can_bus_constants.h"
 
-// TODO, Add all your node includes here
 #include "can_driver_node.h"
 #include "can_geo_node.h"
 #include "can_motor_node.h"
@@ -38,6 +37,7 @@ void can_handler__handle_all_mia(void) {
 
   // Geo Node MIA Functions
   can_geo__geo_heartbeat_mia();
+  can_geo__geo_destination_reached_mia();
   // can_geo__geo_degree_mia();
 }
 
@@ -83,6 +83,7 @@ void can_handler__handle_all_incoming_messages(void) {
     // Geo Node Decode Functions
     can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);
     can_geo__decode_geo_degree(header, recv_message.data.bytes);
+    can_geo__decode_geo_destination_reached(header, recv_message.data.bytes);
 
     // DEBUG
     can_geo__decode_geo_current_coordinates_debug(header, recv_message.data.bytes);
@@ -91,7 +92,6 @@ void can_handler__handle_all_incoming_messages(void) {
 }
 
 void can_handler__transmit_message_10hz(void) {
-  // Module function
 
   // Sensor Node Transmit
   can_sensor__transmit_all_messages();
@@ -107,7 +107,7 @@ void can_handler__transmit_message_10hz(void) {
 }
 
 /**
- * Extern functions
+ * EXTERN FUNCTIONS
  */
 bool dbc_send_can_message(void *argument_from_dbc_encode_and_send, uint32_t message_id, const uint8_t bytes[8],
                           uint8_t dlc) {
