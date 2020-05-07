@@ -19,7 +19,7 @@ void test_driver_obstacle__obstacle_detected_left() {
   sensor_sonar.SENSOR_SONARS_right = 30;
 
   int16_t isleft = driver_obstacle__obstacle_detected();
-  TEST_ASSERT_EQUAL_INT16(isleft, -2);
+  TEST_ASSERT_EQUAL_INT16(isleft, MOTOR_STEERING_hard_left);
 }
 
 void test_driver_obstacle__obstacle_detected_right() {
@@ -27,7 +27,7 @@ void test_driver_obstacle__obstacle_detected_right() {
   sensor_sonar.SENSOR_SONARS_right = 150;
 
   int16_t isright = driver_obstacle__obstacle_detected();
-  TEST_ASSERT_EQUAL_INT16(isright, 2);
+  TEST_ASSERT_EQUAL_INT16(isright, MOTOR_STEERING_hard_right);
 }
 
 void test_driver_obstacle__tilt_left(void) {
@@ -35,7 +35,7 @@ void test_driver_obstacle__tilt_left(void) {
   sensor_sonar.SENSOR_SONARS_left = DISTANCE_THRESHOLD_CM + 10.0;
 
   int16_t left = driver_obstacle__tilt_left_or_right();
-  TEST_ASSERT_EQUAL_INT16(left, -1);
+  TEST_ASSERT_EQUAL_INT16(left, MOTOR_STEERING_slight_left);
 }
 
 void test_driver_obstacle__tilt_right(void) {
@@ -43,22 +43,22 @@ void test_driver_obstacle__tilt_right(void) {
   sensor_sonar.SENSOR_SONARS_left = DISTANCE_THRESHOLD_CM - 10.0;
 
   int16_t right = driver_obstacle__tilt_left_or_right();
-  TEST_ASSERT_EQUAL_INT16(right, 1);
+  TEST_ASSERT_EQUAL_INT16(right, MOTOR_STEERING_slight_right);
 }
 
 void test_driver_obstacle__turn_according_to_degree_left(void) {
   int16_t turn = driver_obstacle__turn_according_to_degree(-20);
-  TEST_ASSERT_EQUAL_INT16(turn, -1);
+  TEST_ASSERT_EQUAL_INT16(turn, MOTOR_STEERING_slight_left);
 }
 
 void test_driver_obstacle__turn_according_to_degree_right(void) {
   int16_t turn = driver_obstacle__turn_according_to_degree(+50);
-  TEST_ASSERT_EQUAL_INT16(turn, +1);
+  TEST_ASSERT_EQUAL_INT16(turn, MOTOR_STEERING_slight_right);
 }
 
 void test_driver_obstacle__turn_according_to_degree_straight(void) {
   int16_t turn = driver_obstacle__turn_according_to_degree(0);
-  TEST_ASSERT_EQUAL_INT16(turn, 0);
+  TEST_ASSERT_EQUAL_INT16(turn, MOTOR_STEERING_straight);
 }
 
 void test_driver_obstacle__move_to_destination_top_quadrant() {
@@ -69,31 +69,31 @@ void test_driver_obstacle__move_to_destination_top_quadrant() {
   geo_degree.GEO_DEGREE_required = 45;
 
   movement = driver_obstacle__move_to_destination();
-  TEST_ASSERT_EQUAL_INT16(movement, 1);
+  TEST_ASSERT_EQUAL_INT16(movement, MOTOR_STEERING_slight_right);
 
   // P2 ->
   geo_degree.GEO_DEGREE_required = 90;
 
   movement = driver_obstacle__move_to_destination();
-  TEST_ASSERT_EQUAL_INT16(movement, 0);
+  TEST_ASSERT_EQUAL_INT16(movement, MOTOR_STEERING_straight);
 
   // P3 -> Second Quadrant
   geo_degree.GEO_DEGREE_required = 135;
 
   movement = driver_obstacle__move_to_destination();
-  TEST_ASSERT_EQUAL_INT16(movement, -1);
+  TEST_ASSERT_EQUAL_INT16(movement, MOTOR_STEERING_slight_left);
 
   // P4 -> Third Quadrant
   geo_degree.GEO_DEGREE_required = 180 + 45;
 
   movement = driver_obstacle__move_to_destination();
-  TEST_ASSERT_EQUAL_INT16(movement, -1);
+  TEST_ASSERT_EQUAL_INT16(movement, MOTOR_STEERING_slight_left);
 
   // P5 -> Fourth Quadrant
   geo_degree.GEO_DEGREE_required = 180 + 45 + 90;
 
   movement = driver_obstacle__move_to_destination();
-  TEST_ASSERT_EQUAL_INT16(movement, +1);
+  TEST_ASSERT_EQUAL_INT16(movement, MOTOR_STEERING_slight_right);
 }
 
 void test_driver_obstacle__move_to_destination_bottom_quadrant() {
@@ -142,12 +142,12 @@ void test_driver_obstacle__get_motor_commands_left_right() {
   sensor_sonar.SENSOR_SONARS_right = 30;
 
   dbc_MOTOR_STEERING_s steering = driver_obstacle__get_motor_commands();
-  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, -2);
+  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, MOTOR_STEERING_hard_left);
 
   sensor_sonar.SENSOR_SONARS_left = 30;
   sensor_sonar.SENSOR_SONARS_right = 150;
   steering = driver_obstacle__get_motor_commands();
-  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, 2);
+  TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, MOTOR_STEERING_hard_right);
 }
 
 void test_driver_obstacle__get_motor_commands_left_right_for_lidar() {

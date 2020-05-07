@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "can_sensor_node.h"
+#include "project.h"
 
 #define DRIVER_OBSTACLE_DEBUG 1
 #define STEERING_BASED_ON_SENSOR_VALUES 1
@@ -56,14 +57,14 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
       // No obstacles ahead, so position yourself according to the GPS Coordinates and move towards destination
       motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
       if (sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM) {
-        motor_steering.MOTOR_STEERING_direction = 1;
+        motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_slight_right;
       }
       if (sensor_lidar.SENSOR_LIDAR_slight_right < DISTANCE_THRESHOLD_CM) {
-        motor_steering.MOTOR_STEERING_direction = -1;
+        motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_slight_left;
       }
       if ((sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM) &&
           (sensor_lidar.SENSOR_LIDAR_slight_right < DISTANCE_THRESHOLD_CM)) {
-        motor_steering.MOTOR_STEERING_direction = 0;
+        motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_straight;
       }
 #if DRIVER_OBSTACLE_DEBUG == 1
       printf("\nSteering value computed by Geo logic: %d", motor_steering.MOTOR_STEERING_direction);
@@ -85,10 +86,10 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
         } else {
           // if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
           if (sensor_lidar.SENSOR_LIDAR_slight_left > sensor_lidar.SENSOR_LIDAR_slight_right) {
-            motor_steering.MOTOR_STEERING_direction = -2; // driver_obstacle__obstacle_detected();
+            motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_hard_left; // driver_obstacle__obstacle_detected();
             // } else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right) {
           } else if (sensor_lidar.SENSOR_LIDAR_slight_left <= sensor_lidar.SENSOR_LIDAR_slight_right) {
-            motor_steering.MOTOR_STEERING_direction = 2;
+            motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_hard_right;
           }
         }
       }
@@ -157,10 +158,10 @@ static int16_t driver_obstacle__turn_according_to_degree(float diff) {
   int16_t rval = 0;
   if (diff > 0) {
     // Go little right
-    rval = 1;
+    rval = MOTOR_STEERING_slight_right;
   } else if (diff < 0) {
     // little left
-    rval = -1;
+    rval = MOTOR_STEERING_slight_left;
   } else {
     // We have reached our destination (STOP Condition)
   }
@@ -173,12 +174,12 @@ static int16_t driver_obstacle__tilt_left_or_right() {
   if (sensor_sonar.SENSOR_SONARS_left <= DISTANCE_THRESHOLD_CM &&
       sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD_CM) {
     // Move a little right
-    return_value = +1;
+    return_value = MOTOR_STEERING_slight_right;
 
   } else if (sensor_sonar.SENSOR_SONARS_right <= DISTANCE_THRESHOLD_CM &&
              sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD_CM) {
     // Move a little left
-    return_value = -1;
+    return_value = MOTOR_STEERING_slight_left;
 
   } else {
     // TODO, Reverse Condition
@@ -198,11 +199,11 @@ static int16_t driver_obstacle__obstacle_detected() {
   if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right &&
       sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD_CM) {
     // Move left
-    return_value = -2;
+    return_value = MOTOR_STEERING_hard_left;
   } else if (sensor_sonar.SENSOR_SONARS_right > sensor_sonar.SENSOR_SONARS_left &&
              sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD_CM) {
     // Move right
-    return_value = +2;
+    return_value = MOTOR_STEERING_hard_right;
   } else {
     // edge case, REVERSE
   }
