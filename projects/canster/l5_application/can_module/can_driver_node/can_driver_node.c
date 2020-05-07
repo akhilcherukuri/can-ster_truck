@@ -89,25 +89,11 @@ void can_driver__driver_coordinates_mia() {
 static void can_driver__transmit_driver_steering();
 static void can_driver__transmit_driver_required_motor_speed();
 static void can_driver__transmit_driver_heartbeat();
-static void can_driver__transmit_driver_coordinates();
 
 void can_driver__transmit_all_messages(void) {
   can_driver__transmit_driver_steering();
   can_driver__transmit_driver_required_motor_speed();
   can_driver__transmit_driver_heartbeat();
-  // can_driver__transmit_driver_coordinates();
-}
-
-static void can_driver__transmit_driver_coordinates() {
-
-  const dbc_DRIVER_COORDINATES_s *destination_coordinate = driver_state__get_destination_coordinate();
-  dbc_DRIVER_COORDINATES_s message = *destination_coordinate;
-
-  if (!dbc_encode_and_send_DRIVER_COORDINATES(NULL, &message)) {
-#if DRIVER_NODE_DEBUG == 1
-    printf("Failed to encode and send Driver Coordinates\r\n");
-#endif
-  }
 }
 
 static void can_driver__transmit_driver_steering() {

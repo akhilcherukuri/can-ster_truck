@@ -139,18 +139,10 @@ void test_can_driver__transmit_driver_heartbeat() {
   can_driver__transmit_driver_heartbeat();
 }
 
-void test_can_driver__transmit_driver_coordinates() {
-  const dbc_DRIVER_COORDINATES_s destination_coordinate;
-  driver_state__get_destination_coordinate_ExpectAndReturn(&destination_coordinate);
-  dbc_send_can_message_ExpectAnyArgsAndReturn(true);
-  can_driver__transmit_driver_coordinates();
-}
-
 #else
 void test_can_driver__transmit_driver_steering() {}
 void test_can_driver__transmit_driver_required_motor_speed() {}
 void test_can_driver__transmit_driver_heartbeat() {}
-void test_can_driver__transmit_driver_coordinates() {}
 #endif
 
 /**
