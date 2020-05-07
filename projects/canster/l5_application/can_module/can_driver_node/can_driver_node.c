@@ -15,7 +15,7 @@
 
 #include "driver_state.h"
 
-#define DRIVER_NODE_DEBUG 1
+#define DRIVER_NODE_DEBUG 0
 
 #if DRIVER_NODE_DEBUG == 1
 #include <stdio.h>

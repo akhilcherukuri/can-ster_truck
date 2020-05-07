@@ -3,7 +3,7 @@
 #include "board_io.h"
 #include "gpio.h"
 
-#define DEBUG_MOTOR_NODE 1
+#define DEBUG_MOTOR_NODE 0
 
 #if DEBUG_MOTOR_NODE == 1
 #include <stdio.h>

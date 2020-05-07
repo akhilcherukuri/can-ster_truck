@@ -6,7 +6,7 @@
 #include "driver_obstacle.h"
 #include "geo_logic.h"
 
-#define SENSOR_NODE_DEBUG 1
+#define SENSOR_NODE_DEBUG 0
 
 #if SENSOR_NODE_DEBUG == 1
 #include <stdio.h>
