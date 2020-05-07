@@ -106,11 +106,6 @@ void test_can__geo_destination_reached_mia_false() {
 /**
  * DECODE
  */
-void test_can_geo__on_decode_geo_degree(void) {
-  dbc_GEO_DEGREE_s geo_degree = {};
-  driver_obstacle__geo_controller_directions_Expect(&geo_degree);
-  can_geo__on_decode_geo_degree();
-}
 
 /**
  * TRANSMIT

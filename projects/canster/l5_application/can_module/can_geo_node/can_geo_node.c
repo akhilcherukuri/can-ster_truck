@@ -168,8 +168,6 @@ void can_geo__geo_destination_reached_mia() {
 /**
  * DECODE
  */
-static void can_geo__on_decode_geo_degree(void);
-
 void can_geo__decode_geo_heartbeat(dbc_message_header_t header, uint8_t bytes[8]) {
   if (dbc_decode_GEO_HEARTBEAT(&geo_heartbeat, header, bytes)) {
 #if GEO_NODE_DEBUG == 1
@@ -206,12 +204,4 @@ void can_geo__decode_geo_current_coordinates_debug(dbc_message_header_t header, 
     // TODO, Put a function here
     // TODO, Debug to Bluetooth or Driver!
   }
-}
-
-static void can_geo__on_decode_geo_degree(void) {
-  driver_obstacle__geo_controller_directions(&geo_degree);
-#if GEO_NODE_DEBUG == 1
-  printf("\non_decode_geo_degree: %lf %lf", (double)geo_degree.GEO_DEGREE_current,
-         (double)geo_degree.GEO_DEGREE_required);
-#endif
 }
