@@ -3,7 +3,7 @@
 #include "can_bus.h"
 
 #define CAN_PORT can1
-#define DEBUG 1
+#define DEBUG 0
 #define RAW_DATA_DEBUG 0
 
 #define BAUD_RATE_KBPS 100
