@@ -31,16 +31,15 @@ static dbc_GEO_DESTINATION_REACHED_s geo_destination;
  * Functions
  */
 // Getters for all static variables
-// ! NO SETTERS
-// ! DO NOT DISCARD THE CONST QUALIFIER
-const dbc_GEO_DEGREE_s *can_geo__get_geo_degree() { return &geo_degree; }
-const dbc_GEO_HEARTBEAT_s *can_geo__get_heartbeat() { return &geo_heartbeat; }
+dbc_GEO_DEGREE_s can_geo__get_geo_degree() { return geo_degree; }
+dbc_GEO_HEARTBEAT_s can_geo__get_heartbeat() { return geo_heartbeat; }
 
 #if BOARD_GEO_NODE == 1
 
 static void can_geo__transmit_geo_heartbeat();
 static void can_geo__transmit_geo_degree();
 static void can_geo__transmit_geo_destination_reached();
+static void can_geo__transmit_geo_distance_from_destination();
 
 // Debug Message
 static void can_geo__transmit_geo_coordinates_debug();
@@ -50,6 +49,7 @@ void can_geo__transmit_all_messages(void) {
   can_geo__transmit_geo_heartbeat();
   can_geo__transmit_geo_degree();
   can_geo__transmit_geo_destination_reached();
+  can_geo__transmit_geo_distance_from_destination();
 
   can_geo__transmit_geo_coordinates_debug();
 }
@@ -106,6 +106,17 @@ static void can_geo__transmit_geo_coordinates_debug() {
   if (!dbc_encode_and_send_GEO_CURRENT_COORDINATES(NULL, &message)) {
 #if GEO_NODE_DEBUG == 1
     printf("Failed to encode and send Geo Coordinates\r\n");
+#endif
+  }
+}
+
+static void can_geo__transmit_geo_distance_from_destination() {
+  dbc_GEO_DISTANCE_FROM_DESTINATION_s message;
+  message.GEO_distance_from_destination = geo_logic__distance_from_destination();
+
+  if (!dbc_encode_and_send_GEO_DISTANCE_FROM_DESTINATION(NULL, &message)) {
+#if GEO_NODE_DEBUG == 1
+    printf("Failed to encode and send Geo Distance from Destination\r\n");
 #endif
   }
 }
