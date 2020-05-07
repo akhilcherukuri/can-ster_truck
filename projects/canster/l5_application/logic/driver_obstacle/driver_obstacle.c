@@ -81,7 +81,7 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
         if (sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM &&
             sensor_lidar.SENSOR_LIDAR_slight_right < DISTANCE_THRESHOLD_CM) {
           // motor_speed_value = 3; // neutral = stop
-        motor_speed_value = 2; // reverse slow
+          motor_speed_value = 2; // reverse slow
         } else {
           // if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
           if (sensor_lidar.SENSOR_LIDAR_slight_left > sensor_lidar.SENSOR_LIDAR_slight_right) {
