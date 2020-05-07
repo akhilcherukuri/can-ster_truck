@@ -98,12 +98,14 @@ static void motor__run_state_machine_10hz(current_motor_state_e curr_motor_state
       if (callback_count == entry_time_of_state_change + 1) {
         esc__direction_processor(decoded_speed_value_from_driver.MOTOR_SPEED_processed);
       }
-      if ((callback_count > (entry_time_of_state_change + 1)) && callback_count <= (entry_time_of_state_change + 30)) {
+      if ((callback_count > (entry_time_of_state_change + 1)) && callback_count <= (entry_time_of_state_change + 10)) {
         esc__direction_processor(3);
       }
       if (callback_count > (entry_time_of_state_change + 10)) {
         state_change = false;
-        printf("\nCase 0...2 Transition Complete %f", decoded_speed_value_from_driver.MOTOR_SPEED_processed);
+#if DEBUG_STATE_MACHINE == 1
+        printf("\nCase 0...2 Transition Complete %lf", (double)decoded_speed_value_from_driver.MOTOR_SPEED_processed);
+#endif
         esc__direction_processor(decoded_speed_value_from_driver.MOTOR_SPEED_processed);
       }
     }
@@ -129,12 +131,14 @@ static void motor__run_state_machine_10hz(current_motor_state_e curr_motor_state
       if (callback_count == entry_time_of_state_change + 1) {
         esc__direction_processor(decoded_speed_value_from_driver.MOTOR_SPEED_processed);
       }
-      if ((callback_count > (entry_time_of_state_change + 1)) && callback_count <= (entry_time_of_state_change + 30)) {
+      if ((callback_count > (entry_time_of_state_change + 1)) && callback_count <= (entry_time_of_state_change + 10)) {
         esc__direction_processor(3);
       }
-      if (callback_count > (entry_time_of_state_change + 30)) {
+      if (callback_count > (entry_time_of_state_change + 10)) {
         state_change = false;
-        printf("\nCase 4...6 Transition Complete: %f", decoded_speed_value_from_driver.MOTOR_SPEED_processed);
+#if DEBUG_STATE_MACHINE == 1
+        printf("\nCase 4...6 Transition Complete: %lf", (double)decoded_speed_value_from_driver.MOTOR_SPEED_processed);
+#endif
         esc__direction_processor(decoded_speed_value_from_driver.MOTOR_SPEED_processed);
       }
     }
