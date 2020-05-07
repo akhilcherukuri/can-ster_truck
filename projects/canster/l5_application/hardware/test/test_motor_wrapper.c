@@ -21,7 +21,7 @@ void test_motor__init() {
 }
 
 void test_motor__run_10hz() {
-  dbc_MOTOR_STEERING_s decoded_steering_value_from_driver = {{0}, 3};
+  dbc_MOTOR_STEERING_s decoded_steering_value_from_driver = {{0}, MOTOR_STEERING_straight};
   dbc_MOTOR_SPEED_s decoded_speed_value_from_driver = {{0}, 3};
   get_mia_steering_ExpectAndReturn(false);
   can_driver__get_driver_steering_ExpectAndReturn(&decoded_steering_value_from_driver);
@@ -33,7 +33,7 @@ void test_motor__run_10hz() {
 }
 
 void test_motor__run_10hz_forward() {
-  dbc_MOTOR_STEERING_s decoded_steering_value_from_driver = {{0}, 5};
+  dbc_MOTOR_STEERING_s decoded_steering_value_from_driver = {{0}, MOTOR_STEERING_straight};
   dbc_MOTOR_SPEED_s decoded_speed_value_from_driver = {{0}, 2};
   get_mia_steering_ExpectAndReturn(false);
   can_driver__get_driver_steering_ExpectAndReturn(&decoded_steering_value_from_driver);
@@ -51,7 +51,7 @@ void test_motor__run_10hz_forward() {
 }
 
 void test_motor__run_10hz_backward() {
-  dbc_MOTOR_STEERING_s decoded_steering_value_from_driver = {{0}, 3};
+  dbc_MOTOR_STEERING_s decoded_steering_value_from_driver = {{0}, MOTOR_STEERING_straight};
   dbc_MOTOR_SPEED_s decoded_speed_value_from_driver = {{0}, 2};
   get_mia_steering_ExpectAndReturn(false);
   can_driver__get_driver_steering_ExpectAndReturn(&decoded_steering_value_from_driver);

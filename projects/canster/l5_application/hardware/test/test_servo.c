@@ -74,7 +74,7 @@ void test_servo__steer_processor(void) {
   test_servo_set_duty_helper(SOFT_RIGHT);
   test_servo_set_duty_helper(HARD_RIGHT);
 
-  for (int i = -2; i <= 2; i++) {
+  for (int i = MOTOR_STEERING_hard_left; i <= MOTOR_STEERING_hard_right; i++) {
     servo__steer_processor(i);
   }
 }

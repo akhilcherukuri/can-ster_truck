@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "gpio.h"
+#include "project.h"
 #include "pwm1.h"
 
 /**
@@ -45,19 +46,19 @@ void servo__steer_init(void) {
 
 void servo__steer_processor(int16_t steering_value) {
   switch (steering_value) {
-  case -2:
+  case MOTOR_STEERING_hard_left:
     servo__steer_hard_left();
     break;
-  case -1:
+  case MOTOR_STEERING_slight_left:
     servo__steer_soft_left();
     break;
-  case 0:
+  case MOTOR_STEERING_straight:
     servo__steer_straight();
     break;
-  case 1:
+  case MOTOR_STEERING_slight_right:
     servo__steer_soft_right();
     break;
-  case 2:
+  case MOTOR_STEERING_hard_right:
     servo__steer_hard_right();
     break;
   default:
