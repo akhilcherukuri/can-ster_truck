@@ -11,7 +11,7 @@
 /**
  * Constants
  */
-#define GEO_NODE_DEBUG 1
+#define GEO_NODE_DEBUG 0
 
 #if GEO_NODE_DEBUG == 1
 #include <stdio.h>
