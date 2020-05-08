@@ -62,6 +62,7 @@ void test_bt_wrapper__update_decoded_messages(void) {
   // CAN NODE
   // MOTOR
   can_motor__get_motor_speed_feedback_ExpectAndReturn(motor_current_speed);
+  can_motor__get_lipo_battery_voltage_debug_ExpectAndReturn(motor_lipo_battery_voltage);
 
   // GEO
   can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
@@ -83,6 +84,7 @@ void test_bt_wrapper__write_once(void) {
   // CAN NODE
   // MOTOR
   can_motor__get_motor_speed_feedback_ExpectAndReturn(motor_current_speed);
+  can_motor__get_lipo_battery_voltage_debug_ExpectAndReturn(motor_lipo_battery_voltage);
 
   // GEO
   can_geo__get_geo_degree_ExpectAndReturn(geo_degree);

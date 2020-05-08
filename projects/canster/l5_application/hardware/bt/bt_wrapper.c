@@ -37,6 +37,7 @@ static dbc_GEO_DISTANCE_FROM_DESTINATION_s geo_distance_from_destination;
 
 // MOTOR
 static dbc_MOTOR_SPEED_FEEDBACK_s motor_current_speed;
+static dbc_LIPO_BATTERY_VOLTAGE_DBG_s motor_lipo_battery_voltage;
 
 // DRIVER
 static dbc_MOTOR_STEERING_s driver_steering;
@@ -89,6 +90,7 @@ static void bt_wrapper__update_decoded_messages(void) {
   // CAN NODES
   // MOTOR
   motor_current_speed = can_motor__get_motor_speed_feedback();
+  motor_lipo_battery_voltage = can_motor__get_lipo_battery_voltage_debug();
 
   // GEO
   geo_degree = can_geo__get_geo_degree();
@@ -102,7 +104,7 @@ static void bt_wrapper__update_decoded_messages(void) {
 
 // TODO, Update this when `update_decoded_messages` is done
 static void bt_wrapper__update_write_buffer(void) {
-  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char), "$canster,%f,%f,%f,%f,%d,%d,%d,%f,%f,%f,%d,%d,%f\n",
+  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char), "$canster,%f,%f,%f,%f,%d,%d,%d,%f,%f,%f,%d,%d,%f,%f\n",
            (double)current_coordinates.GEO_CURRENT_COORDINATES_latitude,
            (double)current_coordinates.GEO_CURRENT_COORDINATES_longitude, (double)destination_coordinate.latitude,
            (double)destination_coordinate.longitude, sensor_lidar.SENSOR_LIDAR_slight_left,
@@ -110,7 +112,8 @@ static void bt_wrapper__update_write_buffer(void) {
            (double)motor_current_speed.MOTOR_SPEED_current, (double)geo_degree.GEO_DEGREE_current,
            (double)geo_degree.GEO_DEGREE_required, driver_steering.MOTOR_STEERING_direction,
            geo_destination_reached.GEO_DESTINATION_REACHED_cmd,
-           (double)geo_distance_from_destination.GEO_distance_from_destination);
+           (double)geo_distance_from_destination.GEO_distance_from_destination,
+           (double)motor_lipo_battery_voltage.LIPO_BATTERY_VOLTAGE_val);
 }
 
 /**
