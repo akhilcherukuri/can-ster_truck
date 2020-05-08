@@ -102,6 +102,15 @@ void gps__run_once(void) {
 
 gps_coordinates_s gps__get_coordinates(void) { return coordinates; }
 
+bool gps__is_valid(void) {
+  bool rval = false;
+  if (parsed_rmc.status == 'A') {
+    rval = true;
+  }
+
+  return rval;
+}
+
 /**
  * STATIC FUNCTION
  */
