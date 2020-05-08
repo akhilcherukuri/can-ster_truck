@@ -95,6 +95,9 @@ BO_ 902 MOTOR_INFO_DBG: 4 MOTOR
  SG_ MOTOR_INFO_DBG_rps: 0|16@1+ (1,0) [0|0] "" DBG
  SG_ MOTOR_INFO_DBG_pwm: 16|16@1+ (0.001,0) [0|0] "" DBG
 
+BO_ 903 LIPO_BATTERY_VOLTAGE_DBG: 4 MOTOR
+ SG_ LIPO_BATTERY_VOLTAGE_val: 0|32@1+ (0.01,0) [0|0] "volts" DBG
+
 CM_ "--BU (Network Node) Information--";
 CM_ BU_ DRIVER "The driver controller of the car";
 CM_ BU_ GEO "The geo controller of the car";
@@ -121,39 +124,49 @@ CM_ BO_ 510 "LIDAR - Distance from obstacle detected in each sector";
 CM_ BO_ 520 "Ultrasonic Sensor - Distance from obstacle detected by each sensor";
 
 CM_ BO_ 900 "Destination coordinates for BUSMASTER debugging";
+CM_ BO_ 901 "Distance from destination";
+CM_ BO_ 902 "Supplied PWM value to the motor and its RPM";
+CM_ BO_ 903 "LIPO Battery Voltage";
 
-CM_ "--SG (Signal) Information--";
+CM_ "--SG (Signal) Information for Heartbeats--";
 CM_ SG_ 100 DRIVER_HEARTBEAT_cmd "Heartbeat command from the driver node";
 CM_ SG_ 101 GEO_HEARTBEAT_cmd "Heartbeat command from the geological node";
 CM_ SG_ 102 MOTOR_HEARTBEAT_cmd "Heartbeat command from the motor node";
 CM_ SG_ 103 SENSOR_HEARTBEAT_cmd "Heartbeat command from the sensor node";
 
+CM_ "--SG (Signal) Information for DRIVER Node--";
 CM_ SG_ 200 DRIVER_STEERING_direction "Calculated Driver Steering values (-2,2) for Motor";
 CM_ SG_ 210 DRIVER_COORDINATES_latitude "Destination Latitude coordinate";
 CM_ SG_ 210 DRIVER_COORDINATES_longitude "Destination Longitude coordinate";
 CM_ SG_ 220 MOTOR_SPEED "Calculated Driver speed values (-3,3) for Motor";
 
+CM_ "--SG (Signal) Information for GEO Node--";
 CM_ SG_ 300 GEO_DEGREE_current "Current Geo Degree relative to true north";
 CM_ SG_ 300 GEO_DEGREE_required "Calculated Geo Degree computed by Haversine Formula";
 CM_ SG_ 310 GEO_DESTINATION_REACHED "Indicator signal to check if the RC car has reached the destination";
 
+CM_ "--SG (Signal) Information for MOTOR Node--";
 CM_ SG_ 400 MOTOR_SPEED_FEEDBACK "Feedback speed (kph) sent by Motor Node";
 
+CM_ "--SG (Signal) Information for SENSOR Node--";
 CM_ SG_ 500 SENSOR_BT_COORDINATES_latitude "Destination Latitude received over Bluetooth";
 CM_ SG_ 500 SENSOR_BT_COORDINATES_longitude "Destination Longitude received over Bluetooth";
-
 CM_ SG_ 510 SENSOR_SONARS_left "Ultrasonic Sensor attached to the left side";
 CM_ SG_ 510 SENSOR_SONARS_right "Ultrasonic Sensor attached to the right side";
 CM_ SG_ 510 SENSOR_SONARS_middle "Ultrasonic Sensor attached to the middle";
 CM_ SG_ 510 SENSOR_SONARS_back_left "Ultrasonic Sensor attached to the back left side";
 CM_ SG_ 510 SENSOR_SONARS_back_right "Ultrasonic Sensor attached to the back right side";
-
 CM_ SG_ 520 SENSOR_LIDAR_middle "Lidar sensing the middle sector (-15 to 15 degrees)";
 CM_ SG_ 520 SENSOR_LIDAR_slight_left "Lidar sensing the slight left sector (-45 to -15 degrees)";
 CM_ SG_ 520 SENSOR_LIDAR_slight_right "Lidar sensing the slight right sector (15 to 45 degrees)";
 CM_ SG_ 520 SENSOR_LIDAR_back "Lidar sensing the back of the car (165 to 195 degrees)";
 
-CM_ SG_ 900 GEO_CURRENT_COORDINATES "Destination coordinates for BUSMASTER debugging";
+CM_ SG_ 900 GEO_CURRENT_COORDINATES_latitude "Current Latitude";
+CM_ SG_ 900 GEO_CURRENT_COORDINATES_longitude "Current Longitude";
+CM_ SG_ 901 GEO_distance_from_destination "Distance from destination";
+CM_ SG_ 902 MOTOR_INFO_DBG_rps "Current RPS value of the motor";
+CM_ SG_ 902 MOTOR_INFO_DBG_pwm "Supplied motor PWM value";
+CM_ SG_ 903 LIPO_BATTERY_VOLTAGE_val "LIPO Battery Voltage";
 
 BA_DEF_ "BusType" STRING ;
 BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;
