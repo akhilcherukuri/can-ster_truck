@@ -78,14 +78,17 @@ void can_handler__handle_all_incoming_messages(void) {
     // Motor Node Decode functions
     can_motor__decode_motor_heartbeat(header, recv_message.data.bytes);
     can_motor__decode_motor_speed_feedback(header, recv_message.data.bytes);
+
+    // MOTOR DEBUG
     can_motor__decode_motor_info_debug(header, recv_message.data.bytes);
+    can_motor__decode_lipo_battery_voltage_debug(header, recv_message.data.bytes);
 
     // Geo Node Decode Functions
     can_geo__decode_geo_heartbeat(header, recv_message.data.bytes);
     can_geo__decode_geo_degree(header, recv_message.data.bytes);
     can_geo__decode_geo_destination_reached(header, recv_message.data.bytes);
 
-    // DEBUG
+    // GEO DEBUG
     can_geo__decode_geo_current_coordinates_debug(header, recv_message.data.bytes);
     can_geo__decode_geo_distance_from_destination_debug(header, recv_message.data.bytes);
   }

@@ -16,7 +16,9 @@
  */
 static dbc_MOTOR_HEARTBEAT_s motor_heartbeat;
 static dbc_MOTOR_SPEED_FEEDBACK_s motor_wheel_speed_current_val;
+
 static dbc_MOTOR_INFO_DBG_s motor_info_debug;
+static dbc_LIPO_BATTERY_VOLTAGE_DBG_s motor_lipo_battery_voltage_debug;
 
 /**
  * Getters here
@@ -24,6 +26,7 @@ static dbc_MOTOR_INFO_DBG_s motor_info_debug;
 dbc_MOTOR_HEARTBEAT_s can_motor__get_heartbeat() { return motor_heartbeat; }
 dbc_MOTOR_SPEED_FEEDBACK_s can_motor__get_motor_speed_feedback() { return motor_wheel_speed_current_val; }
 dbc_MOTOR_INFO_DBG_s can_motor__get_motor_info_debug() { return motor_info_debug; }
+dbc_LIPO_BATTERY_VOLTAGE_DBG_s can_motor__get_lipo_battery_voltage_debug() { return motor_lipo_battery_voltage_debug; }
 
 #if BOARD_MOTOR_NODE == 1
 static void can_motor__transmit_motor_heartbeat();
@@ -113,6 +116,15 @@ void can_motor__decode_motor_info_debug(dbc_message_header_t header, uint8_t byt
   if (dbc_decode_MOTOR_INFO_DBG(&motor_info_debug, header, bytes)) {
 #if DEBUG_MOTOR_NODE == 1
     printf("Motor Info Debug: %f %d", (double)motor_info_debug.MOTOR_INFO_DBG_pwm, motor_info_debug.MOTOR_INFO_DBG_rps);
+#endif
+  }
+}
+
+void can_motor__decode_lipo_battery_voltage_debug(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_LIPO_BATTERY_VOLTAGE_DBG(&motor_lipo_battery_voltage_debug, header, bytes)) {
+#if DEBUG_MOTOR_NODE == 1
+    printf("Motor Lipo Battery Voltage Debug: %f\r\n",
+           (double)motor_lipo_battery_voltage_debug.LIPO_BATTERY_VOLTAGE_val);
 #endif
   }
 }

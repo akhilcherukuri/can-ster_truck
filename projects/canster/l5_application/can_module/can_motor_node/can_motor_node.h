@@ -18,9 +18,11 @@ void can_motor__decode_motor_heartbeat(dbc_message_header_t header, uint8_t byte
 void can_motor__decode_motor_speed_feedback(dbc_message_header_t header, uint8_t bytes[8]);
 
 void can_motor__decode_motor_info_debug(dbc_message_header_t header, uint8_t bytes[8]);
+void can_motor__decode_lipo_battery_voltage_debug(dbc_message_header_t header, uint8_t bytes[8]);
 
 // Getters for all static variables
 dbc_MOTOR_HEARTBEAT_s can_motor__get_heartbeat();
 dbc_MOTOR_SPEED_FEEDBACK_s can_motor__get_motor_speed_feedback();
 
 dbc_MOTOR_INFO_DBG_s can_motor__get_motor_info_debug();
+dbc_LIPO_BATTERY_VOLTAGE_DBG_s can_motor__get_lipo_battery_voltage_debug();
