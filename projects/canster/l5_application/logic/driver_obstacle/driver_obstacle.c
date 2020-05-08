@@ -45,11 +45,11 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
 
   sensor_lidar = can_sensor__get_sensor_lidar();
 
-  dbc_MOTOR_STEERING_s motor_steering = {{0}, 0};
+  dbc_MOTOR_STEERING_s motor_steering = {{0}, MOTOR_STEERING_straight};
   if (is_destination_reached == true) {
-    motor_speed_value = 3; // neutral = stop
+    motor_speed_value = MOTOR_SPEED_neutral; // neutral = stop
   } else {
-    motor_speed_value = 5; // fwd med
+    motor_speed_value = MOTOR_SPEED_forward_medium; // fwd med
 #if STEERING_BASED_ON_SENSOR_VALUES == 1
 
     // if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD_CM) {
@@ -74,15 +74,15 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
       // TODO: Refactor the code
       // if ((double)sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD_CM / 2.0)) {
       if (sensor_lidar.SENSOR_LIDAR_middle <= DISTANCE_THRESHOLD_CM) {
-        // motor_speed_value = 3; // neutral = stop
-        motor_speed_value = 2; // reverse slow
+        // motor_speed_value = MOTOR_SPEED_neutral; // neutral = stop
+        motor_speed_value = MOTOR_SPEED_reverse_slow; // reverse slow
       } else {
         // if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD_CM &&
         //     sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD_CM) {
         if (sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM &&
             sensor_lidar.SENSOR_LIDAR_slight_right < DISTANCE_THRESHOLD_CM) {
-          // motor_speed_value = 3; // neutral = stop
-          motor_speed_value = 2; // reverse slow
+          // motor_speed_value = MOTOR_SPEED_neutral; // neutral = stop
+          motor_speed_value = MOTOR_SPEED_reverse_slow; // reverse slow
         } else {
           // if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
           if (sensor_lidar.SENSOR_LIDAR_slight_left > sensor_lidar.SENSOR_LIDAR_slight_right) {
