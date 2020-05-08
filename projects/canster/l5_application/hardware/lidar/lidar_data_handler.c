@@ -63,6 +63,18 @@ static void lidar_data_response_handle_distance(uint16_t angle, uint16_t distanc
     } else if (angle >= circle_start_angle && angle <= front_high_angle) {
       front_data[((angle - circle_start_angle) % 11) + 10] = distance;
     }
+  } else {
+    if (angle >= left_low_angle && angle <= left_high_angle) {
+      left_data[(angle - left_low_angle) % 20] = 3000;
+    } else if (angle >= right_low_angle && angle <= right_high_angle) {
+      right_data[(angle - right_low_angle) % 20] = 3000;
+    } else if (angle >= rear_low_angle && angle <= rear_high_angle) {
+      rear_data[(angle - rear_low_angle) % 21] = 3000;
+    } else if (angle >= front_low_angle && angle <= circle_end_angle) {
+      front_data[(angle - front_low_angle) % 10] = 3000;
+    } else if (angle >= circle_start_angle && angle <= front_high_angle) {
+      front_data[((angle - circle_start_angle) % 11) + 10] = 3000;
+    }
   }
 }
 
