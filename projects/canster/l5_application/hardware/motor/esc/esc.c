@@ -2,6 +2,7 @@
 
 #include "delay.h"
 #include "gpio.h"
+#include "project.h"
 #include "pwm1.h"
 #include "rpm.h"
 
@@ -12,7 +13,7 @@
 /**
  * STATIC VARIABLES
  */
-static int16_t desired_direction_value; // 0 to 6
+static int16_t desired_direction_value; // -3 to 3
 static double desired_speed_kph;
 static double offset;
 static int16_t old_direction_value;
@@ -87,31 +88,31 @@ void esc__calibrate_red_to_green() { esc__set_duty_cycle(10); }
 void esc__direction_processor(int16_t direction_value) {
   desired_direction_value = direction_value;
   switch (direction_value) {
-  case 0:
+  case MOTOR_SPEED_reverse_fast:
     esc__reverse_fast();
     desired_speed_kph = REVERSE_FAST_SPEED_KPH;
     break;
-  case 1:
+  case MOTOR_SPEED_reverse_medium:
     esc__reverse_medium();
     desired_speed_kph = REVERSE_MEDIUM_SPEED_KPH_LOAD; // REVERSE_MEDIUM_SPEED_KPH;
     break;
-  case 2:
+  case MOTOR_SPEED_reverse_slow:
     esc__reverse_slow();
     desired_speed_kph = REVERSE_SLOW_SPEED_KPH;
     break;
-  case 3:
+  case MOTOR_SPEED_neutral:
     esc__neutral();
     desired_speed_kph = NEUTRAL_SPEED_KPH;
     break;
-  case 4:
+  case MOTOR_SPEED_forward_slow:
     esc__forward_slow();
     desired_speed_kph = FORWARD_SLOW_SPEED_KPH;
     break;
-  case 5:
+  case MOTOR_SPEED_forward_medium:
     esc__forward_medium();
     desired_speed_kph = FORWARD_MEDIUM_SPEED_KPH_LOAD; // FORWARD_MEDIUM_SPEED_KPH;
     break;
-  case 6:
+  case MOTOR_SPEED_forward_fast:
     esc__forward_fast();
     desired_speed_kph = FORWARD_FAST_SPEED_KPH;
     break;
@@ -148,7 +149,7 @@ float speed_to_pwm_adjustment(double target_speed, double rpm_current_speed) {
     old_direction_value = desired_direction_value;
     offset = 0;
   }
-  if (desired_direction_value > 3) {
+  if (desired_direction_value > MOTOR_SPEED_neutral) {
     if ((target_speed - rpm_current_speed > tolerance) || (rpm_current_speed - target_speed > tolerance)) {
       if (rpm_current_speed < target_speed) {
         offset = offset + PWM_ADJUSTMENT_OFFSET;
@@ -158,7 +159,7 @@ float speed_to_pwm_adjustment(double target_speed, double rpm_current_speed) {
     }
   }
 
-  if (desired_direction_value < 3) {
+  if (desired_direction_value < MOTOR_SPEED_neutral) {
     if ((target_speed - rpm_current_speed > tolerance) || (rpm_current_speed - target_speed > tolerance)) {
       if (rpm_current_speed < target_speed) {
         offset = offset - PWM_ADJUSTMENT_OFFSET;
@@ -167,7 +168,7 @@ float speed_to_pwm_adjustment(double target_speed, double rpm_current_speed) {
       }
     }
   }
-  if (desired_direction_value == 3)
+  if (desired_direction_value == MOTOR_SPEED_neutral)
     offset = 0;
   return offset;
 }
@@ -195,10 +196,10 @@ static void esc__set_duty_cycle(float duty_cycle) {
   adjusted_duty_cycle = duty_cycle + (speed_to_pwm_adjustment(desired_speed, current_speed)); // Adding offset to pwm
 #endif
 
-  if (adjusted_duty_cycle > FORWARD_FAST && desired_direction_value > 3) {
+  if (adjusted_duty_cycle > FORWARD_FAST && desired_direction_value > MOTOR_SPEED_neutral) {
     adjusted_duty_cycle = FORWARD_FAST;
   }
-  if (adjusted_duty_cycle < REVERSE_FAST && desired_direction_value < 3) {
+  if (adjusted_duty_cycle < REVERSE_FAST && desired_direction_value < MOTOR_SPEED_neutral) {
     adjusted_duty_cycle = REVERSE_FAST;
   }
   final_adjusted_duty_cycle = adjusted_duty_cycle;

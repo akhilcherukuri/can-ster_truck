@@ -39,7 +39,7 @@ static void motor__run_state_machine_10hz(current_motor_state_e, uint32_t);
 void motor__run_10hz(uint32_t callback_count) {
   bool mia_steering = get_mia_steering();
   if (mia_steering == true) {
-    esc__direction_processor(3);
+    esc__direction_processor(MOTOR_SPEED_neutral);
   } else {
     dbc_MOTOR_STEERING_s *decoded_steering_value_from_driver = can_driver__get_driver_steering();
     servo__steer_processor(decoded_steering_value_from_driver->MOTOR_STEERING_direction);
@@ -49,15 +49,15 @@ void motor__run_10hz(uint32_t callback_count) {
     decoded_speed_value_from_driver = can_driver__get_driver_required_motor_speed();
 
     switch ((int16_t)decoded_speed_value_from_driver.MOTOR_SPEED_processed) {
-    case 0 ... 2: {
+    case MOTOR_SPEED_reverse_fast ... MOTOR_SPEED_reverse_slow: {
       current_motor_state = MOTOR_REVERSE;
       break;
     }
-    case 3: {
+    case MOTOR_SPEED_neutral: {
       current_motor_state = MOTOR_NEUTRAL;
       break;
     }
-    case 4 ... 6: {
+    case MOTOR_SPEED_forward_slow ... MOTOR_SPEED_forward_fast: {
       current_motor_state = MOTOR_FORWARD;
       break;
     }
@@ -99,7 +99,7 @@ static void motor__run_state_machine_10hz(current_motor_state_e curr_motor_state
         esc__direction_processor(decoded_speed_value_from_driver.MOTOR_SPEED_processed);
       }
       if ((callback_count > (entry_time_of_state_change + 1)) && callback_count <= (entry_time_of_state_change + 10)) {
-        esc__direction_processor(3);
+        esc__direction_processor(MOTOR_SPEED_neutral);
       }
       if (callback_count > (entry_time_of_state_change + 10)) {
         state_change = false;
@@ -132,7 +132,7 @@ static void motor__run_state_machine_10hz(current_motor_state_e curr_motor_state
         esc__direction_processor(decoded_speed_value_from_driver.MOTOR_SPEED_processed);
       }
       if ((callback_count > (entry_time_of_state_change + 1)) && callback_count <= (entry_time_of_state_change + 10)) {
-        esc__direction_processor(3);
+        esc__direction_processor(MOTOR_SPEED_neutral);
       }
       if (callback_count > (entry_time_of_state_change + 10)) {
         state_change = false;

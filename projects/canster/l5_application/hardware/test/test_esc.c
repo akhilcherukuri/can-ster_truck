@@ -83,36 +83,36 @@ void test_esc__direction_processor() {
   pwm1__set_duty_cycle_Expect(PWM_CHANNEL, REVERSE_FAST);
   pwm1__set_duty_cycle_IgnoreArg_duty_cycle_in_percent();
   get_speed_calculate_helper();
-  esc__direction_processor(0);
+  esc__direction_processor(MOTOR_SPEED_reverse_fast);
   pwm1__set_duty_cycle_Expect(PWM_CHANNEL, REVERSE_MEDIUM);
   pwm1__set_duty_cycle_IgnoreArg_duty_cycle_in_percent();
   get_speed_calculate_helper();
-  esc__direction_processor(1);
+  esc__direction_processor(MOTOR_SPEED_reverse_medium);
   pwm1__set_duty_cycle_Expect(PWM_CHANNEL, REVERSE_SLOW);
   pwm1__set_duty_cycle_IgnoreArg_duty_cycle_in_percent();
   get_speed_calculate_helper();
-  esc__direction_processor(2);
+  esc__direction_processor(MOTOR_SPEED_reverse_slow);
   pwm1__set_duty_cycle_Expect(PWM_CHANNEL, NEUTRAL);
   pwm1__set_duty_cycle_IgnoreArg_duty_cycle_in_percent();
   get_speed_calculate_helper();
-  esc__direction_processor(3);
+  esc__direction_processor(MOTOR_SPEED_neutral);
   pwm1__set_duty_cycle_Expect(PWM_CHANNEL, FORWARD_SLOW);
   pwm1__set_duty_cycle_IgnoreArg_duty_cycle_in_percent();
   get_speed_calculate_helper();
-  esc__direction_processor(4);
+  esc__direction_processor(MOTOR_SPEED_forward_slow);
   pwm1__set_duty_cycle_Expect(PWM_CHANNEL, FORWARD_MEDIUM);
   pwm1__set_duty_cycle_IgnoreArg_duty_cycle_in_percent();
   get_speed_calculate_helper();
-  esc__direction_processor(5);
+  esc__direction_processor(MOTOR_SPEED_forward_medium);
   pwm1__set_duty_cycle_Expect(PWM_CHANNEL, FORWARD_FAST);
   pwm1__set_duty_cycle_IgnoreArg_duty_cycle_in_percent();
   get_speed_calculate_helper();
-  esc__direction_processor(6);
+  esc__direction_processor(MOTOR_SPEED_forward_fast);
 }
 
 void test_esc__set_duty_cycle_with_rpm_feedback_equal() {
 #if FEEDBACK_LOOP == 1
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   float duty_cycle = FORWARD_MEDIUM;
   desired_speed_kph = FORWARD_MEDIUM_SPEED_KPH;            // Speed to go at
   get_speed_kph_ExpectAndReturn(FORWARD_MEDIUM_SPEED_KPH); // Current speed of car
@@ -128,7 +128,7 @@ void test_esc__set_duty_cycle_with_rpm_feedback_equal() {
 
 void test_esc__set_duty_cycle_with_rpm_feedback_higher() {
 #if FEEDBACK_LOOP == 1
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   float duty_cycle = FORWARD_MEDIUM;
   desired_speed_kph = FORWARD_MEDIUM_SPEED_KPH;          // Speed to go at
   get_speed_kph_ExpectAndReturn(FORWARD_FAST_SPEED_KPH); // Current speed of car
@@ -140,7 +140,7 @@ void test_esc__set_duty_cycle_with_rpm_feedback_higher() {
 
 void test_esc__set_duty_cycle_with_rpm_feedback_lower() {
 #if FEEDBACK_LOOP == 1
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   float duty_cycle = FORWARD_MEDIUM;
   desired_speed_kph = FORWARD_MEDIUM_SPEED_KPH;
   get_speed_kph_ExpectAndReturn(FORWARD_SLOW_SPEED_KPH);
@@ -151,49 +151,49 @@ void test_esc__set_duty_cycle_with_rpm_feedback_lower() {
 }
 
 void test_speed_to_pwm_adjustment_if_car_is_faster_than_expected_forward() {
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   speed_to_pwm_adjustment(FORWARD_SLOW_SPEED_KPH, FORWARD_FAST_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, -PWM_ADJUSTMENT_OFFSET);
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   speed_to_pwm_adjustment(FORWARD_SLOW_SPEED_KPH, FORWARD_FAST_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, -PWM_ADJUSTMENT_OFFSET * 2);
 }
 
 void test_speed_to_pwm_adjustment_if_car_is_faster_than_expected_reverse() {
-  desired_direction_value = 2;
+  desired_direction_value = MOTOR_SPEED_reverse_slow;
   speed_to_pwm_adjustment(REVERSE_SLOW_SPEED_KPH, REVERSE_FAST_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, PWM_ADJUSTMENT_OFFSET);
-  desired_direction_value = 2;
+  desired_direction_value = MOTOR_SPEED_reverse_slow;
   speed_to_pwm_adjustment(REVERSE_SLOW_SPEED_KPH, REVERSE_FAST_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, PWM_ADJUSTMENT_OFFSET * 2);
 }
 
 void test_speed_to_pwm_adjustment_if_car_is_slower_than_expected_forward() {
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   speed_to_pwm_adjustment(FORWARD_FAST_SPEED_KPH, FORWARD_SLOW_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, PWM_ADJUSTMENT_OFFSET);
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   speed_to_pwm_adjustment(FORWARD_FAST_SPEED_KPH, FORWARD_SLOW_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, PWM_ADJUSTMENT_OFFSET * 2);
 }
 
 void test_speed_to_pwm_adjustment_if_car_is_slower_than_expected_reverse() {
-  desired_direction_value = 2;
+  desired_direction_value = MOTOR_SPEED_reverse_slow;
   speed_to_pwm_adjustment(REVERSE_FAST_SPEED_KPH, REVERSE_SLOW_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, -PWM_ADJUSTMENT_OFFSET);
-  desired_direction_value = 2;
+  desired_direction_value = MOTOR_SPEED_reverse_slow;
   speed_to_pwm_adjustment(FORWARD_FAST_SPEED_KPH, FORWARD_SLOW_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, -PWM_ADJUSTMENT_OFFSET * 2);
 }
 
 void test_speed_to_pwm_adjustment_equal_speeds() {
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   speed_to_pwm_adjustment(FORWARD_MEDIUM_SPEED_KPH, FORWARD_MEDIUM_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, 0.0);
 }
 
 void test_speed_to_pwm_adjustment_equal_speeds_under_tolerance() {
-  desired_direction_value = 5;
+  desired_direction_value = MOTOR_SPEED_forward_medium;
   speed_to_pwm_adjustment(FORWARD_MEDIUM_SPEED_KPH + (tolerance / 2), FORWARD_MEDIUM_SPEED_KPH);
   TEST_ASSERT_EQUAL_FLOAT(offset, 0.0);
 }
