@@ -75,8 +75,10 @@ void ultrasonic__update_all_sensors(void) {
 }
 
 void ultrasonic__get_distance_from_all_sensors(dbc_SENSOR_SONARS_s *output) {
-  output->SENSOR_SONARS_left = sensor_left.distance_from_obstacle;
-  output->SENSOR_SONARS_right = sensor_right.distance_from_obstacle;
+  // output->SENSOR_SONARS_left = sensor_left.distance_from_obstacle;
+  // output->SENSOR_SONARS_right = sensor_right.distance_from_obstacle;
+  output->SENSOR_SONARS_left = 0;  // unused
+  output->SENSOR_SONARS_right = 0; // unused
   output->SENSOR_SONARS_middle = sensor_middle.distance_from_obstacle;
 }
 
