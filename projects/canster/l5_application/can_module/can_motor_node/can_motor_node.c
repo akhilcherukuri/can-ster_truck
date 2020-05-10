@@ -3,6 +3,7 @@
 #include "board_io.h"
 #include "gpio.h"
 
+#include "esc.h"
 #include "lipo.h"
 #include "rpm.h"
 #define DEBUG_MOTOR_NODE 0
@@ -29,11 +30,13 @@ const dbc_MOTOR_SPEED_FEEDBACK_s *can_motor__get_motor_speed_feedback() { return
 static void can_motor__transmit_motor_heartbeat();
 static void can_motor__transmit_motor_speed_feedback();
 static void can_motor__transmit_lipo_voltage();
+static void can_motor__transmit_motor_info_debug();
 
 void can_motor__transmit_all_messages(void) {
   can_motor__transmit_motor_heartbeat();
   can_motor__transmit_motor_speed_feedback();
   can_motor__transmit_lipo_voltage();
+  can_motor__transmit_motor_info_debug();
 }
 
 static void can_motor__transmit_motor_heartbeat() {
@@ -67,6 +70,18 @@ static void can_motor__transmit_lipo_voltage() {
 #endif
   }
 }
+
+static void can_motor__transmit_motor_info_debug() {
+  uint16_t rps_value = get_speed_rps();
+  float pwm_value = get_final_pwm();
+  dbc_MOTOR_INFO_DBG_s message = {{0}, rps_value, pwm_value};
+  if (!dbc_encode_and_send_MOTOR_INFO_DBG(NULL, &message)) {
+#if DEBUG_MOTOR_NODE == 1
+    printf("Failed to encode and send RPS and PWM\r\n");
+#endif
+  }
+}
+
 #else
 // Empty function
 void can_motor__transmit_all_messages(void) {}

@@ -173,6 +173,8 @@ float speed_to_pwm_adjustment(double target_speed, double rpm_current_speed) {
   return offset;
 }
 
+float get_final_pwm() { return final_adjusted_duty_cycle; }
+
 /**
  * STATIC FUNCTION DEFINITIONS
  */

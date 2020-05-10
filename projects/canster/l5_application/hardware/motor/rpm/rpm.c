@@ -70,6 +70,7 @@ float rpm__calculate_speed_kph() {
 }
 
 float get_speed_kph(void) { return speed_kph; }
+uint16_t get_speed_rps(void) { return pulse_count; }
 
 /**
  * STATIC FUNCTION DEFINITIONS

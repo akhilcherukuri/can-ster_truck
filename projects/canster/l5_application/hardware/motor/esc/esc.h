@@ -26,3 +26,5 @@ struct state_pid {
 float PID_control(struct state_pid *Pid, float desired_speed, float current_speed);
 
 float speed_to_pwm_adjustment(double calculated_speed, double rpm_current_speed);
+
+float get_final_pwm();
