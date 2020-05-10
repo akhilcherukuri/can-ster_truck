@@ -3,6 +3,7 @@
 #include "board_io.h"
 #include "gpio.h"
 
+#include "lipo.h"
 #include "rpm.h"
 #define DEBUG_MOTOR_NODE 0
 
@@ -27,10 +28,12 @@ const dbc_MOTOR_SPEED_FEEDBACK_s *can_motor__get_motor_speed_feedback() { return
 #if BOARD_MOTOR_NODE == 1
 static void can_motor__transmit_motor_heartbeat();
 static void can_motor__transmit_motor_speed_feedback();
+static void can_motor__transmit_lipo_voltage();
 
 void can_motor__transmit_all_messages(void) {
   can_motor__transmit_motor_heartbeat();
   can_motor__transmit_motor_speed_feedback();
+  can_motor__transmit_lipo_voltage();
 }
 
 static void can_motor__transmit_motor_heartbeat() {
@@ -51,6 +54,16 @@ static void can_motor__transmit_motor_speed_feedback() {
   if (!dbc_encode_and_send_MOTOR_SPEED_FEEDBACK(NULL, &motor_feedback_speed_to_motor)) {
 #if DEBUG_MOTOR_NODE == 1
     printf("Failed to encode and send current Motor speed data to DRIVER Node\r\n");
+#endif
+  }
+}
+
+static void can_motor__transmit_lipo_voltage() {
+  float voltage = lipo__get_voltage();
+  dbc_LIPO_BATTERY_VOLTAGE_DBG_s message = {{0}, voltage};
+  if (!dbc_encode_and_send_LIPO_BATTERY_VOLTAGE_DBG(NULL, &message)) {
+#if DEBUG_MOTOR_NODE == 1
+    printf("Failed to encode and send Battery Voltage\r\n");
 #endif
   }
 }

@@ -7,6 +7,7 @@
 #include "can_handler.h"
 
 #include "gps.h"
+#include "lipo.h"
 #include "motor_wrapper.h"
 
 #include <stdio.h>
@@ -22,6 +23,7 @@ void periodic_callbacks__initialize(void) {
 
   // gps__init();
   motor__init();
+  lipo__init();
 }
 
 void periodic_callbacks__1Hz(uint32_t callback_count) {

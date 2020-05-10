@@ -13,6 +13,7 @@
 #include "Mockcan_handler.h"
 
 // Include the source we wish to test
+#include "Mocklipo.h"
 #include "Mockmotor_wrapper.h"
 #include "periodic_callbacks.h"
 
@@ -23,6 +24,7 @@ void tearDown(void) {}
 void test__periodic_callbacks__initialize(void) {
   can_bus__initialize_Expect();
   motor__init_Expect();
+  lipo__init_Expect();
   periodic_callbacks__initialize();
 }
 

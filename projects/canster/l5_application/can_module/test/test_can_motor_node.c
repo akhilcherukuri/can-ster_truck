@@ -10,6 +10,7 @@
 #include "can_motor_node.c"
 #include "who_am_i.h"
 
+#include "Mocklipo.h"
 #include "Mockrpm.h"
 
 void setUp() {
