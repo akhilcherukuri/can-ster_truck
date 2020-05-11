@@ -71,20 +71,20 @@ void lidar__sample_scan(void) {
   }
 }
 
-// void lidar__scan_run_once(int send_once) {
-//   if (1 == send_once) {
-//     // if (1 == send_once % 600) {
-//     uint8_t request[] = {start_byte, sample_scan};
+#if DO_NOT_RESET_EVERY_MINUTE
+void lidar__scan_run_once(int send_once) {
+  if (1 == send_once) {
+    uint8_t request[] = {start_byte, sample_scan};
 
-//     received_direct_response = false;
-//     for (int i = 0; i < 2; i++) {
-//       uart__put(lidar_uart, request[i], 0);
-//     }
-//     gpio_s motoctl_pin = gpio__construct_as_output(GPIO__PORT_2, 0);
-//     gpio__set(motoctl_pin);
-//   }
-// }
-
+    received_direct_response = false;
+    for (int i = 0; i < 2; i++) {
+      uart__put(lidar_uart, request[i], 0);
+    }
+    gpio_s motoctl_pin = gpio__construct_as_output(GPIO__PORT_2, 0);
+    gpio__set(motoctl_pin);
+  }
+}
+#else
 void lidar__scan_run_once(int send_once) {
   if (stop_flag && (0 == send_once % 600)) {
     // lidar__stop();
@@ -102,6 +102,7 @@ void lidar__scan_run_once(int send_once) {
     stop_flag = true;
   }
 }
+#endif
 
 void lidar__express_scan(void) {
   uint8_t request[] = {start_byte, express_scan, 0x05, 0x03, 0x00, 0x00, 0x00, 0x00, 0x21};

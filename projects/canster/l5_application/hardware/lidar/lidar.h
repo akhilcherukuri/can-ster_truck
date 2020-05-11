@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#define DO_NOT_RESET_EVERY_MINUTE 1
+
 void lidar__config_init(void);
 
 void lidar__stop(void);

@@ -166,7 +166,7 @@ void test__check_bits_incorrect_start(void) {
   uint8_t data1[] = {0b01101111, 0x1, 0x0, 0x0, 0x0};
   TEST_ASSERT_FALSE(check_bits(data1));
 
-  uint8_t data2[] = {0x01101100, 0x1, 0x0, 0x0, 0x0};
+  uint8_t data2[] = {0b01101100, 0x1, 0x0, 0x0, 0x0};
   TEST_ASSERT_FALSE(check_bits(data2));
 }
 
