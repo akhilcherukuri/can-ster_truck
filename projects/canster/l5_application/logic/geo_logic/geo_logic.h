@@ -12,8 +12,19 @@
 
 #include "project.h"
 
+/**
+ * @brief Will run in the periodic_callback 1-10hz function
+ *
+ */
+void geo_logic__run_once();
+
 void geo_logic__update_destination_coordinate(dbc_SENSOR_BT_COORDINATES_s *destination);
 
+/**
+ * @brief Used by can_geo_node transmit function
+ *
+ * @return float
+ */
 float geo_logic__compute_required_bearing();
 
 /**

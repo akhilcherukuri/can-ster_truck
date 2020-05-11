@@ -6,6 +6,7 @@
 #include "can_bus_initializer.h"
 #include "can_handler.h"
 
+#include "geo_logic.h"
 #include "gps.h"
 #include "gps_wrapper.h"
 
@@ -20,6 +21,8 @@ void periodic_callbacks__1Hz(uint32_t callback_count) {
   can_handler__handle_all_mia();
 
   gps_wrapper__update_led_when_valid();
+
+  geo_logic__run_once();
 }
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {

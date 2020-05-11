@@ -12,6 +12,7 @@
 #include "Mockcan_bus_initializer.h"
 #include "Mockcan_handler.h"
 
+#include "Mockgeo_logic.h"
 #include "Mockgps.h"
 #include "Mockgps_wrapper.h"
 
@@ -36,6 +37,7 @@ void test__periodic_callbacks__1Hz(void) {
   can_handler__handle_all_mia_Expect();
 
   gps_wrapper__update_led_when_valid_Expect();
+  geo_logic__run_once_Expect();
 
   periodic_callbacks__1Hz(0);
 }

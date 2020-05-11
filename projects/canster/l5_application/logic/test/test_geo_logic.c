@@ -6,48 +6,55 @@
 #include "geo_logic.c"
 
 void setUp() {
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 0;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = 0;
+  destination_gps_coordinate.latitude = 0;
+  destination_gps_coordinate.longitude = 0;
+
+  current_checkpoint.latitude = 0;
+  current_checkpoint.longitude = 0;
+
+  current_coordinate.latitude = 0;
+  current_coordinate.longitude = 0;
 }
 
 void tearDown() {}
 
 void test_geo_logic__update_destination_coordinate(void) {
+  // Should be set
+  current_coordinate = CHECKPOINTS[13];
+
   dbc_SENSOR_BT_COORDINATES_s driver_coordinates = {};
-  driver_coordinates.SENSOR_BT_COORDINATES_latitude = 2.2789;
-  driver_coordinates.SENSOR_BT_COORDINATES_longitude = 1.1234;
+  driver_coordinates.SENSOR_BT_COORDINATES_latitude = CHECKPOINTS[3].latitude;
+  driver_coordinates.SENSOR_BT_COORDINATES_longitude = CHECKPOINTS[3].longitude;
 
   geo_logic__update_destination_coordinate(&driver_coordinates);
 
-  TEST_ASSERT_EQUAL_FLOAT(destination_coordinate.SENSOR_BT_COORDINATES_latitude,
-                          driver_coordinates.SENSOR_BT_COORDINATES_latitude);
-  TEST_ASSERT_EQUAL_FLOAT(destination_coordinate.SENSOR_BT_COORDINATES_longitude,
-                          driver_coordinates.SENSOR_BT_COORDINATES_longitude);
+  TEST_ASSERT_EQUAL_FLOAT(destination_gps_coordinate.latitude, driver_coordinates.SENSOR_BT_COORDINATES_latitude);
+  TEST_ASSERT_EQUAL_FLOAT(destination_gps_coordinate.longitude, driver_coordinates.SENSOR_BT_COORDINATES_longitude);
+
+  TEST_ASSERT(current_checkpoint.latitude == CHECKPOINTS[12].latitude);
+  TEST_ASSERT(current_checkpoint.longitude == CHECKPOINTS[12].longitude);
 }
 
-// TODO,
-
 void test_geo_logic__compute_required_bearing_dont_move(void) {
-  gps_coordinates_s coordinates = {};
-  coordinates.latitude = 10.2;
-  coordinates.longitude = 20.3;
-  gps__get_coordinates_ExpectAndReturn(coordinates);
+  destination_gps_coordinate = CHECKPOINTS[5];
 
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 10.2;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = 20.3;
+  current_checkpoint = CHECKPOINTS[5];
+  current_coordinate = CHECKPOINTS[5];
 
   float bearing = geo_logic__compute_required_bearing();
   TEST_ASSERT_EQUAL_FLOAT(bearing, 180);
 }
 
 void test_geo_logic__compute_required_bearing(void) {
-  gps_coordinates_s coordinates = {};
-  coordinates.latitude = 5.2;
-  coordinates.longitude = 10.3;
-  gps__get_coordinates_ExpectAndReturn(coordinates);
+  destination_gps_coordinate = CHECKPOINTS[2];
 
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 10.2;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = 20.3;
+  // 5.2, 20.3
+  current_coordinate.latitude = 5.2;
+  current_coordinate.longitude = 10.3;
+
+  // 10.2, 20.3
+  current_checkpoint.latitude = 10.2;
+  current_checkpoint.longitude = 20.3;
 
   float bearing = geo_logic__compute_required_bearing();
   TEST_ASSERT_EQUAL_FLOAT(bearing, 242);
@@ -63,65 +70,57 @@ void test_geo_logic__compute_required_bearing(void) {
  * -122.165280
  */
 void test_geo_logic__compute_required_bearing_real(void) {
-  gps_coordinates_s coordinates = {};
-  coordinates.latitude = 37.338207;
-  coordinates.longitude = -121.886330;
-  gps__get_coordinates_ExpectAndReturn(coordinates);
+  destination_gps_coordinate = CHECKPOINTS[2];
 
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 37.441810;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = -122.165280;
+  current_coordinate.latitude = 37.338207;
+  current_coordinate.longitude = -121.886330;
+
+  current_checkpoint.latitude = 37.441810;
+  current_checkpoint.longitude = -122.165280;
 
   float bearing = geo_logic__compute_required_bearing();
   TEST_ASSERT_EQUAL_FLOAT(bearing, 108);
 }
 
 void test_geo_logic__distance_from_destination_real(void) {
-  gps_coordinates_s coordinates = {};
-  coordinates.latitude = 37.338207;
-  coordinates.longitude = -121.886330;
-  gps__get_coordinates_ExpectAndReturn(coordinates);
+  current_coordinate.latitude = 37.338207;
+  current_coordinate.longitude = -121.886330;
 
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 37.441810;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = -122.165280;
+  destination_gps_coordinate.latitude = 37.441810;
+  destination_gps_coordinate.longitude = -122.165280;
 
   float distance = geo_logic__distance_from_destination();
   TEST_ASSERT_EQUAL_FLOAT(distance, 27204.23); // meters
 }
 
 void test_geo_logic__distance_from_destination_reached(void) {
-  gps_coordinates_s coordinates = {};
-  coordinates.latitude = 37.441810;
-  coordinates.longitude = -122.165280;
-  gps__get_coordinates_ExpectAndReturn(coordinates);
+  current_coordinate.latitude = 37.441810;
+  current_coordinate.longitude = -122.165280;
 
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 37.441810;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = -122.165280;
+  destination_gps_coordinate.latitude = 37.441810;
+  destination_gps_coordinate.longitude = -122.165280;
 
   float distance = geo_logic__distance_from_destination();
   TEST_ASSERT_EQUAL_FLOAT(distance, 0); // meters
 }
 
 void test_geo_logic__distance_from_destination_tiny_increment(void) {
-  gps_coordinates_s coordinates = {};
-  coordinates.latitude = 37.441813; // step change by 3
-  coordinates.longitude = -122.165280;
-  gps__get_coordinates_ExpectAndReturn(coordinates);
+  current_coordinate.latitude = 37.441813; // step change by 3
+  current_coordinate.longitude = -122.165280;
 
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 37.441810;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = -122.165280;
+  destination_gps_coordinate.latitude = 37.441810;
+  destination_gps_coordinate.longitude = -122.165280;
 
   float distance = geo_logic__distance_from_destination();
   TEST_ASSERT_EQUAL_FLOAT(distance, 0.424175); // meters
 }
 
 void test_geo_logic__compute_destination_reached_true() {
-  gps_coordinates_s coordinates = {};
-  coordinates.latitude = 37.441813; // step change by 3
-  coordinates.longitude = -122.165280;
-  gps__get_coordinates_ExpectAndReturn(coordinates);
+  current_coordinate.latitude = 37.441813; // step change by 3
+  current_coordinate.longitude = -122.165280;
 
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 37.441810;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = -122.165280;
+  destination_gps_coordinate.latitude = 37.441810;
+  destination_gps_coordinate.longitude = -122.165280;
 
   dbc_GEO_DESTINATION_REACHED_s destination_reached = geo_logic__compute_destination_reached();
 
@@ -129,15 +128,117 @@ void test_geo_logic__compute_destination_reached_true() {
 }
 
 void test_geo_logic__compute_destination_reached_false() {
-  gps_coordinates_s coordinates = {};
-  coordinates.latitude = 37.441823; // step change by 23
-  coordinates.longitude = -122.165280;
-  gps__get_coordinates_ExpectAndReturn(coordinates);
+  current_coordinate.latitude = 37.441823; // step change by 23
+  current_coordinate.longitude = -122.165280;
 
-  destination_coordinate.SENSOR_BT_COORDINATES_latitude = 37.441869;
-  destination_coordinate.SENSOR_BT_COORDINATES_longitude = -122.165326;
+  destination_gps_coordinate.latitude = 37.441869;
+  destination_gps_coordinate.longitude = -122.165326;
 
   dbc_GEO_DESTINATION_REACHED_s destination_reached = geo_logic__compute_destination_reached();
 
   TEST_ASSERT_EQUAL_UINT8(destination_reached.GEO_DESTINATION_REACHED_cmd, GEO_DESTINATION_REACHED_cmd_NOT_REACHED);
+}
+
+/**
+ * geo_logic__compute_next_checkpoint
+ */
+#include <stdio.h>
+void test_geo_logic__compute_next_checkpoint() {
+  destination_gps_coordinate = CHECKPOINTS[2];
+  current_coordinate = CHECKPOINTS[13];
+
+  current_checkpoint = geo_logic__compute_next_checkpoint();
+
+  // Should go to checkpoints 13
+  TEST_ASSERT(current_checkpoint.latitude == CHECKPOINTS[12].latitude);
+  TEST_ASSERT(current_checkpoint.longitude == CHECKPOINTS[12].longitude);
+}
+
+void test_geo_logic__compute_next_checkpoint_destination_next() {
+  destination_gps_coordinate = CHECKPOINTS[2];
+  current_coordinate = CHECKPOINTS[1];
+
+  current_checkpoint = geo_logic__compute_next_checkpoint();
+
+  // Should go to checkpoints 13
+  TEST_ASSERT(current_checkpoint.latitude == CHECKPOINTS[2].latitude);
+  TEST_ASSERT(current_checkpoint.longitude == CHECKPOINTS[2].longitude);
+}
+
+void test_geo_logic__compute_next_checkpoint_destination_reached() {
+  destination_gps_coordinate = CHECKPOINTS[5];
+  current_coordinate = CHECKPOINTS[5];
+
+  current_checkpoint = geo_logic__compute_next_checkpoint();
+
+  TEST_ASSERT(current_checkpoint.latitude == CHECKPOINTS[5].latitude);
+  TEST_ASSERT(current_checkpoint.longitude == CHECKPOINTS[5].longitude);
+}
+
+/**
+ * TODO, REMOVE THIS LATER
+ * TESTS FOR THE 10th Street Garage
+ */
+void test_geo_logic__complete_navigation_p1() {
+  destination_gps_coordinate = CHECKPOINTS[2];
+  current_coordinate = CHECKPOINTS[13];
+  current_checkpoint = CHECKPOINTS[12];
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 144);
+}
+
+void test_geo_logic__complete_navigation_p2() {
+  destination_gps_coordinate = CHECKPOINTS[2];
+  current_coordinate = CHECKPOINTS[12];
+  current_checkpoint = CHECKPOINTS[8];
+
+  bool checkpointreached = geo_logic__checkpoint_reached();
+  TEST_ASSERT_FALSE(checkpointreached);
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 148);
+}
+
+void test_geo_logic__complete_navigation_p3() {
+  destination_gps_coordinate = CHECKPOINTS[2];
+  current_coordinate = CHECKPOINTS[8];
+  current_checkpoint = CHECKPOINTS[8];
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 119);
+}
+
+void test_geo_logic__complete_navigation_p4() {
+  destination_gps_coordinate = CHECKPOINTS[2];
+  current_coordinate = CHECKPOINTS[0];
+  current_checkpoint = CHECKPOINTS[0];
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 182);
+}
+
+void test_geo_logic__complete_navigation_p5() {
+  destination_gps_coordinate = CHECKPOINTS[2];
+  current_coordinate = CHECKPOINTS[1];
+  current_checkpoint = CHECKPOINTS[1];
+  bool checkpointreached = geo_logic__checkpoint_reached();
+  TEST_ASSERT_TRUE(checkpointreached);
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 131);
+}
+
+void test_geo_logic__complete_navigation_p6() {
+  destination_gps_coordinate = CHECKPOINTS[2];
+  current_coordinate = CHECKPOINTS[2];
+  current_checkpoint = CHECKPOINTS[2];
+  bool checkpointreached = geo_logic__checkpoint_reached();
+  TEST_ASSERT_TRUE(checkpointreached);
+
+  dbc_GEO_DESTINATION_REACHED_s dreached = geo_logic__compute_destination_reached();
+  TEST_ASSERT_EQUAL_UINT8(dreached.GEO_DESTINATION_REACHED_cmd, GEO_DESTINATION_REACHED_cmd_REACHED);
+
+  float bearing = geo_logic__compute_required_bearing();
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 180);
 }
