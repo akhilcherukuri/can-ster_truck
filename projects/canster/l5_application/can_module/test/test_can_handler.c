@@ -16,6 +16,7 @@ void tearDown(void) {}
 
 void test_can_handler__handle_all_mia() {
   can_driver__driver_heartbeat_mia_Expect();
+  can_driver__motor_speed_mia_Expect();
   can_motor__motor_heartbeat_mia_Expect();
   can_geo__geo_heartbeat_mia_Expect();
   can_geo__geo_destination_reached_mia_Expect();
@@ -36,6 +37,7 @@ void test_can_handler__handle_all_incoming_messages(void) {
 
   // DRIVER
   can_driver__decode_driver_heartbeat_ExpectAnyArgs();
+  can_driver__decode_motor_speed_ExpectAnyArgs();
   can_driver__decode_motor_steering_ExpectAnyArgs();
 
   // MOTOR

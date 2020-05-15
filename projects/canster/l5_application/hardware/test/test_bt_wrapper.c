@@ -63,6 +63,7 @@ void test_bt_wrapper__update_decoded_messages(void) {
   // MOTOR
   can_motor__get_motor_speed_feedback_ExpectAndReturn(motor_current_speed);
   can_motor__get_lipo_battery_voltage_debug_ExpectAndReturn(motor_lipo_battery_voltage);
+  can_motor__get_motor_info_debug_ExpectAndReturn(motor_info_dbg);
 
   // GEO
   can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
@@ -72,6 +73,7 @@ void test_bt_wrapper__update_decoded_messages(void) {
 
   // DRIVER
   can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
+  can_driver__get_driver_required_motor_speed_ExpectAndReturn(motor_speed_processed);
 
   bt_wrapper__update_decoded_messages();
 }
@@ -85,6 +87,7 @@ void test_bt_wrapper__write_once(void) {
   // MOTOR
   can_motor__get_motor_speed_feedback_ExpectAndReturn(motor_current_speed);
   can_motor__get_lipo_battery_voltage_debug_ExpectAndReturn(motor_lipo_battery_voltage);
+  can_motor__get_motor_info_debug_ExpectAndReturn(motor_info_dbg);
 
   // GEO
   can_geo__get_geo_degree_ExpectAndReturn(geo_degree);
@@ -94,6 +97,7 @@ void test_bt_wrapper__write_once(void) {
 
   // DRIVER
   can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
+  can_driver__get_driver_required_motor_speed_ExpectAndReturn(motor_speed_processed);
 
   // MISC
   bt__write_Expect(bt_buffer);
