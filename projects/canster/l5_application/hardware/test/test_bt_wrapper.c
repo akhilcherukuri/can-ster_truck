@@ -71,6 +71,8 @@ void test_bt_wrapper__update_decoded_messages(void) {
   can_geo__get_current_coordinates_ExpectAndReturn(current_coordinates);
   can_geo__get_distance_from_destination_ExpectAndReturn(geo_distance_from_destination);
 
+  can_geo__get_heartbeat_ExpectAndReturn(geo_checkpoint_index);
+
   // DRIVER
   can_driver__get_driver_steering_ExpectAndReturn(driver_steering);
   can_driver__get_driver_required_motor_speed_ExpectAndReturn(motor_speed_processed);
@@ -94,6 +96,8 @@ void test_bt_wrapper__write_once(void) {
   can_geo__get_destination_reached_ExpectAndReturn(geo_destination_reached);
   can_geo__get_current_coordinates_ExpectAndReturn(current_coordinates);
   can_geo__get_distance_from_destination_ExpectAndReturn(geo_distance_from_destination);
+
+  can_geo__get_heartbeat_ExpectAndReturn(geo_checkpoint_index);
 
   // DRIVER
   can_driver__get_driver_steering_ExpectAndReturn(driver_steering);

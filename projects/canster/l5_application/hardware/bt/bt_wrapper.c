@@ -35,6 +35,9 @@ static dbc_GEO_DEGREE_s geo_degree;
 static dbc_GEO_DESTINATION_REACHED_s geo_destination_reached;
 static dbc_GEO_DISTANCE_FROM_DESTINATION_s geo_distance_from_destination;
 
+// DEBUG
+static dbc_GEO_HEARTBEAT_s geo_checkpoint_index;
+
 // MOTOR
 static dbc_MOTOR_SPEED_FEEDBACK_s motor_current_speed;
 static dbc_LIPO_BATTERY_VOLTAGE_DBG_s motor_lipo_battery_voltage;
@@ -101,6 +104,9 @@ static void bt_wrapper__update_decoded_messages(void) {
   current_coordinates = can_geo__get_current_coordinates();
   geo_distance_from_destination = can_geo__get_distance_from_destination();
 
+  // DEBUG
+  geo_checkpoint_index = can_geo__get_heartbeat();
+
   // DRIVER
   driver_steering = can_driver__get_driver_steering();
   motor_speed_processed = can_driver__get_driver_required_motor_speed();
@@ -108,18 +114,19 @@ static void bt_wrapper__update_decoded_messages(void) {
 
 // TODO, Update this when `update_decoded_messages` is done
 static void bt_wrapper__update_write_buffer(void) {
-  snprintf(
-      bt_buffer, sizeof(bt_buffer) / sizeof(char), "$canster,%f,%f,%f,%f,%d,%d,%d,%f,%f,%f,%d,%d,%f,%f,%d,%f,%f,%d\n",
-      (double)current_coordinates.GEO_CURRENT_COORDINATES_latitude,
-      (double)current_coordinates.GEO_CURRENT_COORDINATES_longitude, (double)destination_coordinate.latitude,
-      (double)destination_coordinate.longitude, sensor_lidar.SENSOR_LIDAR_slight_left, sensor_lidar.SENSOR_LIDAR_middle,
-      sensor_lidar.SENSOR_LIDAR_slight_right, (double)motor_current_speed.MOTOR_SPEED_current,
-      (double)geo_degree.GEO_DEGREE_current, (double)geo_degree.GEO_DEGREE_required,
-      driver_steering.MOTOR_STEERING_direction, geo_destination_reached.GEO_DESTINATION_REACHED_cmd,
-      (double)geo_distance_from_destination.GEO_distance_from_destination,
-      (double)motor_lipo_battery_voltage.LIPO_BATTERY_VOLTAGE_val, motor_info_dbg.MOTOR_INFO_DBG_rps,
-      (double)motor_info_dbg.MOTOR_INFO_DBG_pwm, (double)sensor_sonar.SENSOR_SONARS_middle,
-      motor_speed_processed.MOTOR_SPEED_processed);
+  snprintf(bt_buffer, sizeof(bt_buffer) / sizeof(char),
+           "$canster,%f,%f,%f,%f,%d,%d,%d,%f,%f,%f,%d,%d,%f,%f,%d,%f,%f,%d,%d\n",
+           (double)current_coordinates.GEO_CURRENT_COORDINATES_latitude,
+           (double)current_coordinates.GEO_CURRENT_COORDINATES_longitude, (double)destination_coordinate.latitude,
+           (double)destination_coordinate.longitude, sensor_lidar.SENSOR_LIDAR_slight_left,
+           sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_slight_right,
+           (double)motor_current_speed.MOTOR_SPEED_current, (double)geo_degree.GEO_DEGREE_current,
+           (double)geo_degree.GEO_DEGREE_required, driver_steering.MOTOR_STEERING_direction,
+           geo_destination_reached.GEO_DESTINATION_REACHED_cmd,
+           (double)geo_distance_from_destination.GEO_distance_from_destination,
+           (double)motor_lipo_battery_voltage.LIPO_BATTERY_VOLTAGE_val, motor_info_dbg.MOTOR_INFO_DBG_rps,
+           (double)motor_info_dbg.MOTOR_INFO_DBG_pwm, (double)sensor_sonar.SENSOR_SONARS_middle,
+           motor_speed_processed.MOTOR_SPEED_processed, geo_checkpoint_index.GEO_HEARTBEAT_cmd);
 }
 
 /**
