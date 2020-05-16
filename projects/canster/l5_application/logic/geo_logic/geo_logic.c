@@ -24,18 +24,19 @@ static const float PI = 3.141592654;
 static const uint32_t EARTH_RADIUS = 6371 * 1000;
 static const float DESTINATION_REACHED_RADIUS_METERS = 4.0;
 
+// static const gps_coordinates_s CHECKPOINTS[] = {
+//     {37.33925, -121.88125}, {37.3394, -121.88124},  {37.33962, -121.8815},  {37.33979, -121.88139},
+//     {37.33994, -121.88093}, {37.33965, -121.88058}, {37.33952, -121.88083}, {37.33954, -121.88107},
+//     {37.33916, -121.88108}, {37.33931, -121.88073}, {37.33919, -121.88028}, {37.33902, -121.8805},
+//     {37.33881, -121.88085}, {37.33865, -121.88073}, {37.3388, -121.88038},
+// };
 static const gps_coordinates_s CHECKPOINTS[] = {
-    {37.33925, -121.88125}, {37.3394, -121.88124},  {37.33962, -121.8815},  {37.33979, -121.88139},
-    {37.33994, -121.88093}, {37.33965, -121.88058}, {37.33952, -121.88083}, {37.33954, -121.88107},
-    {37.33916, -121.88108}, {37.33931, -121.88073}, {37.33919, -121.88028}, {37.33902, -121.8805},
-    {37.33881, -121.88085}, {37.33865, -121.88073}, {37.3388, -121.88038},
-};
+    {37.339606, -121.881361}, {37.339889, -121.880759}, {37.339560, -121.880922}, {37.339258, -121.880861},
+    {37.339430, -121.880493}, {37.339083, -121.880566}, {37.339006, -121.880105}, {37.338720, -121.880695}};
 
 /**
  * STATE VARIABLES
  */
-// static dbc_SENSOR_BT_COORDINATES_s destination_coordinate = {{0}, 37.340679, -121.894371}; // Uncomment for testing
-// static dbc_SENSOR_BT_COORDINATES_s destination_coordinate;
 static gps_coordinates_s destination_gps_coordinate;
 static gps_coordinates_s current_checkpoint;
 static gps_coordinates_s current_coordinate;
@@ -44,7 +45,6 @@ static uint32_t current_checkpoint_index_debug;
 /**
  * NON-STATIC FUNCTIONS
  */
-
 void geo_logic__run_once() { current_coordinate = gps__get_coordinates(); }
 
 void geo_logic__update_destination_coordinate(dbc_SENSOR_BT_COORDINATES_s *destination) {
@@ -101,21 +101,21 @@ uint32_t geo_logic__get_current_checkpoint_index_debug() { return current_checkp
  */
 static gps_coordinates_s geo_logic__compute_next_checkpoint() {
   float max_distance = geo_logic__distance_from_destination();
-  float min_distance = max_distance;
+  float min_current_to_checkpoint_distance = max_distance;
   gps_coordinates_s selected_checkpoint = destination_gps_coordinate;
 
-  for (int i = 0; i < sizeof(CHECKPOINTS) / sizeof(gps_coordinates_s); i++) {
+  for (uint8_t i = 0; i < sizeof(CHECKPOINTS) / sizeof(gps_coordinates_s); i++) {
     gps_coordinates_s temporary_checkpoint = CHECKPOINTS[i];
 
-    float source_to_destination_distance =
+    float current_to_checkpoint_distance =
         geo_logic__distance_between_two_coordinates(&current_coordinate, &temporary_checkpoint);
 
     float checkpoint_to_destination_distance =
         geo_logic__distance_between_two_coordinates(&temporary_checkpoint, &destination_gps_coordinate);
 
     if (checkpoint_to_destination_distance < max_distance) {
-      if (min_distance > source_to_destination_distance) {
-        min_distance = source_to_destination_distance;
+      if (current_to_checkpoint_distance < min_current_to_checkpoint_distance) {
+        min_current_to_checkpoint_distance = current_to_checkpoint_distance;
         selected_checkpoint = temporary_checkpoint;
         current_checkpoint_index_debug = i;
       }
