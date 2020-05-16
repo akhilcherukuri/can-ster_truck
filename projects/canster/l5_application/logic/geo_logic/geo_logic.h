@@ -40,3 +40,6 @@ float geo_logic__distance_from_destination();
  * @return dbc_GEO_DESTINATION_REACHED_s
  */
 dbc_GEO_DESTINATION_REACHED_s geo_logic__compute_destination_reached();
+
+// DEBUG
+uint32_t geo_logic__get_current_checkpoint_index_debug();

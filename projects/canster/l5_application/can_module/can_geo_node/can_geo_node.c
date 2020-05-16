@@ -56,7 +56,9 @@ void can_geo__transmit_all_messages(void) {
 
 static void can_geo__transmit_geo_heartbeat() {
   dbc_GEO_HEARTBEAT_s message = {{0}, 0};
-  message.GEO_HEARTBEAT_cmd = GEO_HEARTBEAT_cmd_SYNC;
+  // message.GEO_HEARTBEAT_cmd = GEO_HEARTBEAT_cmd_SYNC;
+  message.GEO_HEARTBEAT_cmd = geo_logic__get_current_checkpoint_index_debug();
+
   if (!dbc_encode_and_send_GEO_HEARTBEAT(NULL, &message)) {
 #if GEO_NODE_DEBUG == 1
     printf("\nFailed to encode and send Geo Heartbeat");

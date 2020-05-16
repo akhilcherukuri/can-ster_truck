@@ -39,6 +39,7 @@ static const gps_coordinates_s CHECKPOINTS[] = {
 static gps_coordinates_s destination_gps_coordinate;
 static gps_coordinates_s current_checkpoint;
 static gps_coordinates_s current_coordinate;
+static uint32_t current_checkpoint_index_debug;
 
 /**
  * NON-STATIC FUNCTIONS
@@ -92,6 +93,9 @@ dbc_GEO_DESTINATION_REACHED_s geo_logic__compute_destination_reached() {
   return rval;
 }
 
+// DEBUG
+uint32_t geo_logic__get_current_checkpoint_index_debug() { return current_checkpoint_index_debug; }
+
 /**
  * STATIC FUNCTIONS
  */
@@ -113,6 +117,7 @@ static gps_coordinates_s geo_logic__compute_next_checkpoint() {
       if (min_distance > source_to_destination_distance) {
         min_distance = source_to_destination_distance;
         selected_checkpoint = temporary_checkpoint;
+        current_checkpoint_index_debug = i;
       }
     }
   }

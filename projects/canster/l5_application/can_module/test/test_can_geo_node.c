@@ -113,6 +113,9 @@ void test_can__geo_destination_reached_mia_false() {
 #if BOARD_GEO_NODE == 1
 
 void test_can_geo__transmit_geo_heartbeat(void) {
+  dbc_GEO_HEARTBEAT_s message = {};
+  geo_logic__get_current_checkpoint_index_debug_ExpectAndReturn(message.GEO_HEARTBEAT_cmd);
+
   dbc_send_can_message_ExpectAnyArgsAndReturn(true);
   can_geo__transmit_geo_heartbeat();
 }
