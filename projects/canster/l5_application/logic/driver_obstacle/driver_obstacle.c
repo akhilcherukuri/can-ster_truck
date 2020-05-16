@@ -22,6 +22,7 @@ static dbc_SENSOR_LIDAR_s sensor_lidar;
 static dbc_GEO_DEGREE_s geo_degree;
 static float motor_speed_value;
 static bool is_destination_reached;
+static bool motor_state_fwd;
 
 /**
  * STATIC FUNCTION DECLARATIONS
@@ -41,8 +42,8 @@ float driver_obstacle__get_motor_speed_value() { return motor_speed_value; }
 
 void set_destination_reached_status(bool is_dest_reached) { is_destination_reached = is_dest_reached; }
 
-dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
-
+dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands(uint32_t callback_count) {
+  motor_state_fwd = true;
   sensor_lidar = can_sensor__get_sensor_lidar();
 
   dbc_MOTOR_STEERING_s motor_steering = {{0}, MOTOR_STEERING_straight};
@@ -51,10 +52,9 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
   } else {
     motor_speed_value = MOTOR_SPEED_forward_medium; // fwd med
 #if STEERING_BASED_ON_SENSOR_VALUES == 1
-
-    // if (sensor_sonar.SENSOR_SONARS_middle > DISTANCE_THRESHOLD_CM) {
     if (sensor_lidar.SENSOR_LIDAR_middle > 150) {
       // No obstacles ahead, so position yourself according to the GPS Coordinates and move towards destination
+      // if(callback_count % 5 == 0) // Uncomment to make geo_logic-based turning decisions less frequent
       motor_steering.MOTOR_STEERING_direction = driver_obstacle__move_to_destination();
       if (sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM) {
         motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_slight_right;
@@ -71,23 +71,17 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
 #endif
     } else {
       /* Check if turning radius is healthy and large enough */
-      // TODO: Refactor the code
-      // if ((double)sensor_sonar.SENSOR_SONARS_middle < (DISTANCE_THRESHOLD_CM / 2.0)) {
       if (sensor_lidar.SENSOR_LIDAR_middle <= DISTANCE_THRESHOLD_CM) {
-        // motor_speed_value = MOTOR_SPEED_neutral; // neutral = stop
-        motor_speed_value = MOTOR_SPEED_reverse_slow; // reverse slow
+        motor_speed_value = MOTOR_SPEED_reverse_slow;
+        motor_state_fwd = false;
       } else {
-        // if (sensor_sonar.SENSOR_SONARS_left < DISTANCE_THRESHOLD_CM &&
-        //     sensor_sonar.SENSOR_SONARS_right < DISTANCE_THRESHOLD_CM) {
         if (sensor_lidar.SENSOR_LIDAR_slight_left < DISTANCE_THRESHOLD_CM &&
             sensor_lidar.SENSOR_LIDAR_slight_right < DISTANCE_THRESHOLD_CM) {
-          // motor_speed_value = MOTOR_SPEED_neutral; // neutral = stop
-          motor_speed_value = MOTOR_SPEED_reverse_slow; // reverse slow
+          motor_speed_value = MOTOR_SPEED_reverse_slow;
+          motor_state_fwd = false;
         } else {
-          // if (sensor_sonar.SENSOR_SONARS_left > sensor_sonar.SENSOR_SONARS_right) {
           if (sensor_lidar.SENSOR_LIDAR_slight_left > sensor_lidar.SENSOR_LIDAR_slight_right) {
-            motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_hard_left; // driver_obstacle__obstacle_detected();
-            // } else if (sensor_sonar.SENSOR_SONARS_left <= sensor_sonar.SENSOR_SONARS_right) {
+            motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_hard_left;
           } else if (sensor_lidar.SENSOR_LIDAR_slight_left <= sensor_lidar.SENSOR_LIDAR_slight_right) {
             motor_steering.MOTOR_STEERING_direction = MOTOR_STEERING_hard_right;
           }
@@ -99,6 +93,10 @@ dbc_MOTOR_STEERING_s driver_obstacle__get_motor_commands() {
 #endif
     }
 #endif
+  }
+  if (motor_state_fwd == false &&
+      ((double)sensor_sonar.SENSOR_SONARS_middle <= 70.0 || sensor_lidar.SENSOR_LIDAR_back <= 100)) {
+    motor_speed_value = MOTOR_SPEED_neutral;
   }
   return motor_steering;
 }
@@ -173,14 +171,11 @@ static int16_t driver_obstacle__tilt_left_or_right() {
 
   if (sensor_sonar.SENSOR_SONARS_left <= DISTANCE_THRESHOLD_CM &&
       sensor_sonar.SENSOR_SONARS_right > DISTANCE_THRESHOLD_CM) {
-    // Move a little right
     return_value = MOTOR_STEERING_slight_right;
 
   } else if (sensor_sonar.SENSOR_SONARS_right <= DISTANCE_THRESHOLD_CM &&
              sensor_sonar.SENSOR_SONARS_left > DISTANCE_THRESHOLD_CM) {
-    // Move a little left
     return_value = MOTOR_STEERING_slight_left;
-
   } else {
     // TODO, Reverse Condition
     // both right and left are <= DISTANCE THRESHOLD

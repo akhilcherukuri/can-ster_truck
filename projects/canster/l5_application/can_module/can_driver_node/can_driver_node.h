@@ -4,7 +4,7 @@
 #include "who_am_i.h"
 
 // Transmit
-void can_driver__transmit_all_messages(void);
+void can_driver__transmit_all_messages(uint32_t);
 
 // Mia
 void can_driver__driver_heartbeat_mia();

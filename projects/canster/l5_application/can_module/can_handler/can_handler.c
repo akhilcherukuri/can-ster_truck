@@ -90,14 +90,14 @@ void can_handler__handle_all_incoming_messages(void) {
   }
 }
 
-void can_handler__transmit_message_10hz(void) {
+void can_handler__transmit_message_10hz(uint32_t callback_count) {
   // Module function
 
   // Sensor Node Transmit
   can_sensor__transmit_all_messages();
 
   // Driver Node Transmit
-  can_driver__transmit_all_messages();
+  can_driver__transmit_all_messages(callback_count);
 
   // Motor Node Transmit
   can_motor__transmit_all_messages();

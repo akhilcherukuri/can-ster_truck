@@ -119,10 +119,10 @@ void test_can_driver__motor_steering_mia_false() {
  */
 void test_can_driver__transmit_driver_steering() {
   dbc_MOTOR_STEERING_s message;
-  driver_obstacle__get_motor_commands_ExpectAndReturn(message);
+  driver_obstacle__get_motor_commands_ExpectAndReturn(0, message);
   dbc_send_can_message_ExpectAnyArgsAndReturn(true);
 
-  can_driver__transmit_driver_steering();
+  can_driver__transmit_driver_steering(0);
 }
 
 void test_can_driver__transmit_driver_required_motor_speed() {

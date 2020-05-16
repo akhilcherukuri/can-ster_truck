@@ -39,7 +39,7 @@ void test__periodic_callbacks__1Hz(void) {
 
 void test__periodic_callbacks__10Hz(void) {
   can_handler__handle_all_incoming_messages_Expect();
-  can_handler__transmit_message_10hz_Expect();
+  can_handler__transmit_message_10hz_Expect(0);
 
   periodic_callbacks__10Hz(0);
 }

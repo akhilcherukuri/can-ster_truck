@@ -9,7 +9,7 @@
 void can_handler__handle_all_mia(void);
 
 void can_handler__handle_all_incoming_messages(void);
-void can_handler__transmit_message_10hz();
+void can_handler__transmit_message_10hz(uint32_t);
 
 /**
  * EXTERN inside project.h

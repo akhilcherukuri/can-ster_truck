@@ -31,7 +31,7 @@ void periodic_callbacks__1Hz(uint32_t callback_count) {
 
 void periodic_callbacks__10Hz(uint32_t callback_count) {
   can_handler__handle_all_incoming_messages();
-  can_handler__transmit_message_10hz();
+  can_handler__transmit_message_10hz(callback_count);
 }
 
 void periodic_callbacks__100Hz(uint32_t callback_count) {}
