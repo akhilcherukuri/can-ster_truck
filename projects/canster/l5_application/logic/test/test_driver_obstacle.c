@@ -150,6 +150,105 @@ void test_driver_obstacle__get_motor_commands_left_right() {
   TEST_ASSERT_EQUAL(steering.MOTOR_STEERING_direction, MOTOR_STEERING_hard_right);
 }
 
-void test_driver_obstacle__get_motor_commands_left_right_for_lidar() {
-  // TODO, Write this test
+void test_destination_reached_or_not(void) {
+  is_destination_reached = true;
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar);
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL(motor_speed_value, MOTOR_SPEED_neutral);
+}
+
+void test_driver_obstacle__sensor_lidar_middle_greater_than_150() {
+  dbc_MOTOR_STEERING_s steering;
+  dbc_SENSOR_LIDAR_s sensor_lidar_test = {{0}, 200, 200, 200, 200};
+  dbc_SENSOR_LIDAR_s sensor_lidar_test1 = {{0}, 200, 99, 101, 200};
+  dbc_SENSOR_LIDAR_s sensor_lidar_test2 = {{0}, 200, 100, 50, 200};
+  dbc_SENSOR_LIDAR_s sensor_lidar_test3 = {{0}, 200, 50, 50, 200};
+
+  is_destination_reached = false;
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test);
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_INT(motor_speed_value, MOTOR_SPEED_forward_medium);
+
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test1);
+  steering = driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_INT(steering.MOTOR_STEERING_direction, MOTOR_STEERING_slight_right);
+
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test2);
+  steering = driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_INT(steering.MOTOR_STEERING_direction, MOTOR_STEERING_slight_left);
+
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test3);
+  steering = driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_INT(steering.MOTOR_STEERING_direction, MOTOR_STEERING_straight);
+}
+
+void test_driver_obstacle__sensor_lidar_middle_less_than_150() {
+  dbc_MOTOR_STEERING_s steering;
+  dbc_SENSOR_LIDAR_s sensor_lidar_test = {{0}, 121, 50, 51, 200};
+  dbc_SENSOR_LIDAR_s sensor_lidar_test1 = {{0}, 121, 102, 101, 200};
+  dbc_SENSOR_LIDAR_s sensor_lidar_test2 = {{0}, 121, 101, 102, 200};
+  dbc_SENSOR_LIDAR_s sensor_lidar_test3 = {{0}, 98, 50, 50, 200};
+  dbc_SENSOR_LIDAR_s sensor_lidar_test4 = {{0}, 121, 101, 98, 200};
+  dbc_SENSOR_LIDAR_s sensor_lidar_test5 = {{0}, 121, 98, 101, 200};
+  // float MOTOR_SPEED_reverse_slow = 0, MOTOR_STEERING_hard_left = 3.3, MOTOR_STEERING_hard_right = 4.4;
+  is_destination_reached = false;
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test);
+  sensor_sonar.SENSOR_SONARS_middle = 75;
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_FLOAT(motor_speed_value, MOTOR_SPEED_reverse_slow);
+
+  TEST_ASSERT_FALSE(motor_state_fwd);
+
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test1);
+  steering = driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_INT(steering.MOTOR_STEERING_direction, MOTOR_STEERING_hard_left);
+
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test2);
+  steering = driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_INT(steering.MOTOR_STEERING_direction, MOTOR_STEERING_hard_right);
+
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test4);
+  steering = driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_INT(steering.MOTOR_STEERING_direction, MOTOR_STEERING_hard_left);
+
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test5);
+  steering = driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_INT(steering.MOTOR_STEERING_direction, MOTOR_STEERING_hard_right);
+
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar_test3);
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_FLOAT(motor_speed_value, MOTOR_SPEED_reverse_slow);
+  TEST_ASSERT_FALSE(motor_state_fwd);
+}
+
+void test_neutral_check(void) {
+  motor_state_fwd = false;
+  sensor_sonar.SENSOR_SONARS_middle = 69.0;
+  sensor_lidar.SENSOR_LIDAR_back = 99;
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar);
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_FLOAT(motor_speed_value, MOTOR_SPEED_neutral);
+
+  sensor_sonar.SENSOR_SONARS_middle = 72.0;
+  sensor_lidar.SENSOR_LIDAR_back = 99;
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar);
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_FLOAT(motor_speed_value, MOTOR_SPEED_neutral);
+
+  sensor_sonar.SENSOR_SONARS_middle = 69.0;
+  sensor_lidar.SENSOR_LIDAR_back = 101;
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar);
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_EQUAL_FLOAT(motor_speed_value, MOTOR_SPEED_neutral);
+
+  sensor_sonar.SENSOR_SONARS_middle = 71;
+  sensor_lidar.SENSOR_LIDAR_back = 101;
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar);
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_NOT_EQUAL(motor_speed_value, MOTOR_SPEED_neutral);
+
+  motor_state_fwd = true;
+  can_sensor__get_sensor_lidar_ExpectAndReturn(sensor_lidar);
+  driver_obstacle__get_motor_commands(0);
+  TEST_ASSERT_NOT_EQUAL(motor_speed_value, MOTOR_SPEED_neutral);
 }
