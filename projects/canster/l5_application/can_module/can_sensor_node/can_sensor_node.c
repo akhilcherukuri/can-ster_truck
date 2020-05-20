@@ -166,6 +166,7 @@ static void can_sensor__transmit_sensor_bt_coordinates() {
 static void can_sensor__transmit_motor_key() {
   dbc_MOTOR_KEY_s message = {};
   bt_wrapper__get_motor_key(&message);
+  // printf("\nKey: %d", message.MOTOR_KEY_val);
 
   if (!dbc_encode_and_send_MOTOR_KEY(NULL, &message)) {
 #if SENSOR_NODE_DEBUG == 1

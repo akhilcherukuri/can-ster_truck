@@ -76,14 +76,9 @@ void bt_wrapper__get_destination_coordinates(gps_coordinates_s *dest_coordinate)
 }
 
 void bt_wrapper__get_motor_key(dbc_MOTOR_KEY_s *motor_key) {
-  dbc_MOTOR_KEY_s local_motor_key = {};
-  local_motor_key.MOTOR_KEY_val = 0;
-  if (motor_start) {
-    local_motor_key.MOTOR_KEY_val = 1;
-  }
-
-  if (motor_key) {
-    *motor_key = local_motor_key; // copy
+  motor_key->MOTOR_KEY_val = 0;
+  if (motor_start == true) {
+    motor_key->MOTOR_KEY_val = 1;
   }
 }
 
