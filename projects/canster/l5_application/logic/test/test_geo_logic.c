@@ -20,7 +20,7 @@ void tearDown() {}
 
 void test_geo_logic__update_destination_coordinate(void) {
   // Should be set
-  current_coordinate = CHECKPOINTS[13];
+  current_coordinate = CHECKPOINTS[7];
 
   dbc_SENSOR_BT_COORDINATES_s driver_coordinates = {};
   driver_coordinates.SENSOR_BT_COORDINATES_latitude = CHECKPOINTS[3].latitude;
@@ -31,8 +31,8 @@ void test_geo_logic__update_destination_coordinate(void) {
   TEST_ASSERT_EQUAL_FLOAT(destination_gps_coordinate.latitude, driver_coordinates.SENSOR_BT_COORDINATES_latitude);
   TEST_ASSERT_EQUAL_FLOAT(destination_gps_coordinate.longitude, driver_coordinates.SENSOR_BT_COORDINATES_longitude);
 
-  TEST_ASSERT(current_checkpoint.latitude == CHECKPOINTS[12].latitude);
-  TEST_ASSERT(current_checkpoint.longitude == CHECKPOINTS[12].longitude);
+  TEST_ASSERT(current_checkpoint.latitude == CHECKPOINTS[5].latitude);
+  TEST_ASSERT(current_checkpoint.longitude == CHECKPOINTS[5].longitude);
 }
 
 void test_geo_logic__compute_required_bearing_dont_move(void) {
@@ -145,13 +145,13 @@ void test_geo_logic__compute_destination_reached_false() {
 #include <stdio.h>
 void test_geo_logic__compute_next_checkpoint() {
   destination_gps_coordinate = CHECKPOINTS[2];
-  current_coordinate = CHECKPOINTS[13];
+  current_coordinate = CHECKPOINTS[7];
 
   current_checkpoint = geo_logic__compute_next_checkpoint();
 
   // Should go to checkpoints 13
-  TEST_ASSERT(current_checkpoint.latitude == CHECKPOINTS[12].latitude);
-  TEST_ASSERT(current_checkpoint.longitude == CHECKPOINTS[12].longitude);
+  TEST_ASSERT(current_checkpoint.latitude == CHECKPOINTS[5].latitude);
+  TEST_ASSERT(current_checkpoint.longitude == CHECKPOINTS[5].longitude);
 }
 
 void test_geo_logic__compute_next_checkpoint_destination_next() {
@@ -180,65 +180,57 @@ void test_geo_logic__compute_next_checkpoint_destination_reached() {
  * TESTS FOR THE 10th Street Garage
  */
 void test_geo_logic__complete_navigation_p1() {
-  destination_gps_coordinate = CHECKPOINTS[2];
-  current_coordinate = CHECKPOINTS[13];
-  current_checkpoint = CHECKPOINTS[12];
+  destination_gps_coordinate = CHECKPOINTS[0];
+  current_coordinate = CHECKPOINTS[7];
+  current_checkpoint = CHECKPOINTS[5];
 
   float bearing = geo_logic__compute_required_bearing();
-  TEST_ASSERT_EQUAL_FLOAT(bearing, 144);
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 197);
 }
 
 void test_geo_logic__complete_navigation_p2() {
-  destination_gps_coordinate = CHECKPOINTS[2];
-  current_coordinate = CHECKPOINTS[12];
-  current_checkpoint = CHECKPOINTS[8];
+  destination_gps_coordinate = CHECKPOINTS[0];
+  current_coordinate = CHECKPOINTS[5];
+  current_checkpoint = CHECKPOINTS[3];
 
   bool checkpointreached = geo_logic__checkpoint_reached();
   TEST_ASSERT_FALSE(checkpointreached);
 
   float bearing = geo_logic__compute_required_bearing();
-  TEST_ASSERT_EQUAL_FLOAT(bearing, 148);
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 122);
 }
 
 void test_geo_logic__complete_navigation_p3() {
-  destination_gps_coordinate = CHECKPOINTS[2];
-  current_coordinate = CHECKPOINTS[8];
-  current_checkpoint = CHECKPOINTS[8];
+  destination_gps_coordinate = CHECKPOINTS[0];
+  current_coordinate = CHECKPOINTS[3];
+  current_checkpoint = CHECKPOINTS[3];
+
+  bool checkpointreached = geo_logic__checkpoint_reached();
+  TEST_ASSERT_TRUE(checkpointreached);
 
   float bearing = geo_logic__compute_required_bearing();
-  TEST_ASSERT_EQUAL_FLOAT(bearing, 119);
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 169);
 }
 
 void test_geo_logic__complete_navigation_p4() {
-  destination_gps_coordinate = CHECKPOINTS[2];
-  current_coordinate = CHECKPOINTS[0];
-  current_checkpoint = CHECKPOINTS[0];
+  destination_gps_coordinate = CHECKPOINTS[0];
+  current_coordinate = CHECKPOINTS[2];
+  current_checkpoint = CHECKPOINTS[2];
 
   float bearing = geo_logic__compute_required_bearing();
-  TEST_ASSERT_EQUAL_FLOAT(bearing, 182);
+  TEST_ASSERT_EQUAL_FLOAT(bearing, 96);
 }
 
 void test_geo_logic__complete_navigation_p5() {
-  destination_gps_coordinate = CHECKPOINTS[2];
-  current_coordinate = CHECKPOINTS[1];
-  current_checkpoint = CHECKPOINTS[1];
+  destination_gps_coordinate = CHECKPOINTS[0];
+  current_coordinate = CHECKPOINTS[0];
+  current_checkpoint = CHECKPOINTS[0];
   bool checkpointreached = geo_logic__checkpoint_reached();
   TEST_ASSERT_TRUE(checkpointreached);
-
-  float bearing = geo_logic__compute_required_bearing();
-  TEST_ASSERT_EQUAL_FLOAT(bearing, 131);
-}
-
-void test_geo_logic__complete_navigation_p6() {
-  destination_gps_coordinate = CHECKPOINTS[2];
-  current_coordinate = CHECKPOINTS[2];
-  current_checkpoint = CHECKPOINTS[2];
-  bool checkpointreached = geo_logic__checkpoint_reached();
-  TEST_ASSERT_TRUE(checkpointreached);
-
-  dbc_GEO_DESTINATION_REACHED_s dreached = geo_logic__compute_destination_reached();
-  TEST_ASSERT_EQUAL_UINT8(dreached.GEO_DESTINATION_REACHED_cmd, GEO_DESTINATION_REACHED_cmd_REACHED);
 
   float bearing = geo_logic__compute_required_bearing();
   TEST_ASSERT_EQUAL_FLOAT(bearing, 180);
+
+  dbc_GEO_DESTINATION_REACHED_s destination_reached = geo_logic__compute_destination_reached();
+  TEST_ASSERT_EQUAL_UINT8(destination_reached.GEO_DESTINATION_REACHED_cmd, GEO_DESTINATION_REACHED_cmd_REACHED);
 }
