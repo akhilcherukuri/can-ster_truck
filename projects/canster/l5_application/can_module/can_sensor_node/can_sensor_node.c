@@ -100,12 +100,14 @@ static void can_sensor__transmit_sensor_heartbeat();
 static void can_sensor__transmit_sensor_sonar();
 static void can_sensor__transmit_sensor_lidar();
 static void can_sensor__transmit_sensor_bt_coordinates();
+static void can_sensor__transmit_motor_key();
 
 void can_sensor__transmit_all_messages(void) {
   can_sensor__transmit_sensor_heartbeat();
   can_sensor__transmit_sensor_sonar();
   can_sensor__transmit_sensor_lidar();
   can_sensor__transmit_sensor_bt_coordinates();
+  can_sensor__transmit_motor_key();
 }
 
 static void can_sensor__transmit_sensor_heartbeat() {
@@ -157,6 +159,17 @@ static void can_sensor__transmit_sensor_bt_coordinates() {
   if (!dbc_encode_and_send_SENSOR_BT_COORDINATES(NULL, &message_bt_coordinates)) {
 #if SENSOR_NODE_DEBUG == 1
     printf("Failed to encode and send Sensor BT Coordinates\r\n");
+#endif
+  }
+}
+
+static void can_sensor__transmit_motor_key() {
+  dbc_MOTOR_KEY_s message = {};
+  bt_wrapper__get_motor_key(&message);
+
+  if (!dbc_encode_and_send_MOTOR_KEY(NULL, &message)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("Failed to encode and send SENSOR MOTOR Key\r\n");
 #endif
   }
 }

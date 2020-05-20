@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "project.h"
-
 // Get Data
 #include "can_driver_node.h"
 #include "can_geo_node.h"
@@ -24,6 +22,7 @@
  * Static state variables
  */
 static gps_coordinates_s destination_coordinate;
+static bool motor_start = false;
 
 // SENSOR
 static dbc_SENSOR_SONARS_s sensor_sonar;
@@ -76,6 +75,18 @@ void bt_wrapper__get_destination_coordinates(gps_coordinates_s *dest_coordinate)
   *dest_coordinate = destination_coordinate;
 }
 
+void bt_wrapper__get_motor_key(dbc_MOTOR_KEY_s *motor_key) {
+  dbc_MOTOR_KEY_s local_motor_key = {};
+  local_motor_key.MOTOR_KEY_val = 0;
+  if (motor_start) {
+    local_motor_key.MOTOR_KEY_val = 1;
+  }
+
+  if (motor_key) {
+    *motor_key = local_motor_key; // copy
+  }
+}
+
 /**
  * Static functions
  */
@@ -83,6 +94,11 @@ static void bt_wrapper__read_cb(char *buffer, char *identifier) {
   // Parse everything here
   if (strcmp(identifier, "$loc") == 0) {
     bt_wrapper__parse_loc(buffer);
+    motor_start = true;
+  }
+
+  if (strcmp(identifier, "$stop") == 0) {
+    motor_start = false;
   }
 }
 
