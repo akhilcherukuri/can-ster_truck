@@ -81,6 +81,9 @@ BO_ 520 SENSOR_LIDAR: 8 SENSOR
  SG_ SENSOR_LIDAR_slight_right: 32|16@1+ (1,0) [0|0] "cm" DRIVER
  SG_ SENSOR_LIDAR_back: 48|16@1+ (1,0) [0|0] "cm" DRIVER
 
+BO_ 530 MOTOR_KEY: 1 SENSOR
+ SG_ MOTOR_KEY_val: 0|8@1+ (1,0) [0|0] "" DRIVER
+
 BO_ 900 GEO_CURRENT_COORDINATES: 8 GEO
  SG_ GEO_CURRENT_COORDINATES_latitude: 0|32@1- (0.000001,-90) [-90|90] "degrees" DBG
  SG_ GEO_CURRENT_COORDINATES_longitude: 32|32@1- (0.000001,-180) [-180|180] "degrees" DBG
@@ -94,6 +97,9 @@ BO_ 902 MOTOR_INFO_DBG: 4 MOTOR
 
 BO_ 903 LIPO_BATTERY_VOLTAGE_DBG: 4 MOTOR
  SG_ LIPO_BATTERY_VOLTAGE_val: 0|32@1+ (0.01,0) [0|0] "volts" DBG
+
+BO_ 904 CURRENT_CHECKPOINT_DBG: 1 GEO
+ SG_ CURRENT_CHECKPOINT_val: 0|8@1+ (1,0) [0|0] "" DBG
 
 CM_ "--BU (Network Node) Information--";
 CM_ BU_ DRIVER "The driver controller of the car";
@@ -119,11 +125,13 @@ CM_ BO_ 400 "Current motor info (rps and kph) sent as feedback to the Driver Nod
 CM_ BO_ 500 "Coordinate BT values (destination coordinates) sent by Sensor Node";
 CM_ BO_ 510 "LIDAR - Distance from obstacle detected in each sector";
 CM_ BO_ 520 "Ultrasonic Sensor - Distance from obstacle detected by each sensor";
+CM_ BO_ 530 "Start/Stop signal from the Bluetooth app";
 
 CM_ BO_ 900 "Destination coordinates for BUSMASTER debugging";
 CM_ BO_ 901 "Distance from destination";
 CM_ BO_ 902 "Supplied PWM value to the motor and its RPM";
 CM_ BO_ 903 "LIPO Battery Voltage";
+CM_ BO_ 904 "Current checkpoint of the car";
 
 CM_ "--SG (Signal) Information for Heartbeats--";
 CM_ SG_ 100 DRIVER_HEARTBEAT_cmd "Heartbeat command from the driver node";
@@ -157,6 +165,7 @@ CM_ SG_ 520 SENSOR_LIDAR_middle "Lidar sensing the middle sector (-15 to 15 degr
 CM_ SG_ 520 SENSOR_LIDAR_slight_left "Lidar sensing the slight left sector (-45 to -15 degrees)";
 CM_ SG_ 520 SENSOR_LIDAR_slight_right "Lidar sensing the slight right sector (15 to 45 degrees)";
 CM_ SG_ 520 SENSOR_LIDAR_back "Lidar sensing the back of the car (165 to 195 degrees)";
+CM_ SG_ 530 MOTOR_KEY_val "1 -> Start the motor from the app, 0 -> Stop";
 
 CM_ SG_ 900 GEO_CURRENT_COORDINATES_latitude "Current Latitude";
 CM_ SG_ 900 GEO_CURRENT_COORDINATES_longitude "Current Longitude";
@@ -164,6 +173,7 @@ CM_ SG_ 901 GEO_distance_from_destination "Distance from destination";
 CM_ SG_ 902 MOTOR_INFO_DBG_rps "Current RPS value of the motor";
 CM_ SG_ 902 MOTOR_INFO_DBG_pwm "Supplied motor PWM value";
 CM_ SG_ 903 LIPO_BATTERY_VOLTAGE_val "LIPO Battery Voltage";
+CM_ SG_ 904 CURRENT_CHECKPOINT_val "Current checkpoint of the car";
 
 BA_DEF_ "BusType" STRING ;
 BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;
