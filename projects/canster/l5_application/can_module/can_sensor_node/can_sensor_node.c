@@ -24,6 +24,7 @@
 static dbc_SENSOR_HEARTBEAT_s sensor_heartbeat;
 static dbc_SENSOR_SONARS_s sensor_sonar;
 static dbc_SENSOR_LIDAR_s sensor_lidar;
+static dbc_MOTOR_KEY_s key;
 
 /**
  * STATIC FUNCTIONS
@@ -36,6 +37,7 @@ static void can_sensor__update_driver_obstacle(dbc_SENSOR_SONARS_s *);
 dbc_SENSOR_SONARS_s can_sensor__get_sensor_sonar() { return sensor_sonar; }
 dbc_SENSOR_HEARTBEAT_s can_sensor__get_heartbeat() { return sensor_heartbeat; }
 dbc_SENSOR_LIDAR_s can_sensor__get_sensor_lidar() { return sensor_lidar; }
+dbc_MOTOR_KEY_s can_sensor__get_motor_key() { return key; }
 
 /**
  * MIA
@@ -77,6 +79,17 @@ void can_sensor__sensor_lidar_mia() {
            sensor_lidar.SENSOR_LIDAR_middle, sensor_lidar.SENSOR_LIDAR_back);
 #endif
     // can_sensor__update_driver_obstacle(&sensor_sonar);
+  }
+}
+
+void can_sensor__motor_key_mia() {
+  const uint32_t mia_increment_value = 100;
+
+  if (dbc_service_mia_MOTOR_KEY(&key, mia_increment_value)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("\nMIA ->  MOTOR_KEY");
+    printf("\nAssigned default key value = %d", key.MOTOR_KEY_val);
+#endif
   }
 }
 
@@ -147,6 +160,14 @@ void can_sensor__decode_sensor_lidar(dbc_message_header_t header, uint8_t bytes[
 #endif
     set_lcd_lidar_distance_led(sensor_lidar);
     // can_sensor__update_driver_obstacle(&sensor_sonar);
+  }
+}
+
+void can_sensor__decode_motor_key(dbc_message_header_t header, uint8_t bytes[8]) {
+  if (dbc_decode_MOTOR_KEY(&key, header, bytes)) {
+#if SENSOR_NODE_DEBUG == 1
+    printf("\nKey = %d", key.MOTOR_KEY_val);
+#endif
   }
 }
 

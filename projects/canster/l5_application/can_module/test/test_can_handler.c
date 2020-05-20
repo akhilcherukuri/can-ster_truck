@@ -27,6 +27,7 @@ void test_can_handler__handle_all_mia() {
   can_geo__geo_heartbeat_mia_Expect();
   can_geo__geo_degree_mia_Expect();
   can_geo__geo_destination_reached_mia_Expect();
+  can_sensor__motor_key_mia_Expect();
 
   can_handler__handle_all_mia();
 }
@@ -47,6 +48,7 @@ void test_can_handler__handle_all_incoming_messages(void) {
   can_sensor__decode_sensor_heartbeat_ExpectAnyArgs();
   can_sensor__decode_sensor_sonar_ExpectAnyArgs();
   can_sensor__decode_sensor_lidar_ExpectAnyArgs();
+  can_sensor__decode_motor_key_ExpectAnyArgs();
 
   // MOTOR
   can_motor__decode_motor_heartbeat_ExpectAnyArgs();

@@ -26,6 +26,7 @@ void can_handler__handle_all_mia(void) {
   can_sensor__sensor_sonar_mia();
   can_sensor__sensor_heartbeat_mia();
   can_sensor__sensor_lidar_mia();
+  can_sensor__motor_key_mia();
 
   // Driver Node MIA Functions
   // can_driver__motor_speed_mia();
@@ -71,6 +72,7 @@ void can_handler__handle_all_incoming_messages(void) {
     can_sensor__decode_sensor_heartbeat(header, recv_message.data.bytes);
     can_sensor__decode_sensor_sonar(header, recv_message.data.bytes);
     can_sensor__decode_sensor_lidar(header, recv_message.data.bytes);
+    can_sensor__decode_motor_key(header, recv_message.data.bytes);
 
     // Driver Node Decode functions
     // can_driver__decode_driver_heartbeat(header, recv_message.data.bytes);
